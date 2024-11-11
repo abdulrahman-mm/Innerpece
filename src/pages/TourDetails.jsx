@@ -1,0 +1,31 @@
+import Header from "../components/Header";
+import Featuredhero from "../components/FeaturedHero";
+import Featured from "../components/Featured";
+import TourDetailsTwoComponents from "../components/TourDetailsTwoComponents";
+import ImportantNotice from "../components/ImportantNotice";
+import CampRules from "../components/CampRules";
+import TourPlanning from "../components/TourPlanning";
+import Review from "../components/Review";
+import Footer from "../components/Footer";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+function TourDetails() {
+  return (
+    <div>
+      <Header />
+      <Featuredhero />
+      <Featured />
+      <TourDetailsTwoComponents />
+      <CampRules />
+      <ImportantNotice />
+      <TourPlanning />
+      <Review />
+
+      <Footer />
+    </div>
+  );
+}
+
+export default TourDetails;
