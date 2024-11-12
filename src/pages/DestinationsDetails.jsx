@@ -34,7 +34,11 @@ function DestinationsDetails() {
     <div>
       <Header />
       <DestinationsDetailsHero apiData={apiData} />
-      <DestinationDetailsTwoComponents apiData={apiData} />
+      <DestinationDetailsTwoComponents
+        apiData={apiData}
+        setApiData={setApiData}
+        city_name={city_name}
+      />
       <Footer />
     </div>
   );

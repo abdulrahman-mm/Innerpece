@@ -37,7 +37,7 @@ function Footer() {
 
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'instant',
     });
   }
 
@@ -74,10 +74,12 @@ function Footer() {
             </p>
 
             <p className="mt-3 md:mt-5">
-              <span className="inline-block me-5">
-                <FaPhoneAlt className="text-lg md:text-2xl  text-sky-300" />
-              </span>
-              {footerContent.contact_number}
+              <a href={`tel:${footerContent.contact_number}`}>
+                <span className="inline-block me-5">
+                  <FaPhoneAlt className="text-lg md:text-2xl  text-sky-300" />
+                </span>
+                {footerContent.contact_number}
+              </a>
             </p>
 
             <p className="mt-3 md:mt-5">

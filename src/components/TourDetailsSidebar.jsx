@@ -7,15 +7,55 @@ import insurance from "../assets/insurance.png";
 import pricetag from "../assets/pricetag.png";
 import calendar from "../assets/featuredCalender.png";
 import map from "../assets/featuredmap.png";
+import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function Sidebar() {
+  const location = useLocation();
+  const { id } = location.state || {};
+  const [apiData, setApiData] = useState([]);
+
+  useEffect(() => {
+    const fetchProgramData = async () => {
+      try {
+        const storedUserDetails = sessionStorage.getItem("loginDetails");
+
+        const userDetails = storedUserDetails
+          ? JSON.parse(storedUserDetails)
+          : null;
+
+        const payload = {
+          program_id: id,
+          user_id: userDetails?.id || null,
+        };
+
+        const response = await axios.post(
+          "https://backoffice.innerpece.com/api/get-program-details",
+          payload
+        );
+
+        setApiData(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchProgramData();
+  }, [id]);
+
+
   return (
     <div className=" w-full lg:basis-[22%] xl:basis-[25%] flex-grow mt-3 md:mt-7">
       <div className="flex flex-col p-3 shadow-md bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
         <span className="text-gray-600 ">
-          Starting Form <del>INR 28000</del>{" "}
+          Starting Form{" "}
+          <del>INR{` ${
+            apiData.actual_price ? apiData.actual_price : "INR 25000"
+          }`}</del>{" "}
         </span>
-        <p className="text-green-800 font-semibold text-2xl">INR 25000</p>
+        <p className="text-green-800 font-semibold text-2xl">INR{` ${
+          apiData.discount_price ? apiData.discount_price : "INR 25000"
+        }`}</p>
 
         <div className="border-t-2 border-dotted w-full border-sky-800"></div>
 
@@ -40,15 +80,12 @@ function Sidebar() {
       </div>
 
       <div className="shadow-md mt-10 shadow-black/10 rounded-lg">
-
-      <div className="flex gap-4 mt-3 ms-3">
-            <p className="text-sky-800">|</p>
-            <p className="font-semibold">Book With Confidence</p>
-          </div>
+        <div className="flex gap-4 mt-3 ms-3">
+          <p className="text-sky-800">|</p>
+          <p className="font-semibold">Book With Confidence</p>
+        </div>
 
         <div className="flex flex-wrap  items-start mt-10 justify-between md:flex-col p-5   gap-y-4 gap-2">
-         
-
           <div className="flex gap-4 items-center">
             <img src={customerservice} alt="" />
             <p>Customer care available 24/7</p>
@@ -71,10 +108,10 @@ function Sidebar() {
         </div>
       </div>
 
-      <img src={calendar} alt="" className="mt-10  w-screen" />
+      {/* {/* <img src={calendar} alt="" className="mt-10  w-screen" /> */}
 
       <p className="font-semibold mt-10">Where you'll be</p>
-      <img src={map} alt="" className="mt-5 w-screen" />
+      <img src={map} alt="" className="mt-5 w-screen" /> 
     </div>
   );
 }

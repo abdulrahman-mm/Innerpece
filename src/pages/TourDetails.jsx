@@ -7,9 +7,8 @@ import CampRules from "../components/CampRules";
 import TourPlanning from "../components/TourPlanning";
 import Review from "../components/Review";
 import Footer from "../components/Footer";
-import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import PaymentPolicy from "../components/PaymentPolicy";
+import ImportantInfo from "../components/ImportantInfo";
 
 function TourDetails() {
   return (
@@ -18,14 +17,19 @@ function TourDetails() {
       <Featuredhero />
       <Featured />
       <TourDetailsTwoComponents />
-      <CampRules />
-      <ImportantNotice />
+      <PaymentPolicy />
+      <ImportantInfo />
       <TourPlanning />
       <Review />
-
       <Footer />
     </div>
   );
 }
 
 export default TourDetails;
+{
+  /* <CampRules /> */
+}
+{
+  /* <ImportantNotice /> */
+}

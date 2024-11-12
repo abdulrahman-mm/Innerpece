@@ -11,7 +11,6 @@ import axios from "axios";
 
 function Hero() {
   const location = useLocation();
-  
   const { id, title } = location.state || {};
   const [apiData, setApiData] = useState([]);
 
@@ -42,8 +41,6 @@ function Hero() {
     fetchProgramData();
   }, [id]);
 
-  
-
   return (
     <div className="relative ">
       <img
@@ -56,34 +53,31 @@ function Hero() {
         className="h-[50vh] md:h-[40vh] lg:h-[50vh] w-full object-cover "
       />
       <div className="absolute  bg-white  -bottom-9 left-1/2 -translate-x-1/2 flex flex-wrap  gap-2 justify-start  md:justify-between rounded-3xl lg:rounded-full px-5 py-3  w-full md:w-4/5 items-center shadow-lg shadow-black/10">
-        <div className="flex flex-grow cursor-pointer  gap-2 md:gap-3 bg-gray-100/80 px-4 py-3 md:px-6 md:py-4 lg:px-10 lg:py-5 rounded-full items-center">
+        {" "}
+        <div className="flex flex-grow cursor-pointer  gap-2 md:gap-3  px-4 py-3 md:px-6 md:py-4 lg:px-10 lg:py-5 rounded-full items-center">
           <img src={vector1} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base lg:text-lg font-semibold">
             Information
           </p>
         </div>
-
         <div className="flex flex-grow cursor-pointer  px-4 py-3  gap-2 md:gap-3 items-center">
           <img src={vector2} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base lg:text-lg font-semibold">
             Tour Planning
           </p>
         </div>
-
         <div className="flex flex-grow cursor-pointer  px-4 py-3 gap-2 md:gap-3 items-center">
           <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base lg:text-lg font-semibold">
             Location Share
           </p>
         </div>
-
         <div className="flex flex-grow cursor-pointer  px-4 py-3 gap-2 md:gap-3 items-center">
           <img src={vector4} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base lg:text-lg font-semibold">
             Reviews
           </p>
         </div>
-
         <div className="flex flex-grow  cursor-pointer px-4 py-3 gap-2 md:gap-3 items-center">
           <img src={vector5} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base lg:text-lg font-semibold">

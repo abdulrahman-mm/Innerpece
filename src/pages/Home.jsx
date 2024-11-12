@@ -11,15 +11,16 @@ import LetsGetStarted from "../components/LetsGetStarted";
 import ExplorePopularPackages from "../components/ExplorePopularPackages";
 import OurStoryDocumentation from "../components/OurStoryDocumentation";
 import Footer from "../components/Footer";
+import Modal from "../components/Modal";
 
 function Home() {
   return (
     <div>
       <Header />
-      {/* <Hero /> */}
-      {/* <HomePrograms /> */}
-      {/* <HomeDestinations /> */}
-      {/* <ExploreMore /> */}
+      <Hero />
+      <HomePrograms />
+      <HomeDestinations />
+      <ExploreMore />
       <UpcomingEvents />
       <TalkToUs />
       <ExplorePopularEvents />
@@ -27,6 +28,7 @@ function Home() {
       <LetsGetStarted />
       <ExplorePopularPackages />
       <OurStoryDocumentation />
+      <Modal />
       <Footer />
     </div>
   );

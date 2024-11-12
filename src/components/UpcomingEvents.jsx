@@ -43,7 +43,7 @@ function UpcomingEvents() {
 
     window.scrollTo({
       top: 0,
-      behavior: 'instant',
+      behavior: "instant",
     });
   };
 

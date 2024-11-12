@@ -34,7 +34,11 @@ function Programs() {
     <div>
       <Header />
       <ProgramsDetailsHero apiData={apiData} />
-      <ProgramsDetailsTwoComponents apiData={apiData} />
+      <ProgramsDetailsTwoComponents
+        apiData={apiData}
+        setApiData={setApiData}
+        themes_name={themes_name}
+      />
       <Footer />
     </div>
   );

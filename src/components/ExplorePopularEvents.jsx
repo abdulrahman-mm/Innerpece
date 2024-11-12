@@ -33,13 +33,25 @@ function ExplorePopularEvents() {
     },
   };
 
-  function onClickCard() {
-    navigate("/tourdetails");
+ 
+
+
+  const handleCardClick = (id, title) => {
+    const formattedTitleName = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-") // Remove all special characters and replace with hyphen
+      .replace(/-+/g, "-") // Replace multiple hyphens with a single hyphen
+      .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
+
+    navigate(`${id}/${formattedTitleName}`, {
+      state: { id, title },
+    });
+
     window.scrollTo({
       top: 0,
       behavior: "instant",
     });
-  }
+  };
 
   useEffect(() => {
     async function getApiData() {
@@ -89,7 +101,8 @@ function ExplorePopularEvents() {
       >
         {popularEventsData.map((items, index) => (
           <div
-            onClick={onClickCard}
+          onClick={() => handleCardClick(items.id, items.title)}
+
             key={index}
             className="cursor-pointer  flex flex-col w-screen  bg-white "
           >
@@ -121,7 +134,8 @@ function ExplorePopularEvents() {
         <div className="max-sm:hidden flex flex-wrap items-center justify-start mt-14 gap-x-5 gap-y-14">
           {popularEventsData.map((items, index) => (
             <div
-              onClick={onClickCard}
+            onClick={() => handleCardClick(items.id, items.title)}
+
               key={index}
               className="w-72 h-64 border-gray-200  cursor-pointer transform transition duration-300 ease-in-out hover:-translate-y-1 border-2  rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
             >

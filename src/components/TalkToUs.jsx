@@ -1,6 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function TalkToUs() {
+  let navigate = useNavigate();
+
+  function onclickBtn() {
+    navigate('/contactus')
+
+    window.scrollTo({
+      top:'0',
+      behavior:'instant'
+    })
+  }
   return (
     <div className="rounded-lg ms-5 me-5 md:ms-16 md:me-16 mt-16  bg-gradient-to-r from-slate-900 to-sky-800 flex flex-wrap items-center justify-between px-2 py-9">
       <div className="h-full ps-3 md:ps-11 content-center">
@@ -13,7 +24,10 @@ function TalkToUs() {
       </div>
 
       <div className="md:pe-28 ps-3 md:ps-0">
-        <button className="bg-white px-2 mt-2 md:mt-0 md:px-3 md:py-2 rounded-md text-lg font-semibold">
+        <button
+          onClick={onclickBtn}
+          className="bg-white px-2 mt-2 md:mt-0 md:px-3 md:py-2 rounded-md text-lg font-semibold"
+        >
           Talk to us
         </button>
       </div>
