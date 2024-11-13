@@ -101,6 +101,10 @@
 
 // export default Programs;
 // Programs.js
+
+
+
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -123,6 +127,9 @@ function Programs() {
         console.log(error);
       });
   }, []);
+
+
+  
 
   const handleThemeClick = (id, themes_name) => {
     const formattedThemeName = themes_name

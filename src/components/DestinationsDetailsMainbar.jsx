@@ -14,6 +14,7 @@ import { IoBedSharp } from "react-icons/io5";
 import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function DestinationsDetailsMainbar({
   apiData,
@@ -23,6 +24,7 @@ function DestinationsDetailsMainbar({
   setSortBy,
 }) {
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
+  let navigate = useNavigate();
 
   const [sortedData, setSortedData] = useState("");
 
@@ -49,7 +51,24 @@ function DestinationsDetailsMainbar({
     fetchSortedData();
   }, [sortBy, apiData]);
 
-  console.log(sortedData);
+  const handleCardClick = (id, title) => {
+    const formattedTitleName = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-") // Remove all special characters and replace with hyphen
+      .replace(/-+/g, "-") // Replace multiple hyphens with a single hyphen
+      .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
+
+    navigate(`/${id}/${formattedTitleName}`, {
+      state: { id, title },
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  };
+
+  console.log(apiData);
 
   return (
     <div className=" pb-52 ">
@@ -216,7 +235,10 @@ function DestinationsDetailsMainbar({
                   for 32 Nights + Taxes(4 rooms)
                 </p>
 
-                <div className="flex  items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1 lg:px-8 lg:py-2 rounded-lg ">
+                <div
+                  onClick={() => handleCardClick(item.id, item.title)}
+                  className="flex  items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1 lg:px-8 lg:py-2 rounded-lg "
+                >
                   <p className="text-white cursor-pointer  md:text-xl font-semibold ">
                     View
                   </p>

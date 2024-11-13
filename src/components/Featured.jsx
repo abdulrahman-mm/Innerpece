@@ -45,7 +45,6 @@ function Featured() {
     fetchProgramData();
   }, [id]);
 
-
   return (
     <div className="mt-32 md:mt-28 ms-5 me-5 md:ms-10 md:me-10  lg:ms-20 lg:me-20">
       <div className="flex flex-col gap-2 md:flex-row flex-wrap justify-between">
@@ -83,20 +82,21 @@ function Featured() {
               <img src={heart} alt="" />
               <p className="text-gray-700">WishList</p>
             </div>
-          </div>
-
-          <p className="font-semibold flex items-center md:justify-end">
+            <p className="font-semibold flex items-center md:justify-end">
             {`${apiData.total_reviews} ${
               apiData.total_reviews <= 1 ? "Review" : "Reviews"
             }`}
           </p>
+          </div>
 
-          <div className="flex gap-3 flex-wrap items-center">
+          
+
+          {/* <div className="flex gap-3 flex-wrap items-center">
             <p className="font-semibold text-sky-800 text-xl md:text-2xl">
               {`INR ${apiData.discount_price}`}
             </p>
             <del className="text-gray-300 md:text-xl">{`INR ${apiData.actual_price}`}</del>
-          </div>
+          </div> */}
         </div>
       </div>
 
