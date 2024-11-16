@@ -29,6 +29,34 @@ function Mainbar() {
         );
 
         setApiData(response.data.data);
+        // setIsWishlisted(response.data.data.wishlists);
+
+        document.title = apiData.title || "Default Title";
+
+        const metaOgTitle = document.querySelector("meta[property='og:title']");
+        if (metaOgTitle) {
+          metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+        }
+
+        // console.log('metaogtitle',metaOgTitle);
+
+        const metaOgDescription = document.querySelector(
+          "meta[property='og:description']"
+        );
+        if (metaOgDescription) {
+          metaOgDescription.setAttribute(
+            "content",
+            apiData.program_desc || "Default description"
+          );
+        }
+
+        const metaOgImage = document.querySelector("meta[property='og:image']");
+        if (metaOgImage) {
+          metaOgImage.setAttribute(
+            "content",
+            `https://backoffice.innerpece.com/${programData.cover_img}` || ""
+          );
+        }
       } catch (err) {
         console.log(err);
       }
@@ -127,27 +155,25 @@ function Mainbar() {
           <p className="font-semibold text-2xl ms-4">Activities</p>
 
           <div className="flex flex-wrap justify-start mt-5 gap-4">
-            <div className="grid grid-cols-1 gap-5  sm:grid-cols-2 ">
-              {Object.keys(apiData.activities).map((key, index) => {
-                const activities = apiData.activities[key];
+            {Object.keys(apiData.activities).map((key, index) => {
+              const activities = apiData.activities[key];
 
-                return (
-                  <div
-                    className="flex flex-col flex-grow justify-start  items-start border-[1px] gap-3 w-40  border-black/40 p-3 rounded-lg py-5  "
-                    key={index}
-                  >
-                    <img
-                      src={`https://backoffice.innerpece.com/${activities.activities_pic}`}
-                      // alt={foodBeverage.food_beverage_pic}
-                      className="bg-contain"
-                    />
-                    <p className="text-lg text-gray-700">
-                      {activities.activities}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
+              return (
+                <div
+                  className="flex flex-col justify-start  items-start border-[1px] gap-3 w-32 md:w-40  border-black/40 p-3 rounded-lg py-5  "
+                  key={index}
+                >
+                  <img
+                    src={`https://backoffice.innerpece.com/${activities.activities_pic}`}
+                    // alt={foodBeverage.food_beverage_pic}
+                    className="bg-contain "
+                  />
+                  <p className="text-lg text-gray-700">
+                    {activities.activities}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

@@ -54,33 +54,16 @@ function Login() {
       sessionStorage.setItem("loginid", loginid);
       sessionStorage.setItem("loginDetails", JSON.stringify(loginDetails));
 
-
-      setEmail('')
-      setPassword('')
-      setLoginError('')
-
-      // const Toast = Swal.mixin({
-      //   toast: true,
-      //   position: "bottom-left",
-      //   showConfirmButton: false,
-      //   timer: 5000,
-      //   timerProgressBar: true,
-      //   didOpen: (toast) => {
-      //     toast.onmouseenter = Swal.stopTimer;
-      //     toast.onmouseleave = Swal.resumeTimer;
-      //   },
-      // });
-      // Toast.fire({
-      //   icon: "success",
-      //   title: "Login successfull",
-      // });
+      setEmail("");
+      setPassword("");
+      setLoginError("");
 
       Swal.fire({
-        position: 'center',
+        position: "center",
         icon: "success",
         title: "Login successfully",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
 
       setTimeout(() => {
@@ -104,7 +87,7 @@ function Login() {
     <div className="flex items-center justify-center mt-28">
       <div className="80vw md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
-          <div className=' bg-[url("././assets/login_image.png")] w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+          <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
           <div className="w-2/5 flex-grow flex-shrink">
             <div className="flex flex-col gap-2">

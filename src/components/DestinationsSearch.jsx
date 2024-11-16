@@ -44,9 +44,9 @@ function Search() {
         <img src={Destination_Tour8} alt="" className="bg-contain w-full transform transition duration-700 ease-in-out hover:scale-95" />
       </div>
 
-      <div className="flex items-center justify-center mt-9">
+      {/* <div className="flex items-center justify-center mt-9">
         <button className="bg-sky-800 px-12 rounded-full text-white py-3">Load More</button>
-      </div>
+      </div> */}
     </div>
   );
 }

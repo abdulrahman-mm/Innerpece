@@ -29,7 +29,6 @@ function OurValue() {
               imperdiet ornare elit rhoncus diam gravida pharetra. Turpis
               integer lectus et.
             </p>
-            <p className="text-lg text-sky-500 cursor-pointer">Learn More</p>
           </div>
         </div>
 
@@ -48,7 +47,6 @@ function OurValue() {
             <p className="text-gray-600 text-xl">
             At integer nibh lacus tortor. Aenean enim mi ipsum aenean adipiscing eu faucibus. Nibh pharetra nulla arcu faucibus proin elit. Ante convallis felis scelerisque et arcu blandit. Elementum elit viverra cras blandit convallis.
             </p>
-            <p className="text-lg text-sky-500 cursor-pointer">Learn More</p>
           </div>
         </div>
 
@@ -68,7 +66,6 @@ function OurValue() {
             <p className="text-gray-600 text-xl">
             Eget convallis mattis vel ligula amet nulla lacinia quam malesuada. A pharetra massa pulvinar nulla. Eget nec nunc tristique sed non gravida. Ut auctor tellus suscipit ultrices est pretium. Mus odio et turpis lacinia sit.
             </p>
-            <p className="text-lg text-sky-500 cursor-pointer">Learn More</p>
           </div>
         </div>
 

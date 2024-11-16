@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function TourPlanning() {
+function TourPlanning({TourPlanningRef}) {
   const location = useLocation();
 
   const { id, title } = location.state || {};
@@ -30,6 +30,27 @@ function TourPlanning() {
         );
 
         setApiData(response.data.data);
+        // setIsWishlisted(response.data.data.wishlists);
+
+        document.title = apiData.title || "Default Title";
+
+        const metaOgTitle = document.querySelector("meta[property='og:title']");
+          if (metaOgTitle) {
+            metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+          }
+
+          // console.log('metaogtitle',metaOgTitle);
+
+          const metaOgDescription = document.querySelector("meta[property='og:description']");
+          if (metaOgDescription) {
+            metaOgDescription.setAttribute("content", apiData.program_desc || "Default description");
+          }
+
+          const metaOgImage = document.querySelector("meta[property='og:image']");
+          if (metaOgImage) {
+            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${programData.cover_img}` || '');
+          }
+
       } catch (err) {
         console.log(err);
       }
@@ -38,7 +59,7 @@ function TourPlanning() {
   }, [id]);
 
   return (
-    <div className="ms-5 me-5 w-90vw md:ms-20 md:me-20 mt-10 md:w-2/3">
+    <div ref={TourPlanningRef} className="ms-5 me-5 w-90vw md:ms-20 md:me-20 mt-10 md:w-2/3">
       <p className="font-semibold text-2xl ">Tour Planning</p>
 
       {apiData.tour_planning &&

@@ -68,16 +68,12 @@ function UpcomingEvents() {
   }, []);
 
   return (
-    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-16 ">
-      <div className="flex flex-wrap items-center justify-between">
+    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-10 md:mt-16 ">
         <p className="text-xl  md:text-3xl font-semibold">
           Explore <span className="text-blue-500">Upcoming Events</span>
         </p>
 
-        <p className="underline  text-blue-800 text-end  cursor-pointer">
-          View all
-        </p>
-      </div>
+      
 
       <Carousel
         swipeable={true}

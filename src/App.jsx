@@ -8,6 +8,8 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import TourDetails from "./pages/TourDetails";
 import DestinationsDetails from "./pages/DestinationsDetails";
+import PageNotFound from "./pages/PageNotFound";
+import HomeFilter from "./pages/HomeFilter";
 
 function App() {
   return (
@@ -21,13 +23,19 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/:id/:title" element={<TourDetails />} />
+          <Route path="/home-filter/:city_name" element={<HomeFilter />} />
 
-          <Route path="/programsdetails/:theme_name" element={<ProgramsDetails />} />
+          <Route
+            path="/programsdetails/:theme_name"
+            element={<ProgramsDetails />}
+          />
 
           <Route
             path="/destinationsdetails/:city_name"
             element={<DestinationsDetails />}
           />
+
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
     </>

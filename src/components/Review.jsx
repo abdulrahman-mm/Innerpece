@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function Review() {
+function Review({reviewRef}) {
   const location = useLocation();
 
   const { id, title } = location.state || {};
@@ -30,6 +30,27 @@ function Review() {
         );
 
         setApiData(response.data.data);
+        // setIsWishlisted(response.data.data.wishlists);
+
+        document.title = apiData.title || "Default Title";
+
+        const metaOgTitle = document.querySelector("meta[property='og:title']");
+          if (metaOgTitle) {
+            metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+          }
+
+          // console.log('metaogtitle',metaOgTitle);
+
+          const metaOgDescription = document.querySelector("meta[property='og:description']");
+          if (metaOgDescription) {
+            metaOgDescription.setAttribute("content", apiData.program_desc || "Default description");
+          }
+
+          const metaOgImage = document.querySelector("meta[property='og:image']");
+          if (metaOgImage) {
+            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${programData.cover_img}` || '');
+          }
+
       } catch (err) {
         console.log(err);
       }
@@ -38,7 +59,7 @@ function Review() {
   }, [id]);
 
   return (
-    <div className="ms-5 me-5 mt-16 md:ms-20 md:me-20 md:mt-12 md:pb-24">
+    <div ref={reviewRef} className="ms-5 me-5 mt-16 md:ms-20 md:me-20 md:mt-12 md:pb-24">
       {apiData.client_reviews &&
         apiData.client_reviews.length > 0 &&
         apiData.client_reviews.map((item, index) => (

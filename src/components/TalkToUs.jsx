@@ -13,7 +13,7 @@ function TalkToUs() {
     })
   }
   return (
-    <div className="rounded-lg ms-5 me-5 md:ms-16 md:me-16 mt-16  bg-gradient-to-r from-slate-900 to-sky-800 flex flex-wrap items-center justify-between px-2 py-9">
+    <div className="rounded-lg ms-5 me-5 md:ms-16 md:me-16 mt-10 md:mt-16 bg-gradient-to-r from-slate-900 to-sky-800 flex flex-wrap items-center justify-between px-2 py-9">
       <div className="h-full ps-3 md:ps-11 content-center">
         <p className="text-white font-semibold text-lg md:text-2xl">
           Do you want to experience an event with us?

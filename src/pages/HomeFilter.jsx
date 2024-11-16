@@ -22,14 +22,14 @@ import defaultimage from "../assets/defaultimg.png";
 
 function DestinationsDetails() {
   const location = useLocation();
-  const { id, city_name } = location.state || {};
+  const { date, city_name } = location.state || {};
   const [apiData, setApiData] = useState([]);
   const [sortBy, setSortBy] = useState("");
 
-  const [startDate, setStartDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [startDate, setStartDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
-  const [searchTitle, setSearchTitle] = useState("");
+  const [searchTitle, setSearchTitle] = useState('');
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(2);
@@ -48,75 +48,63 @@ function DestinationsDetails() {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program",
+          "https://backoffice.innerpece.com/api/home-filter",
           {
-            destination: id,
+            destination: city_name,
+            start_date: date,
           }
         );
 
+        console.log('homefilter',response.data.data);
         setApiData(response.data.data);
 
-        console.log("for seo", response.data.data[0]);
         const firstProgram = response.data.data[0];
         const metaOgTitle = document.querySelector("meta[property='og:title']");
         console.log(metaOgTitle);
         if (metaOgTitle) {
-          metaOgTitle.setAttribute(
-            "content",
-            firstProgram.title || "Default Title"
-          );
+          metaOgTitle.setAttribute("content", firstProgram.title || "Default Title");
         }
 
-        const metaOgDescription = document.querySelector(
-          "meta[property='og:description']"
-        );
-        if (metaOgDescription) {
-          metaOgDescription.setAttribute(
-            "content",
-            firstProgram.category || "Default description"
-          );
-        }
+        const metaOgDescription = document.querySelector("meta[property='og:description']");
+            if (metaOgDescription) {
+              metaOgDescription.setAttribute("content", firstProgram.category || "Default description");
+            }
 
-        const metaOgImage = document.querySelector("meta[property='og:image']");
-        if (metaOgImage) {
-          metaOgImage.setAttribute(
-            "content",
-            `https://backoffice.innerpece.com/${firstProgram.cover_img}` || ""
-          );
-        }
+            const metaOgImage = document.querySelector("meta[property='og:image']");
+            if (metaOgImage) {
+              metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${firstProgram.cover_img}` || '');
+            }
       } catch (err) {
         console.log(err);
       }
     };
     fetchProgramData();
-  }, [id]);
+  }, [city_name, date]);
 
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
   let navigate = useNavigate();
 
+
   const handleSearchClick = async () => {
     try {
       // Post request to search-program API
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/search-program",
-        {
-          destination: city_name,
-          title: searchTitle,
-        }
-      );
+      const response = await axios.post('https://backoffice.innerpece.com/api/search-program', {
+        destination: city_name,
+        title: searchTitle
+      });
 
-      if (response.data.status === "success") {
+      if (response.data.status === 'success') {
         if (response.data.data.length === 0) {
           setApiData([]); // No data found, set empty array
         } else {
           setApiData(response.data.data); // Set the retrieved data
         }
       } else {
-        console.error("Error fetching programs:", response.data.message);
+        console.error('Error fetching programs:', response.data.message);
         setApiData([]); // Error occurred, set empty array
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       setApiData([]); // Set empty array on exception
     }
   };
@@ -139,60 +127,52 @@ function DestinationsDetails() {
   };
 
   const handleSortChange = async (event) => {
-    setFilterButtonClicked(false);
-
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
     try {
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/sort-destination ",
-        {
-          sort_by: selectedSort,
-          destination: city_name,
-        }
-      );
+      const response = await axios.post('https://backoffice.innerpece.com/api/sort-destination ', {
+        sort_by: selectedSort,
+        destination: city_name
+      });
 
-      console.log("API response:", response.data); // Inspect response data
+      console.log('API response:', response.data); // Inspect response data
 
-      if (response.data.status === "success") {
+      if (response.data.status === 'success') {
         const dataObject = response.data.data;
         // Convert the data object to an array
         const dataArray = Object.values(dataObject);
         setApiData(dataArray);
       } else {
-        console.error("Error sorting programs:", response.data.message);
+        console.error('Error sorting programs:', response.data.message);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
   const handleFilterClick = async () => {
-    setFilterButtonClicked(false);
-
     try {
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/filter-destination",
-        {
-          start_date: startDate,
-          to_date: toDate,
-          destination: city_name,
-        }
-      );
-
-      if (response.data.status === "success") {
+      const response = await axios.post('https://backoffice.innerpece.com/api/filter-destination', {
+        start_date: startDate,
+        to_date: toDate,
+        destination: city_name
+      });
+  
+      if (response.data.status === 'success') {
         const data = Object.values(response.data.data); // Convert data to an array
-
+  
         if (data.length === 0) {
           setApiData([]); // No data found, set empty array
         } else {
-          console.log("filtered data", data);
+          console.log('filtered data', data);
           setApiData(data); // Set the retrieved data as an array
+
+          
         }
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       setApiData([]);
     }
   };
@@ -203,38 +183,11 @@ function DestinationsDetails() {
 
   const handleToChange = (e) => {
     setToDate(e.target.value);
-  };
+  }
 
-  const handleClearFilterClicked = async () => {
-    setFilterButtonClicked(false);
-
-    const fetchProgramData = async () => {
-      try {
-        const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program",
-          {
-            destination: id,
-          }
-        );
-        setStartDate("");
-        setToDate("");
-        setApiData(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProgramData();
-  };
-
-  useEffect(() => {
-    if (filterButtonClicked) {
-      document.body.classList.add("overflow-hidden");
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-    // Clean up on component unmount
-    return () => document.body.classList.remove("overflow-hidden");
-  }, [filterButtonClicked]);
+  function onchangeSelect(e) {
+    setSortBy(e.target.value);
+  }
 
   return (
     <div>
@@ -259,7 +212,7 @@ function DestinationsDetails() {
         >
           <div
             id="blur"
-            className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-lg flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1  md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
+            className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-lg flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1 md:px-8 md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
           >
             <h1 className="text-white text-lg md:text-2xl lg:text-4xl font-semibold">{`Explore ${
               apiData.length > 0 ? apiData[0].title : ""
@@ -299,7 +252,6 @@ function DestinationsDetails() {
 
       <div className="flex flex-col md:flex-row ustify-between gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* main section > sideBar */}
-
         <div className="mt-20 px-7 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[20%] ">
           <p className="text-xl">Search By Filter</p>
 
@@ -319,20 +271,11 @@ function DestinationsDetails() {
             className="border-2 p-2 rounded"
           />
 
-          <button
-            value="FILTER"
-            onClick={handleFilterClick}
-            className="bg-sky-600 hover:bg-sky-800 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
-          >
+          <button 
+          value="FILTER"
+          onClick={handleFilterClick}
+          className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit">
             Filter
-          </button>
-
-          <button
-            className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
-            value="FILTER"
-            onClick={handleClearFilterClicked}
-          >
-            Clear Filter
           </button>
 
           <p className="text-xl">Sort By</p>
@@ -341,7 +284,7 @@ function DestinationsDetails() {
             name=""
             id=""
             className="border-2 p-2 outline-none"
-            onChange={handleSortChange}
+            onChange={handleSortChange} 
             value={sortBy}
           >
             <option value="" disabled selected>
@@ -354,42 +297,23 @@ function DestinationsDetails() {
         </div>
 
         {/* main section > mainBar */}
-
-        {/* this div will show only in smaller screens */}
         <div className="  w-full ">
           <p
             onClick={() => setFilterButtonClicked(!filterButtonClicked)}
             className={`mt-10 w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${
-              filterButtonClicked ? "bg-red-600 text-white" : "bg-gray-300"
+              filterButtonClicked ? "bg-red-500 text-white" : "bg-gray-300"
             } }`}
           >
             {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
           </p>
 
-          <div
-            className={`fixed bottom-0 left-0 right-0 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
-              filterButtonClicked
-                ? "translate-y-0 opacity-100"
-                : "translate-y-full opacity-0"
-            }`}
-          >
-            <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
-              {/* Filter Header with X button */}
-              <div className="flex justify-between items-center">
-                <p className="text-lg">Search By Filter</p>
-                <button
-                  onClick={() => setFilterButtonClicked(false)}
-                  className="text-gray-600 text-xl font-bold transition-transform duration-300 transform hover:scale-110"
-                >
-                  &times;
-                </button>
-              </div>
+          {filterButtonClicked && (
+            <div className="mt-5 md:hidden flex border-2 flex-col rounded-lg px-3 py-3 pb-5 gap-5">
+              <p className="text-lg">Search By Filter</p>
 
               <div className="flex flex-wrap gap-5">
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="fromDate" className="w-20">
-                    From Date
-                  </label>
+                  <label htmlFor="fromDate">From Date</label>
                   <input
                     type="date"
                     value={startDate}
@@ -399,42 +323,28 @@ function DestinationsDetails() {
                 </div>
 
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="toDate" className="w-20">
-                    To Date
-                  </label>
+                  <label htmlFor="toDate">To Date</label>
                   <input
                     type="date"
                     value={toDate}
-                    onChange={handleToChange}
+            onChange={handleToChange}
                     className="border-2 p-2 rounded"
                   />
                 </div>
 
-                <div className="flex items-center gap-2 flex-wrap">
-                  <button
-                    className="bg-sky-600 hover:bg-sky-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                    value="FILTER"
-                    onClick={handleFilterClick}
-                  >
-                    Filter
-                  </button>
-
-                  <button
-                    className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                    value="FILTER"
-                    onClick={handleClearFilterClicked}
-                  >
-                    Clear Filter
-                  </button>
-                </div>
+                <button 
+                 value="FILTER"
+                 onClick={handleFilterClick}
+                className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit">
+                  Filter
+                  
+                </button>
               </div>
 
               <p className="text-lg">Sort By</p>
 
               <select
-                name=""
-                id=""
-                className="border-2 p-2 outline-none"
+                className="border-2 p-2 rounded outline-none w-fit"
                 onChange={handleSortChange}
                 value={sortBy}
               >
@@ -446,7 +356,7 @@ function DestinationsDetails() {
                 <option value="price_high_to_low">High Price</option>
               </select>
             </div>
-          </div>
+          )}
 
           {currentItems.length > 0 ? (
             currentItems.map((item, index) => (
@@ -593,12 +503,12 @@ function DestinationsDetails() {
               </div>
             ))
           ) : (
-            <div className="flex my-20 items-center justify-center w-full h-full">
-              <p className="text-xl md:text-3xl">No programs available.</p>
+            <div className="no-data-container">
+              <p>No programs available.</p>
             </div>
           )}
 
-          <nav>
+<nav>
             <div className="flex justify-center items-center mt-5">
               <ul className="flex space-x-2">
                 {Array.from(
@@ -607,11 +517,7 @@ function DestinationsDetails() {
                     <li key={i + 1} className="relative">
                       <button
                         onClick={() => paginate(i + 1)}
-                        className={`px-4 py-2 border-2 rounded-full text-black ${
-                          currentPage === i + 1
-                            ? "bg-blue-700 border-blue-700 text-white"
-                            : "hover:bg-blue-600 hover:border-blue-600"
-                        }`}
+                        className={`px-4 py-2 border-2 rounded-full text-black ${currentPage === i + 1 ? "bg-blue-700 border-blue-700 text-white" : "hover:bg-blue-600 hover:border-blue-600"}`}
                       >
                         {i + 1}
                       </button>
@@ -621,6 +527,7 @@ function DestinationsDetails() {
               </ul>
             </div>
           </nav>
+
         </div>
       </div>
 

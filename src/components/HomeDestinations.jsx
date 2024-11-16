@@ -36,7 +36,7 @@ function Destinations() {
   };
 
   return (
-    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-16">
+    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-10 md:mt-16">
       <p className="text-2xl md:text-3xl font-semibold ">Destinations </p>
 
       <div className="flex flex-wrap gap-4 justify-start  mt-12  ">

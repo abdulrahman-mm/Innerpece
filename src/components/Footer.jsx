@@ -7,10 +7,8 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 import { FaFacebook } from "react-icons/fa";
 import { RiInstagramFill } from "react-icons/ri";
 import { FaHeart } from "react-icons/fa6";
+import { FaLinkedin } from "react-icons/fa";
 import aryulogo from "../assets/aryulogo.png";
-import { FaYoutube } from "react-icons/fa";
-import { FaTwitter } from "react-icons/fa";
-import homefooterx from "../assets/homefooterx.png";
 import homefooterinsta from "../assets/homefooterinsta.png";
 import homefooterfb from "../assets/homefooterfb.png";
 import homefooterlinkedin from "../assets/homefooterlinkedin.png";
@@ -37,12 +35,12 @@ function Footer() {
 
     window.scrollTo({
       top: 0,
-      behavior: 'instant',
+      behavior: "instant",
     });
   }
 
   return (
-    <div className="mt-36">
+    <div className="mt-10 md:mt-28 ">
       <img
         src={footer1}
         alt=""
@@ -50,8 +48,8 @@ function Footer() {
       />
 
       <div className="bg-[url('././assets/footer2.png')]   bg-center bg-cover pb-2 ">
-        <div className="footer  py-16 items-start gap-8 flex-wrap flex-col md:flex-row flex justify-start md:justify-evenly pt-24 px-5 ">
-          <div className="flex flex-col  flex-wrap text-white basis-80">
+        <div className="footer  py-16  gap-12 flex-wrap flex-col md:flex-row flex  justify-between  pt-24 px-5 ">
+          <div className="flex flex-col  flex-wrap text-white ">
             <div>
               <img
                 src={`https://backoffice.innerpece.com/${footerContent.footer_logo}`}
@@ -117,7 +115,7 @@ function Footer() {
             </p>
           </div>
 
-          <div className="flex flex-col flex-wrap gap-8">
+          <div className="flex flex-col flex-wrap gap-y-3">
             <div className="flex items-center gap-3">
               <FaCircleArrowRight className="inline-block text-sky-200 text-3xl" />
               <p className="text-xl md:text-2xl text-white font-semibold">
@@ -127,22 +125,26 @@ function Footer() {
 
             <div className="flex flex-wrap gap-x-5">
               <a
-                href={`https://www.facebook.com/login.php/?_rdc=1&_rdr`}
+                href={`https://www.facebook.com/p/Innerpece-100094846880465/?_rdr`}
                 target="_blank"
               >
                 <img src={homefooterfb} alt="" className="cursor-pointer" />
               </a>
-              <a href={`https://x.com/`} target="_blank">
-                <img src={homefooterx} alt="" className="cursor-pointer" />
-              </a>
-              <a href={`https://www.linkedin.com/company/login`}>
+
+              <a
+                href={`https://www.linkedin.com/company/80112098/admin/dashboard/`}
+                target="_blank"
+              >
                 <img
                   src={homefooterlinkedin}
                   alt=""
                   className="cursor-pointer"
                 />
               </a>
-              <a href={`https://www.instagram.com/`} target="_blank">
+              <a
+                href={`https://www.instagram.com/innerpececom/`}
+                target="_blank"
+              >
                 <img src={homefooterinsta} alt="" className="cursor-pointer" />
               </a>
             </div>
@@ -150,11 +152,11 @@ function Footer() {
             <img
               src={`https://backoffice.innerpece.com/uploads/settings/official_logo/1724229229_1.PNG`}
               alt=""
-              className="bg-contain w-48 h-28"
+              className="bg-contain w-40 h-16"
             />
           </div>
 
-          <div className="flex flex-col flex-wrap gap-y-3">
+          <div className="flex flex-col md:items-center  flex-wrap gap-y-3">
             <div className="flex items-center">
               <p className="text-white md:text-xl md:text-[10px] font-semibold">
                 Crafting Excellence With{" "}
@@ -169,15 +171,31 @@ function Footer() {
             </p>
 
             <div className="flex flex-wrap gap-x-3">
-              <RiInstagramFill className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer" />
-              <FaFacebook className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer " />
-              <FaYoutube className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer" />
-              <FaTwitter className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer" />
+              <a
+                href="https://www.instagram.com/aryutechnologies/"
+                target="_blank"
+              >
+                <RiInstagramFill className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer" />
+              </a>
+
+              <a
+                href="https://www.facebook.com/profile.php?id=61560790628495"
+                target="_blank"
+              >
+                <FaFacebook className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer " />
+              </a>
+
+              <a
+                href="https://www.linkedin.com/company/103279912/admin/dashboard/"
+                target="_blank"
+              >
+                <FaLinkedin className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer " />
+              </a>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-8 items-center justify-around">
+        <div className="flex flex-wrap gap-8 items-center justify-around pb-5">
           <p className="text-xs md:text-sm text-white ">
             {footerContent.copyright}
           </p>

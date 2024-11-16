@@ -18,8 +18,6 @@ import defaultimage from "../assets/defaultimg.png";
 function ExplorePopularEvents() {
   const [popularEventsData, setPopularEventsData] = useState([]);
 
- 
-
   let navigate = useNavigate();
 
   const responsive = {
@@ -32,9 +30,6 @@ function ExplorePopularEvents() {
       items: 1,
     },
   };
-
- 
-
 
   const handleCardClick = (id, title) => {
     const formattedTitleName = title
@@ -74,16 +69,10 @@ function ExplorePopularEvents() {
   }, []);
 
   return (
-    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-16">
-      <div className="flex items-center justify-between flex-wrap">
-        <p className="text-xl md:text-4xl font-semibold">
-          Explore <span className="text-blue-500">Popular Events</span>
-        </p>
-
-        <p className="underline text-sky-800  text-end cursor-pointer font-semibold">
-          View all
-        </p>
-      </div>
+    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-10 md:mt-16">
+      <p className="text-xl md:text-4xl font-semibold">
+        Explore <span className="text-blue-500">Popular Events</span>
+      </p>
 
       <Carousel
         swipeable={true}
@@ -101,8 +90,7 @@ function ExplorePopularEvents() {
       >
         {popularEventsData.map((items, index) => (
           <div
-          onClick={() => handleCardClick(items.id, items.title)}
-
+            onClick={() => handleCardClick(items.id, items.title)}
             key={index}
             className="cursor-pointer  flex flex-col w-screen  bg-white "
           >
@@ -134,8 +122,7 @@ function ExplorePopularEvents() {
         <div className="max-sm:hidden flex flex-wrap items-center justify-start mt-14 gap-x-5 gap-y-14">
           {popularEventsData.map((items, index) => (
             <div
-            onClick={() => handleCardClick(items.id, items.title)}
-
+              onClick={() => handleCardClick(items.id, items.title)}
               key={index}
               className="w-72 h-64 border-gray-200  cursor-pointer transform transition duration-300 ease-in-out hover:-translate-y-1 border-2  rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
             >

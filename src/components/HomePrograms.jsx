@@ -102,9 +102,6 @@
 // export default Programs;
 // Programs.js
 
-
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -128,9 +125,6 @@ function Programs() {
       });
   }, []);
 
-
-  
-
   const handleThemeClick = (id, themes_name) => {
     const formattedThemeName = themes_name
       .toLowerCase()
@@ -149,7 +143,7 @@ function Programs() {
   };
 
   return (
-    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-16">
+    <div className="ms-5 me-5 md:ms-16 md:me-16 mt-10">
       <p className="mt-12 text-2xl md:text-3xl font-semibold">Programs</p>
 
       {programsData.length > 0 ? (
@@ -160,13 +154,13 @@ function Programs() {
               onClick={() => handleThemeClick(item.id, item.themes_name)}
               className="relative w-56 h-60 cursor-pointer hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl"
             >
-              <div className="absolute -z-20 bg-gradient-to-b from-black/70 to-transparent h-full w-full"></div>
+              <div className="absolute -z-20 bg-gradient-to-b  from-black/70 to-transparent h-full w-full"></div>
               <img
                 src={`https://backoffice.innerpece.com/${item.theme_pic}`}
                 alt=""
-                className="w-56 h-60 -z-40 bg-gradient  shadow-black object-cover rounded absolute inset-0"
+                className="w-56 h-60 transition duration-300 ease-in-out brightness-100 hover:brightness-150 -z-40 bg-gradient  shadow-black object-cover rounded absolute inset-0"
               />
-              <p className="absolute z-10  flex justify-center text-lg w-full top-4 text-white font-semibold">
+              <p className="absolute z-10  flex justify-center  w-full top-4 text-white font-semibold">
                 {item.themes_name}
               </p>
             </div>

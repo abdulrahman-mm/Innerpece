@@ -22,24 +22,6 @@ function Signup() {
   const [newsletter_sub, setNewsletterSub] = useState("");
   const [terms_condition, setTermsCondition] = useState("");
 
-  // const [userDetails, setUserDetails] = useState({
-  //   first_name: "",
-  //   last_name: "",
-  //   email: "",
-  //   password: "",
-  //   password_confirmation: "",
-  //   dob: "",
-  //   phone: "",
-  //   street: "",
-  //   city: "",
-  //   state: "",
-  //   zip_province_code: "",
-  //   country: "",
-  //   preferred_lang: "",
-  //   newsletter_sub: false,
-  //   terms_condition: false,
-  // });
-
   const [userDetailsError, setUserDetailsError] = useState({
     first_name: "",
     last_name: "",
@@ -62,21 +44,12 @@ function Signup() {
     navigate("/login");
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: "instant",
     });
   }
 
   function handleInputChanges(e) {
     const { name, value, checked, type } = e.target;
-
-    // if (name === "phone") {
-    //   setUserDetails({ ...userDetails, [name]: value.slice(0, 10) });
-    // }
-    // if (type === "checkbox") {
-    //   setUserDetails({ ...userDetails, [name]: checked });
-    // } else {
-    //   setUserDetails({ ...userDetails, [name]: value });
-    // }
 
     if (name === "first_name") {
       setFirstname(value);
@@ -207,19 +180,6 @@ function Signup() {
       let errors = err.response.data.errors;
 
       setUserDetailsError({ ...errors });
-
-      // if (err.response && err.response.data.errors) {
-      //   const errors = err.response.data.errors;
-      //   setUserDetailsError({
-      //     // first_name: errors.first_name ? errors.first_name[0] : null,
-      //     // last_name: errors.last_name ? errors.last_name[0] : null,
-      //     email: errors.email ? errors.email[0] : null,
-      //     // phone: errors.phone ? errors.phone[0] : null,
-      //     // Add other fields similarly...
-      //   });
-      // }
-      // console.log("Backend Errors:", err.response.data.errors.email);
-      // console.log(userDetailsError);
     }
   };
 
@@ -227,7 +187,7 @@ function Signup() {
     <div className="flex items-center justify-center md:px-1 mt-16">
       <div className="w-[95vw] md:w-[80vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex bg-gray-50/30 justify-start gap-1 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
-          <div className=' bg-[url("././assets/signup.png")] w-1/5  rounded-md  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+          <div className=' bg-[url("././assets/signup.png")] w-1/5 max-md:hidden  rounded-md  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
           <div className="w-2/5 flex-grow flex-shrink">
             <div className="flex flex-col gap-2">

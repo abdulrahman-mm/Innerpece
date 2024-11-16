@@ -2,8 +2,19 @@ import React from "react";
 import VideoBox1 from "../assets/VideoBox1.png";
 import VideoBox2 from "../assets/VideoBox2.png";
 import VideoBox3 from "../assets/VideoBox3.png";
+import { useNavigate } from "react-router-dom";
 
 function OurStory() {
+  let navigate=useNavigate()
+
+  function handleBtnClick(){
+    navigate('/login')
+    window.scrollTo({
+      top:0,
+      behavior:'instant'
+    })
+  }
+
   return (
     <div className="bg-gradient-to-b mt-24 pb-20 px-5 md:px-12  lg:px-24  xl:px-32 from-sky-800 to-black ">
       
@@ -26,7 +37,7 @@ function OurStory() {
 
       <div className="flex items-center justify-between mt-14">
           <p className="w-1/2 text-white/50">Velit ultrices sed lobortis tristique. Quam cras sollicitudin cum amet eget praesent. Semper mollis posuere tincidunt lorem sit adipiscing tincidunt ut amet. Malesuada tincidunt risus in aliquet platea sapien. Netus amet.</p>
-          <button className=" bg-white px-6 py-3 rounded-full">Get Started</button>
+          <button onClick={handleBtnClick} className=" bg-white px-6 py-3 rounded-full">Get Started</button>
       </div>
     </div>
   );

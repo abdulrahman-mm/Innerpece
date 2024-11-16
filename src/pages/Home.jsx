@@ -8,10 +8,9 @@ import TalkToUs from "../components/TalkToUs";
 import ExplorePopularEvents from "../components/ExplorePopularEvents";
 import Destination from "../components/Destination";
 import LetsGetStarted from "../components/LetsGetStarted";
-import ExplorePopularPackages from "../components/ExplorePopularPackages";
-import OurStoryDocumentation from "../components/OurStoryDocumentation";
+// import ExplorePopularPackages from "../components/ExplorePopularPackages";
+// import OurStoryDocumentation from "../components/OurStoryDocumentation";
 import Footer from "../components/Footer";
-import Modal from "../components/Modal";
 
 function Home() {
   return (
@@ -24,11 +23,10 @@ function Home() {
       <UpcomingEvents />
       <TalkToUs />
       <ExplorePopularEvents />
-      <Destination />
+      {/* <Destination /> */}
       <LetsGetStarted />
-      <ExplorePopularPackages />
-      <OurStoryDocumentation />
-      <Modal />
+      {/* <ExplorePopularPackages /> */}
+      {/* <OurStoryDocumentation /> */}
       <Footer />
     </div>
   );

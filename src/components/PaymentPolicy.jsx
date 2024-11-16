@@ -29,6 +29,27 @@ function PaymentPolicy() {
         );
 
         setApiData(response.data.data);
+        // setIsWishlisted(response.data.data.wishlists);
+
+        document.title = apiData.title || "Default Title";
+
+        const metaOgTitle = document.querySelector("meta[property='og:title']");
+          if (metaOgTitle) {
+            metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+          }
+
+          // console.log('metaogtitle',metaOgTitle);
+
+          const metaOgDescription = document.querySelector("meta[property='og:description']");
+          if (metaOgDescription) {
+            metaOgDescription.setAttribute("content", apiData.program_desc || "Default description");
+          }
+
+          const metaOgImage = document.querySelector("meta[property='og:image']");
+          if (metaOgImage) {
+            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${programData.cover_img}` || '');
+          }
+
       } catch (err) {
         console.log(err);
       }
