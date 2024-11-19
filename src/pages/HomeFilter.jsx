@@ -26,10 +26,10 @@ function DestinationsDetails() {
   const [apiData, setApiData] = useState([]);
   const [sortBy, setSortBy] = useState("");
 
-  const [startDate, setStartDate] = useState('');
-  const [toDate, setToDate] = useState('');
+  const [startDate, setStartDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
-  const [searchTitle, setSearchTitle] = useState('');
+  const [searchTitle, setSearchTitle] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(2);
@@ -40,7 +40,6 @@ function DestinationsDetails() {
   const currentItems = Array.isArray(apiData)
     ? apiData.slice(indexOfFirstItem, indexOfLastItem)
     : [];
-
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -55,25 +54,36 @@ function DestinationsDetails() {
           }
         );
 
-        console.log('homefilter',response.data.data);
+        console.log("homefilter", response.data.data);
         setApiData(response.data.data);
 
         const firstProgram = response.data.data[0];
         const metaOgTitle = document.querySelector("meta[property='og:title']");
         console.log(metaOgTitle);
         if (metaOgTitle) {
-          metaOgTitle.setAttribute("content", firstProgram.title || "Default Title");
+          metaOgTitle.setAttribute(
+            "content",
+            firstProgram.title || "Default Title"
+          );
         }
 
-        const metaOgDescription = document.querySelector("meta[property='og:description']");
-            if (metaOgDescription) {
-              metaOgDescription.setAttribute("content", firstProgram.category || "Default description");
-            }
+        const metaOgDescription = document.querySelector(
+          "meta[property='og:description']"
+        );
+        if (metaOgDescription) {
+          metaOgDescription.setAttribute(
+            "content",
+            firstProgram.category || "Default description"
+          );
+        }
 
-            const metaOgImage = document.querySelector("meta[property='og:image']");
-            if (metaOgImage) {
-              metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${firstProgram.cover_img}` || '');
-            }
+        const metaOgImage = document.querySelector("meta[property='og:image']");
+        if (metaOgImage) {
+          metaOgImage.setAttribute(
+            "content",
+            `https://backoffice.innerpece.com/${firstProgram.cover_img}` || ""
+          );
+        }
       } catch (err) {
         console.log(err);
       }
@@ -84,27 +94,29 @@ function DestinationsDetails() {
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
   let navigate = useNavigate();
 
-
   const handleSearchClick = async () => {
     try {
       // Post request to search-program API
-      const response = await axios.post('https://backoffice.innerpece.com/api/search-program', {
-        destination: city_name,
-        title: searchTitle
-      });
+      const response = await axios.post(
+        "https://backoffice.innerpece.com/api/search-program",
+        {
+          destination: city_name,
+          title: searchTitle,
+        }
+      );
 
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         if (response.data.data.length === 0) {
           setApiData([]); // No data found, set empty array
         } else {
           setApiData(response.data.data); // Set the retrieved data
         }
       } else {
-        console.error('Error fetching programs:', response.data.message);
+        console.error("Error fetching programs:", response.data.message);
         setApiData([]); // Error occurred, set empty array
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       setApiData([]); // Set empty array on exception
     }
   };
@@ -131,48 +143,52 @@ function DestinationsDetails() {
     setSortBy(selectedSort);
 
     try {
-      const response = await axios.post('https://backoffice.innerpece.com/api/sort-destination ', {
-        sort_by: selectedSort,
-        destination: city_name
-      });
+      const response = await axios.post(
+        "https://backoffice.innerpece.com/api/sort-destination ",
+        {
+          sort_by: selectedSort,
+          destination: city_name,
+        }
+      );
 
-      console.log('API response:', response.data); // Inspect response data
+      console.log("API response:", response.data); // Inspect response data
 
-      if (response.data.status === 'success') {
+      if (response.data.status === "success") {
         const dataObject = response.data.data;
         // Convert the data object to an array
         const dataArray = Object.values(dataObject);
         setApiData(dataArray);
       } else {
-        console.error('Error sorting programs:', response.data.message);
+        console.error("Error sorting programs:", response.data.message);
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
   const handleFilterClick = async () => {
     try {
-      const response = await axios.post('https://backoffice.innerpece.com/api/filter-destination', {
-        start_date: startDate,
-        to_date: toDate,
-        destination: city_name
-      });
-  
-      if (response.data.status === 'success') {
+      const response = await axios.post(
+        "https://backoffice.innerpece.com/api/filter-destination",
+        {
+          start_date: startDate,
+          to_date: toDate,
+          destination: city_name,
+        }
+      );
+
+      if (response.data.status === "success") {
         const data = Object.values(response.data.data); // Convert data to an array
-  
+
         if (data.length === 0) {
           setApiData([]); // No data found, set empty array
         } else {
-          console.log('filtered data', data);
+          console.log("filtered data", data);
           setApiData(data); // Set the retrieved data as an array
-
-          
         }
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
       setApiData([]);
     }
   };
@@ -183,11 +199,7 @@ function DestinationsDetails() {
 
   const handleToChange = (e) => {
     setToDate(e.target.value);
-  }
-
-  function onchangeSelect(e) {
-    setSortBy(e.target.value);
-  }
+  };
 
   return (
     <div>
@@ -271,10 +283,11 @@ function DestinationsDetails() {
             className="border-2 p-2 rounded"
           />
 
-          <button 
-          value="FILTER"
-          onClick={handleFilterClick}
-          className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit">
+          <button
+            value="FILTER"
+            onClick={handleFilterClick}
+            className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit"
+          >
             Filter
           </button>
 
@@ -284,7 +297,7 @@ function DestinationsDetails() {
             name=""
             id=""
             className="border-2 p-2 outline-none"
-            onChange={handleSortChange} 
+            onChange={handleSortChange}
             value={sortBy}
           >
             <option value="" disabled selected>
@@ -327,17 +340,17 @@ function DestinationsDetails() {
                   <input
                     type="date"
                     value={toDate}
-            onChange={handleToChange}
+                    onChange={handleToChange}
                     className="border-2 p-2 rounded"
                   />
                 </div>
 
-                <button 
-                 value="FILTER"
-                 onClick={handleFilterClick}
-                className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit">
+                <button
+                  value="FILTER"
+                  onClick={handleFilterClick}
+                  className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit"
+                >
                   Filter
-                  
                 </button>
               </div>
 
@@ -503,12 +516,12 @@ function DestinationsDetails() {
               </div>
             ))
           ) : (
-            <div className="no-data-container">
+            <div className="flex items-start text-2xl justify-center w-full h-screen ">
               <p>No programs available.</p>
             </div>
           )}
 
-<nav>
+          <nav>
             <div className="flex justify-center items-center mt-5">
               <ul className="flex space-x-2">
                 {Array.from(
@@ -517,7 +530,11 @@ function DestinationsDetails() {
                     <li key={i + 1} className="relative">
                       <button
                         onClick={() => paginate(i + 1)}
-                        className={`px-4 py-2 border-2 rounded-full text-black ${currentPage === i + 1 ? "bg-blue-700 border-blue-700 text-white" : "hover:bg-blue-600 hover:border-blue-600"}`}
+                        className={`px-4 py-2 border-2 rounded-full text-black ${
+                          currentPage === i + 1
+                            ? "bg-blue-700 border-blue-700 text-white"
+                            : "hover:bg-blue-600 hover:border-blue-600"
+                        }`}
                       >
                         {i + 1}
                       </button>
@@ -527,7 +544,6 @@ function DestinationsDetails() {
               </ul>
             </div>
           </nav>
-
         </div>
       </div>
 

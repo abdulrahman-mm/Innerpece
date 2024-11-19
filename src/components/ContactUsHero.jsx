@@ -2,13 +2,20 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function Hero() {
-  let navigate=useNavigate()
+  let navigate = useNavigate();
   return (
-    <div className="bg-[url('././assets/contactushero.png')] h-[70vh] w-full bg-no-repeat bg-center bg-cover">
+    <div className="bg-[url('././assets/contactushero.png')] h-[30vh] md:h-[70vh] w-full bg-no-repeat bg-center bg-cover">
       <div className="flex flex-col items-center justify-center h-full gap-5">
-        <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-black/75">CONTACT US</p>
+        <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-black/75">
+          CONTACT US
+        </p>
         <div className="flex gap-5">
-          <p className="text-white cursor-pointer hover:text-sky-800" onClick={()=>navigate('/')}>HOME</p>
+          <p
+            className="text-white cursor-pointer hover:text-sky-800"
+            onClick={() => navigate("/")}
+          >
+            HOME
+          </p>
           <p className="text-sky-800">CONTACT US</p>
         </div>
       </div>

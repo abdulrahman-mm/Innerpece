@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Link, useNavigate } from "react-router-dom";
 import innerpece_logo2 from "../assets/innerpece_logo2.svg";
@@ -7,8 +7,18 @@ function Header() {
   const [isOpen, setIsOpen] = useState(false);
   let navigate = useNavigate();
 
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    // Clean up on component unmount
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [isOpen]);
+
   return (
-    <div className="flex justify-between items-center w-full px-5 md:px-11 py-4 bg-black text-white backdrop:blur-lg shadow-2xl shadow-white">
+    <div className="flex justify-between items-center w-full px-5 md:px-11 py-3 md:py-4 bg-black text-white backdrop:blur-lg shadow-2xl shadow-white">
       <div onClick={() => navigate("/")} className="cursor-pointer">
         <img src={innerpece_logo2} alt="" />
       </div>

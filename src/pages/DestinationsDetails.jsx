@@ -33,14 +33,17 @@ function DestinationsDetails() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(2);
+  const [loading, setLoading] = useState(true); // Add a loading state
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
+  const [filterButtonClicked, setFilterButtonClicked] = useState(false);
+  let navigate = useNavigate();
+
   const currentItems = Array.isArray(apiData)
     ? apiData.slice(indexOfFirstItem, indexOfLastItem)
     : [];
-
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -55,6 +58,7 @@ function DestinationsDetails() {
         );
 
         setApiData(response.data.data);
+        setLoading(false);
 
         console.log("for seo", response.data.data[0]);
         const firstProgram = response.data.data[0];
@@ -86,13 +90,11 @@ function DestinationsDetails() {
         }
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     };
     fetchProgramData();
   }, [id]);
-
-  const [filterButtonClicked, setFilterButtonClicked] = useState(false);
-  let navigate = useNavigate();
 
   const handleSearchClick = async () => {
     try {
@@ -235,6 +237,45 @@ function DestinationsDetails() {
     // Clean up on component unmount
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
+
+  const SkeletonLoader = () => {
+    return (
+      <div className="animate-pulse flex flex-col mt-10 gap-4 px-3 md:px-10 w-full md:w-[80vw]">
+        {[...Array(2)].map((_, index) => (
+          <div
+            key={index}
+            className="bg-gray-100 h-auto mt-11 justify-between flex flex-col gap-2 lg:flex-row "
+          >
+            {/* Left section */}
+            <div className="w-full  lg:w-[30vw] h-64  bg-gray-300"></div>
+
+            {/* Middle section */}
+            <div className="flex flex-col gap-2 md:gap-5 md:py-2 flex-1">
+              <div className="w-1/2 lg:w-96 h-10 bg-gray-300 rounded-lg"></div>
+              <div className="w-1/3 lg:w-72 h-10 bg-gray-300 rounded-lg"></div>
+              <div className="w-1/4 lg:w-52 h-10 bg-gray-300 rounded-lg"></div>
+
+              <div className="border-b border-gray-400 w-full lg:w-[300px]"></div>
+
+              <div className="flex gap-8">
+                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+              </div>
+            </div>
+
+            {/* Right section */}
+            <div className="flex lg:flex-col  gap-2 md:gap-4 pb-2 md:py-2 md:pe-5">
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -448,7 +489,9 @@ function DestinationsDetails() {
             </div>
           </div>
 
-          {currentItems.length > 0 ? (
+          {loading ? (
+            <SkeletonLoader />
+          ) : currentItems.length > 0 ? (
             currentItems.map((item, index) => (
               <div key={index} className="flex flex-col mt-10  ">
                 <div

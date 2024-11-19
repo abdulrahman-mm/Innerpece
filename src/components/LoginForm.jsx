@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import facebook from "../assets/facebook.png";
-import google from "../assets/google.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -81,10 +79,8 @@ function Login() {
     }
   }
 
-  console.log(loginError);
-
   return (
-    <div className="flex items-center justify-center mt-28">
+    <div className="flex items-center justify-center mt-8 md:mt-28">
       <div className="80vw md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
           <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
@@ -106,18 +102,6 @@ function Login() {
               </div>
 
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
-                {/* <div className="flex flex-col flex-grow gap-2">
-                  <label htmlFor="name" className="font-semibold">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="border-2 border-gray-300 outline-none p-2 rounded-md"
-                    placeholder="Enter your name*"
-                  />
-                </div> */}
                 <div className="flex flex-col flex-grow gap-2">
                   <label htmlFor="email" className="font-semibold">
                     Email
@@ -201,23 +185,6 @@ function Login() {
               >
                 Sign In
               </button>
-
-              <div className="flex gap-3 mt-5 items-center">
-                <p>or</p>
-                <hr className="w-36" />
-              </div>
-
-              <div className="flex flex-wrap gap-6">
-                <div className="cursor-pointer flex px-5 flex-grow justify-center  flex-shrink items-center border-2 p-3 gap-2 rounded">
-                  <img src={google} alt="" />
-                  <p>Sign in with google</p>
-                </div>
-
-                <div className="flex cursor-pointer px-5 flex-grow justify-center flex-shrink items-center border-2 p-3 gap-2 rounded">
-                  <img src={facebook} alt="" />
-                  <p>Sign in with facebook</p>
-                </div>
-              </div>
 
               <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
                 <p>Don't you have an account?</p>

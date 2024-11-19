@@ -38,6 +38,7 @@ function Programs() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const [loading, setLoading] = useState(true); // Add a loading state
 
   const currentItems = Array.isArray(apiData)
     ? apiData.slice(indexOfFirstItem, indexOfLastItem)
@@ -52,18 +53,15 @@ function Programs() {
             theme: id,
           }
         );
-
+        setLoading(false);
         setApiData(response.data.data);
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     };
     fetchProgramData();
   }, [id]);
-
-  function onchangeSelect(e) {
-    setSortBy(e.target.value);
-  }
 
   const handleDateChange = (e) => {
     setStartDate(e.target.value);
@@ -74,8 +72,6 @@ function Programs() {
   };
 
   const handleClearFilterClicked = async () => {
-    setFilterButtonClicked(false);
-
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
@@ -179,7 +175,10 @@ function Programs() {
     }
   };
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setCurrentPage(pageNumber);
+  };
 
   const handleCardClick = (id, title) => {
     const formattedTitleName = title
@@ -207,6 +206,45 @@ function Programs() {
     // Clean up on component unmount
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
+
+  const SkeletonLoader = () => {
+    return (
+      <div className="animate-pulse flex flex-col mt-10 gap-4 px-3 md:px-10 w-full md:w-[77vw]">
+        {[...Array(2)].map((_, index) => (
+          <div
+            key={index}
+            className="bg-gray-100 h-auto mt-11 justify-between flex flex-col gap-2 lg:flex-row "
+          >
+            {/* Left section */}
+            <div className="w-full  lg:w-[30vw] h-64  bg-gray-300"></div>
+
+            {/* Middle section */}
+            <div className="flex flex-col gap-2 md:gap-5 md:py-2 flex-1">
+              <div className="w-1/2 lg:w-96 h-10 bg-gray-300 rounded-lg"></div>
+              <div className="w-1/3 lg:w-72 h-10 bg-gray-300 rounded-lg"></div>
+              <div className="w-1/4 lg:w-52 h-10 bg-gray-300 rounded-lg"></div>
+
+              <div className="border-b border-gray-400 w-full lg:w-[300px]"></div>
+
+              <div className="flex gap-8">
+                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+              </div>
+            </div>
+
+            {/* Right section */}
+            <div className="flex lg:flex-col justify-between gap-2 md:gap-4 pb-2 md:py-2 md:pe-5">
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -418,22 +456,15 @@ function Programs() {
             </div>
           </div>
 
-          {currentItems.length > 0 ? (
+          {loading ? (
+            <SkeletonLoader />
+          ) : currentItems.length > 0 ? (
             currentItems.map((item, index) => (
               <div key={index} className="flex flex-col mt-10  ">
                 <div
                   key={index}
                   className="flex  flex-col lg:flex-row mt-11    "
                 >
-                  {/* <img
-                    src={
-                      item.cover_img
-                        ? `https://backoffice.innerpece.com/${item.cover_img}`
-                        : defaultimage
-                    }
-                    alt=""
-                    className="object-cover  lg:w-72  bg-center  rounded-none"
-                  /> */}
                   <img
                     src={
                       item.cover_img
@@ -441,7 +472,7 @@ function Programs() {
                         : defaultimage
                     }
                     alt=""
-                    className="object-cover  w-full lg:w-72 bg-center rounded-none"
+                    className="object-cover  w-full lg:w-72  rounded-none"
                   />
 
                   <div className="flex flex-wrap flex-grow   flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">
@@ -540,7 +571,7 @@ function Programs() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-4  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2  lg:rounded-lg lg:rounded-s-none rounded-b-none">
+                  <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-4  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
                     <p className="font-bold text-xl md:text-2xl">
                       ₹{item.price}
                     </p>
@@ -588,8 +619,8 @@ function Programs() {
                         onClick={() => paginate(i + 1)}
                         className={`px-4 py-2 border-2 rounded-full text-black ${
                           currentPage === i + 1
-                            ? "bg-blue-700 border-blue-700 text-white"
-                            : "hover:bg-blue-600 hover:border-blue-600"
+                            ? "bg-sky-800 border-sky-800 text-white"
+                            : "hover:bg-sky-700 hover:border-sky-700"
                         }`}
                       >
                         {i + 1}

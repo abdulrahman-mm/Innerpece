@@ -17,7 +17,7 @@ function LetsGetStarted() {
 
   }
   return (
-    <div className='image bg-[url("././assets/letsgetstarted.jpg")] bg-center bg-cover p-5 ms-5 me-5  md:ms-16 md:me-16 mt-10 md:mt-16 py-8 rounded-md'>
+    <div className='image bg-[url("././assets/letsgetstarted.jpg")] bg-center bg-cover p-5 ms-5 me-5 mt-8 md:ms-16 md:me-16  md:mt-16 py-8 rounded-md'>
       <div className="flex gap-5 justify-between md:justify-between flex-wrap items-center h-full mx-5 md:mx-20">
         <div className="flex flex-wrap">
           <div>

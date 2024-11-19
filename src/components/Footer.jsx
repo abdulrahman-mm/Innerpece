@@ -40,7 +40,7 @@ function Footer() {
   }
 
   return (
-    <div className="mt-10 md:mt-28 ">
+    <div className="mt-8 md:mt-28 ">
       <img
         src={footer1}
         alt=""
@@ -48,7 +48,7 @@ function Footer() {
       />
 
       <div className="bg-[url('././assets/footer2.png')]   bg-center bg-cover pb-2 ">
-        <div className="footer  py-16  gap-12 flex-wrap flex-col md:flex-row flex  justify-between  pt-24 px-5 ">
+        <div className="footer py-5  md:py-16 gap-8  md:gap-12 flex-wrap flex-col md:flex-row flex  justify-start  px-5 ">
           <div className="flex flex-col  flex-wrap text-white ">
             <div>
               <img
@@ -58,7 +58,7 @@ function Footer() {
               />
             </div>
 
-            <p className="mt-3 md:mt-5 text-lg">
+            <p className="mt-5 text-lg">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores
             </p>
 
@@ -89,7 +89,7 @@ function Footer() {
           </div>
 
           <div className="text-white basis-30 flex flex-wrap flex-col gap-2 md:gap-4">
-            <p className="font-semibold text-xl md:text-2xl mb-4 md:mb-7">
+            <p className="font-semibold text-xl md:text-2xl pb-3 md:pb-5 ">
               Services Req
             </p>
             <p
@@ -97,6 +97,12 @@ function Footer() {
               className="text-lg text-gray-400 cursor-pointer hover:text-white"
             >
               About Us
+            </p>
+            <p
+              onClick={() => navigate("/contactus")}
+              className="text-lg text-gray-400 cursor-pointer hover:text-white"
+            >
+              Contact
             </p>
             <p className="text-lg text-gray-400 cursor-pointer hover:text-white">
               Faq
@@ -107,23 +113,18 @@ function Footer() {
             <p className="text-lg text-gray-400 cursor-pointer hover:text-white">
               Blog Insights
             </p>
-            <p
-              onClick={() => navigate("/contactus")}
-              className="text-lg text-gray-400 cursor-pointer hover:text-white"
-            >
-              Contact
-            </p>
+           
           </div>
 
-          <div className="flex flex-col flex-wrap gap-y-3">
-            <div className="flex items-center gap-3">
+          <div className="flex flex-col flex-wrap ">
+            <div className="flex items-center gap-3 pb-5">
               <FaCircleArrowRight className="inline-block text-sky-200 text-3xl" />
               <p className="text-xl md:text-2xl text-white font-semibold">
                 Get In Touch
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-x-5">
+            <div className="flex flex-wrap gap-x-5 mt-5">
               <a
                 href={`https://www.facebook.com/p/Innerpece-100094846880465/?_rdr`}
                 target="_blank"
@@ -152,13 +153,13 @@ function Footer() {
             <img
               src={`https://backoffice.innerpece.com/uploads/settings/official_logo/1724229229_1.PNG`}
               alt=""
-              className="bg-contain w-40 h-16"
+              className="bg-contain w-40 h-16 mt-5 md:mt-8"
             />
           </div>
 
           <div className="flex flex-col md:items-center  flex-wrap gap-y-3">
-            <div className="flex items-center">
-              <p className="text-white md:text-xl md:text-[10px] font-semibold">
+            <div className="flex items-center pb-5">
+              <p className="text-white text-xl md:text-2xl font-semibold">
                 Crafting Excellence With{" "}
               </p>
               <FaHeart className="text-white ms-1 " />
@@ -175,21 +176,21 @@ function Footer() {
                 href="https://www.instagram.com/aryutechnologies/"
                 target="_blank"
               >
-                <RiInstagramFill className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer" />
+                <RiInstagramFill className="text-white  rounded-full bg-blue-600 p-1 text-3xl cursor-pointer" />
               </a>
 
               <a
                 href="https://www.facebook.com/profile.php?id=61560790628495"
                 target="_blank"
               >
-                <FaFacebook className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer " />
+                <FaFacebook className="text-white rounded-full bg-blue-600 p-1 text-3xl cursor-pointer " />
               </a>
 
               <a
                 href="https://www.linkedin.com/company/103279912/admin/dashboard/"
                 target="_blank"
               >
-                <FaLinkedin className="text-white rounded-full bg-blue-600 p-1 text-2xl cursor-pointer " />
+                <FaLinkedin className="text-white rounded-full bg-blue-600 p-1 text-3xl cursor-pointer " />
               </a>
             </div>
           </div>

@@ -4,7 +4,7 @@ import ourmissionimg1 from "../assets/ourmissionimg1.png";
 
 function OurMission() {
   return (
-    <div className="ms-3 me-3 mt-24 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
+    <div className="ms-3 me-3 mt-8 md:mt-24 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
       <div className="flex flex-col items-center lg:flex-row justify-start lg:gap-32 xl:gap-48">
       
         <div className="basis-[50%] lg:basis-[30%] gap-8">
@@ -13,7 +13,7 @@ function OurMission() {
             Tristique aliquet facilisi massa in
           </p>
 
-          <div className="flex flex-col mt-14 gap-11 ">
+          <div className="flex flex-col mt-5 md:mt-14 gap-11 ">
             <div className="flex gap-5">
               <p className="text-blue-900 font-bold">01</p>
               <div className="flex flex-col gap-2">
@@ -24,7 +24,7 @@ function OurMission() {
                   Vitae pharetra dolor convallis non tellus at id. Nisi
                   dignissim dui scelerisque leo aliquam molestie.
                 </p>
-                <hr className="w-full mt-6 border-sky-900/20" />
+                <hr className="w-full mt-1 md:mt-6 border-sky-900/20" />
               </div>
             </div>
 
@@ -38,7 +38,7 @@ function OurMission() {
                   Proin nibh scelerisque consectetur eget sit. Non arcu amet eu
                   vestibulum id. Leo vitae enim non.
                 </p>
-                <hr className="w-full mt-6 border-sky-900/20" />
+                <hr className="w-full mt-1 md:mt-6 border-sky-900/20" />
               </div>
             </div>
 
@@ -57,7 +57,7 @@ function OurMission() {
           </div>
         </div>
 
-        <div className="relative mx-auto basis-[20%] mt-28 lg:mt-0 lg:basis-[50%]">
+        <div className="relative mx-auto basis-[20%] mt-8 lg:mt-0 lg:basis-[50%]">
           <img src={ourmissionimg1} alt="" className="  md:w-auto bg-center bg-contain" />
           <img
             src={ourmissionimg2}

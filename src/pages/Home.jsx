@@ -21,7 +21,7 @@ function Home() {
       <HomeDestinations />
       <ExploreMore />
       <UpcomingEvents />
-      <TalkToUs />
+      {/* <TalkToUs /> */}
       <ExplorePopularEvents />
       {/* <Destination /> */}
       <LetsGetStarted />

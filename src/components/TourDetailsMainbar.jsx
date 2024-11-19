@@ -74,12 +74,12 @@ function Mainbar() {
         }}
       ></p>
 
-      <p className="text-sm font-semibold ms-3 mt-2 cursor-pointer">
+      {/* <p className="text-sm font-semibold ms-3 mt-2 cursor-pointer">
         Read More{" "}
         <span>
           <MdOutlineKeyboardArrowDown className="inline-block" />
         </span>{" "}
-      </p>
+      </p> */}
 
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
@@ -105,12 +105,12 @@ function Mainbar() {
                 })}
               </div>
 
-              <span className="text-sm font-semibold ms-3 cursor-pointer">
+              {/* <span className="text-sm font-semibold ms-3 cursor-pointer">
                 More Details{" "}
                 <span>
                   <MdOutlineKeyboardArrowDown className="inline-block" />
                 </span>{" "}
-              </span>
+              </span> */}
             </div>
           </div>
         )}
@@ -140,12 +140,12 @@ function Mainbar() {
                 })}
               </div>
 
-              <span className="text-sm font-semibold ms-3 cursor-pointer">
+              {/* <span className="text-sm font-semibold ms-3 cursor-pointer">
                 More Details{" "}
                 <span>
                   <MdOutlineKeyboardArrowDown className="inline-block" />
                 </span>{" "}
-              </span>
+              </span> */}
             </div>
           </div>
         )}

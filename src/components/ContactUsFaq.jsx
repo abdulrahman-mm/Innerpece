@@ -25,15 +25,15 @@ function Faq() {
   };
 
   return (
-    <div className="px-5 md:px-20 lg:px-30 xl:px-40 gap-16 py-8 mt-12">
+    <div className="px-5 md:px-20 lg:px-30 xl:px-40 gap-16 py-8 mt-8 md:mt-12">
       <p className="text-3xl md:text-5xl">FAQ</p>
       <p className="text-2xl md:text-3xl mt-10">Booking and Reservations</p>
       <hr className="mt-8 w-20 border-sky-800" />
 
-      <div className="flex flex-col md:w-[70vw] xl:w-[50vw] mt-12 gap-8">
+      <div className="flex flex-col md:w-[70vw] xl:w-[50vw] mt-5 md:mt-12 gap-8">
         {faqs.map((faq, index) => (
           
-          <div key={index} className=" pb-4">
+          <div key={index} className=" md:pb-4">
             <div
               className="flex items-center cursor-pointer justify-between"
               onClick={() => toggleFaq(index)}
