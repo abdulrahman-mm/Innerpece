@@ -16,7 +16,7 @@ function OurStory() {
   }
 
   return (
-    <div className="bg-gradient-to-b mt-8 md:mt-24 pb-20 px-5 md:px-12  lg:px-24  xl:px-32 from-sky-800 to-black ">
+    <div className="bg-gradient-to-b mt-8 md:mt-16 pb-20 px-5 md:px-12  lg:px-24  xl:px-32 from-sky-800 to-black ">
       <div className="flex pt-16 items-center gap-8 w-full md:w-2/3">
         <hr className="w-80 border-white" />
 

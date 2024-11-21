@@ -22,6 +22,7 @@ function Featured() {
   const currentUrl = window.location.href;
   const metaDescription = apiData?.program_desc || "";
   const [loading, setLoading] = useState(true);
+  const [activeImage, setActiveImage] = useState(0); // Default to the first image
 
   const responsive = {
     tablet: {
@@ -64,7 +65,6 @@ function Featured() {
           metaOgTitle.setAttribute("content", apiData.title || "Default Title");
         }
 
-
         const metaOgDescription = document.querySelector(
           "meta[property='og:description']"
         );
@@ -79,7 +79,7 @@ function Featured() {
         if (metaOgImage) {
           metaOgImage.setAttribute(
             "content",
-            `https://backoffice.innerpece.com/${programData.cover_img}` || ""
+            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
           );
         }
       } catch (err) {
@@ -136,7 +136,7 @@ function Featured() {
   };
 
   return (
-    <div className="mt-32 md:mt-28 ms-5 me-5 md:ms-10 md:me-10  lg:ms-20 lg:me-20">
+    <div className="mt-20 md:mt-28 ms-5 me-5 md:ms-10 md:me-10  lg:ms-20 lg:me-20">
       <div className="flex flex-col gap-2 md:flex-row flex-wrap justify-between">
         <div className="flex flex-wrap flex-col items-start justify-between gap-4">
           <span className="bg-red-500  text-white px-2">Featured</span>
@@ -196,18 +196,43 @@ function Featured() {
       {loading ? (
         <div className="object-cover mt-3 flex-shrink h-96  md:w-52 lg:w-64 xl:w-80 bg-gray-400 animate-pulse"></div>
       ) : (
-        <div>
+        // <div>
+        //   {apiData && apiData.gallery_img && (
+        //     <div className="flex max-md:hidden flex-wrap flex-shrink  my-5 ">
+        //       {apiData.gallery_img.map((item, index) => (
+        //         <img
+        //           onClick={() => handleImageClick(index)}
+        //           src={
+        //             apiData.gallery_img
+        //               ? `https://backoffice.innerpece.com/${item}`
+        //               : defaultimage
+        //           }
+        //           alt=""
+        //           className={`object-cover cursor-pointer h-96 transition-all  ease-out duration-700 ${
+        //             expandedIndex === index ? "w-[60%]" : "w-[10%]"
+        //           }`}
+        //         />
+        //       ))}
+        //     </div>
+        //   )}
+        // </div>
+
+        <div className="mt-5">
           {apiData && apiData.gallery_img && (
-            <div className="flex max-md:hidden flex-wrap flex-shrink gap-8 my-5">
+            <div className="flex max-md:hidden flex-wrap overflow-hidden">
               {apiData.gallery_img.map((item, index) => (
                 <img
+                  key={index}
                   src={
                     apiData.gallery_img
                       ? `https://backoffice.innerpece.com/${item}`
                       : defaultimage
                   }
                   alt=""
-                  className="object-cover flex-shrink h-96  md:w-52 lg:w-64 xl:w-80"
+                  className={`object-cover cursor-pointer h-96 transition-all ease-in-out duration-700 ${
+                    activeImage === index ? "w-[30%] scale-105" : "w-[5%]"
+                  } hover:w-[30%] hover:scale-105`}
+                  onMouseEnter={() => setActiveImage(index)} // Set the hovered image as active
                 />
               ))}
             </div>
@@ -228,7 +253,7 @@ function Featured() {
           keyBoardControl={true}
           transitionDuration={1000}
           containerClass="carousel-container"
-          itemClass="carousel-item-padding-40-px block sm:hidden shadow-lg shadow-black/10 mt-5"
+          itemClass="carousel-item-padding-40-px block md:hidden shadow-lg shadow-black/10 mt-5"
         >
           {apiData.gallery_img.map((item, index) => (
             <img
@@ -247,3 +272,5 @@ function Featured() {
 }
 
 export default Featured;
+
+// className={`object-cover flex-shrink h-96  md:w-52 lg:w-64 xl:w-80`}

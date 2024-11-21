@@ -48,7 +48,7 @@ function TourPlanning({TourPlanningRef}) {
 
           const metaOgImage = document.querySelector("meta[property='og:image']");
           if (metaOgImage) {
-            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${programData.cover_img}` || '');
+            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${apiData.cover_img}` || '');
           }
 
       } catch (err) {
@@ -59,7 +59,7 @@ function TourPlanning({TourPlanningRef}) {
   }, [id]);
 
   return (
-    <div ref={TourPlanningRef} className="ms-5 me-5 w-90vw md:ms-20 md:me-20 mt-10 md:w-2/3">
+    <div ref={TourPlanningRef} className="ms-5 me-5 mt-8 w-90vw md:ms-20 md:me-20 md:mt-10 md:w-2/3">
       <p className="font-semibold text-2xl ">Tour Planning</p>
 
       {apiData.tour_planning &&

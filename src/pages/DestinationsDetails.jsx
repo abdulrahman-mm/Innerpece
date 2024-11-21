@@ -60,10 +60,8 @@ function DestinationsDetails() {
         setApiData(response.data.data);
         setLoading(false);
 
-        console.log("for seo", response.data.data[0]);
         const firstProgram = response.data.data[0];
         const metaOgTitle = document.querySelector("meta[property='og:title']");
-        console.log(metaOgTitle);
         if (metaOgTitle) {
           metaOgTitle.setAttribute(
             "content",
@@ -505,7 +503,7 @@ function DestinationsDetails() {
                         : defaultimage
                     }
                     alt=""
-                    className="object-cover w-full lg:w-72  bg-center  rounded-none"
+                    className="object-cover w-full lg:w-72 hover:brightness-110 bg-center  rounded-none"
                   />
 
                   <div className="flex flex-wrap flex-grow  flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">

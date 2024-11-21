@@ -5,13 +5,13 @@ import ourvalueimg3 from "../assets/ourvalueimg3.png";
 
 function OurValue() {
   return (
-    <div className="ms-3 me-3 mt-8 md:mt-28 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 md:pb-40">
+    <div className="ms-3 me-3 mt-8 md:mt-16 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
       <p className="text-xl text-gray-700">OUR VALUE</p>
       <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold w-full md:w-1/3">
         Ac gravida at arcu vitae ut nulla. Sed
       </p>
 
-      <div className="flex flex-col mt-5 md:mt-14 items-center gap-5 md:gap-8">
+      <div className="flex flex-col mt-5 md:mt-14 items-center ">
         <div className="flex flex-col md:flex-row flex-wrap items-center gap-5 md:gap-8 justify-between">
           <div className="flex items-center  gap-5 basis-[20%]">
             <hr className="border-sky-800 w-12" />

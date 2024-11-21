@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
 import ContactUs from "./pages/ContactUs";
-import Destinations from "./pages/Destinations";
+// import Destinations from "./pages/Destinations";
 import ProgramsDetails from "./pages/ProgramsDetails";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
@@ -10,6 +10,8 @@ import TourDetails from "./pages/TourDetails";
 import DestinationsDetails from "./pages/DestinationsDetails";
 import PageNotFound from "./pages/PageNotFound";
 import HomeFilter from "./pages/HomeFilter";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/destinations" element={<Destinations />} />
+          {/* <Route path="/destinations" element={<Destinations />} /> */}
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/login" element={<Login />} />
@@ -34,6 +36,9 @@ function App() {
             path="/destinationsdetails/:city_name"
             element={<DestinationsDetails />}
           />
+
+          <Route path="/privacypolicy" element={<PrivacyPolicy/>}/>
+          <Route path="/termsofservice" element={<TermsOfService/>}/>
 
           <Route path="*" element={<PageNotFound />} />
         </Routes>

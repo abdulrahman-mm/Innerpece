@@ -13,7 +13,6 @@ function Hero() {
   const [selectedDate, setSelectedDate] = useState("");
   const navigate = useNavigate();
 
-  
   const handleInputChange = (event) => {
     setCityName(event.target.value);
   };
@@ -70,9 +69,9 @@ function Hero() {
   }, []);
 
   return (
-    <div className="hero-container">
+    <div className="hero-container relative">
       {loading ? (
-        <div className="relative h-[90vh] md:h-screen  bg-gray-300 rounded animate-pulse">
+        <div className="relative h-[40vh] md:h-screen  bg-gray-300 rounded animate-pulse">
           <div className="absolute inset-0 bg-gradient-to-b from-gray-400 to-gray-200 rounded"></div>
         </div>
       ) : (
@@ -91,7 +90,7 @@ function Hero() {
             {homeImage.map((image) => (
               <div
                 key={image.id}
-                className="carousel-item relative h-[80vh] md:h-screen w-screen"
+                className="carousel-item relative h-[40vh] md:h-screen w-screen"
               >
                 {/* Black gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent z-10"></div>
@@ -101,27 +100,31 @@ function Hero() {
                   className="absolute inset-0 h-full w-full object-cover "
                   src={`https://backoffice.innerpece.com/${image.slider_image}`}
                   alt={image.slider_name}
+                  loading="lazy"
                 />
 
                 <p
-                  className="text-white tracking-widest z-10  absolute top-10 sm:top-40 left-7 md:top-40 md:left-28 text-xl md:text-4xl "
+                  className="text-white uppercase  tracking-widest z-10  absolute top-5 sm:top-20 left-7 md:top-40 md:left-28 text-lg md:text-4xl "
                   style={{ "text-shadow": "2px 2px 3px #000000" }}
                 >
                   {image.slider_name}
                 </p>
                 <p
-                  className="text-white font-bold z-10 absolute left-7 top-32 sm:top-72 md:top-72 lg:top-64 xl:top-56 md:left-28 text-lg md:text-5xl lg:text-4xl"
+                  className="text-white uppercase  font-semibold z-10 absolute left-7 top-28 sm:top-28 md:top-72 lg:top-64 xl:top-56 md:left-28 text-lg md:text-5xl lg:text-4xl"
                   style={{ "text-shadow": "2px 2px 8px #000000" }}
                 >
                   {image.subtitle}
                 </p>
+                
               </div>
+              
             ))}
+            
           </Carousel>
         )
       )}
       {homeImage.length > 0 && (
-        <div className="w-100%  flex  absolute bottom-10 left-[2%] right-[2%] md:left-[10%] md:right-[10%]   justify-center ">
+        <div className="w-100%  flex  absolute bottom-1  left-[2%] right-[2%] md:left-[10%] md:right-[10%]   justify-center ">
           <div className="   justify-center  bg-white flex  flex-shrink flex-row flex-wrap md:flex-nowrap sm:gap-2 gap-1 rounded mx-1 px-2 sm:px-0 sm:ps-2 py-1 sm:py-0  lg:rounded-full shadow-2xl shadow-white/40">
             <div
               className="flex  flex-grow basis-[5%] lg:basis-[7%]   flex-shrink  items-center gap-3 border-gray-400 border-2 rounded md:rounded-3xl py-1 md:py-3 
@@ -143,7 +146,7 @@ function Hero() {
                 type="date"
                 value={selectedDate}
                 onChange={handleDateChange}
-                className="border-none mx-2 rounded outline-none"
+                className="border-none mx-2 rounded outline-none bg-white"
               />
             </div>
 

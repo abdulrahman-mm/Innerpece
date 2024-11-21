@@ -48,7 +48,7 @@ function Review({reviewRef}) {
 
           const metaOgImage = document.querySelector("meta[property='og:image']");
           if (metaOgImage) {
-            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${programData.cover_img}` || '');
+            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${apiData.cover_img}` || '');
           }
 
       } catch (err) {
@@ -59,7 +59,7 @@ function Review({reviewRef}) {
   }, [id]);
 
   return (
-    <div ref={reviewRef} className="ms-5 me-5 mt-16 md:ms-20 md:me-20 md:mt-12 md:pb-24">
+    <div ref={reviewRef} className="ms-5 me-5 mt-16 md:ms-20 md:me-20 md:mt-12">
       {apiData.client_reviews &&
         apiData.client_reviews.length > 0 &&
         apiData.client_reviews.map((item, index) => (

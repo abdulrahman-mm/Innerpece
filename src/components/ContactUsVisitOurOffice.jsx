@@ -3,7 +3,7 @@ import React from "react";
 function VisitOurOffice() {
   return (
     <div className="bg-gray-100/70">
-      <div className="flex items-center  flex-col md:flex-row px-5 md:px-20 lg:px-30 xl:px-40 gap-5  md:gap-8 lg:gap-12 xl:gap-16 py-8 mt-8 md:mt-12">
+      <div className="flex items-center  flex-col md:flex-row px-5 md:px-20 lg:px-30 xl:px-40 gap-5  md:gap-8 lg:gap-12 xl:gap-16 py-8 mt-8 md:mt-14">
         <div className="flex flex-col flex-grow basis-[40%] gap-5">
           <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
             Visit Our Office

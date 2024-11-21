@@ -307,7 +307,7 @@ function Programs() {
       {/* Main Section  */}
       <div className="flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* Main Section > Sidebar */}
-        <div className="mt-32 px-7 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[20%] ">
+        <div className="mt-20 py-10 px-7  h-fit flex flex-col gap-5 rounded-md  max-md:hidden border-2 basis-[20%] ">
           <p className="text-xl">Search By Filter</p>
           <label htmlFor="fromDate">From Date</label>
           <input
@@ -460,11 +460,12 @@ function Programs() {
             <SkeletonLoader />
           ) : currentItems.length > 0 ? (
             currentItems.map((item, index) => (
-              <div key={index} className="flex flex-col mt-10  ">
+              <div key={index} className="flex flex-col mt-5  overflow-hidden">
                 <div
                   key={index}
-                  className="flex  flex-col lg:flex-row mt-11    "
+                  className="flex  flex-col lg:flex-row mt-5 overflow-hidden   "
                 >
+                  
                   <img
                     src={
                       item.cover_img
@@ -472,15 +473,15 @@ function Programs() {
                         : defaultimage
                     }
                     alt=""
-                    className="object-cover  w-full lg:w-72  rounded-none"
+                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full lg:w-72  rounded-none"
                   />
 
-                  <div className="flex flex-wrap flex-grow   flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">
+                  <div className="flex flex-wrap flex-grow overflow-hidden   flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">
                     <p className="font-semibold flex-wrap text-2xl md:text-3xl">
                       {item.title}
                     </p>
 
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-centeroverflow-hidden justify-between gap-2 flex-wrap">
                       <div className="flex items-center gap-2">
                         <FaLocationDot className="text-sky-800" />
                         <p>{item.location}</p>

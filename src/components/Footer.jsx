@@ -40,16 +40,17 @@ function Footer() {
   }
 
   return (
-    <div className="mt-8 md:mt-28 ">
+    <div className="mt-8 md:mt-16 ">
+      
       <img
         src={footer1}
         alt=""
         className="w-screen -mb-2  sm:-mb-3 md:-mb-4 lg:-mb-5"
       />
 
-      <div className="bg-[url('././assets/footer2.png')]   bg-center bg-cover pb-2 ">
-        <div className="footer py-5  md:py-16 gap-8  md:gap-12 flex-wrap flex-col md:flex-row flex  justify-start  px-5 ">
-          <div className="flex flex-col  flex-wrap text-white ">
+      <div className="bg-[url('././assets/footer2.png')]   bg-center bg-cover  ">
+        <div className="footer py-5  md:py-16 gap-8  md:gap-12 flex-wrap flex-col md:flex-row flex  justify-start xl:justify-evenly  px-5 ">
+          <div className="flex flex-col basis-[30%] flex-wrap text-white ">
             <div>
               <img
                 src={`https://backoffice.innerpece.com/${footerContent.footer_logo}`}
@@ -59,7 +60,8 @@ function Footer() {
             </div>
 
             <p className="mt-5 text-lg">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores
+              Innerpece is a travel curator that transforms your travel ideas
+              into customized, unforgettable journeys.
             </p>
 
             <p className="mt-3 md:mt-5">
@@ -88,32 +90,37 @@ function Footer() {
             </p>
           </div>
 
-          <div className="text-white basis-30 flex flex-wrap flex-col gap-2 md:gap-4">
+          <div className="text-white basis-30 flex gap-2 flex-col  md:gap-4">
             <p className="font-semibold text-xl md:text-2xl pb-3 md:pb-5 ">
               Services Req
             </p>
+
             <p
               onClick={() => navigate("/aboutus")}
               className="text-lg text-gray-400 cursor-pointer hover:text-white"
             >
               About Us
             </p>
+
             <p
               onClick={() => navigate("/contactus")}
               className="text-lg text-gray-400 cursor-pointer hover:text-white"
             >
               Contact
             </p>
-            <p className="text-lg text-gray-400 cursor-pointer hover:text-white">
-              Faq
+            <p
+              onClick={() => navigate("/termsofservice")}
+              className="text-lg text-gray-400 cursor-pointer hover:text-white"
+            >
+              Terms Of Service
             </p>
-            <p className="text-lg text-gray-400 cursor-pointer hover:text-white">
-              Our Team
+
+            <p
+              onClick={() => navigate("/privacypolicy")}
+              className="text-lg text-gray-400 cursor-pointer hover:text-white"
+            >
+              Privacy Policy
             </p>
-            <p className="text-lg text-gray-400 cursor-pointer hover:text-white">
-              Blog Insights
-            </p>
-           
           </div>
 
           <div className="flex flex-col flex-wrap ">
@@ -165,7 +172,7 @@ function Footer() {
               <FaHeart className="text-white ms-1 " />
             </div>
 
-            <img src={aryulogo} alt="" className="w-28 h-20" />
+            <img src={aryulogo} alt="" className="w-20 h-16 md:w-28 md:h-20" />
 
             <p className="text-white text-xs font-semibold">
               <span className="font-bold text-xl me-1">ARYU</span>Technologies

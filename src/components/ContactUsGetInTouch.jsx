@@ -77,7 +77,7 @@ function GetInTouch() {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row px-5 py-8  md:px-20 lg:px-30 xl:px-40 gap-16 mt-8 md:mt-12">
+      <div className="flex flex-col md:flex-row px-5 md:px-20 lg:px-30 xl:px-40 gap-8 md:gap-16 mt-8 md:mt-14">
         <div className="basis-[40%]">
           <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
             Get in Touch with Our Team

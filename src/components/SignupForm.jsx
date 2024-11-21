@@ -48,6 +48,15 @@ function Signup() {
     });
   }
 
+  function navigateToTermsOfService(){
+    navigate('/termsofservice')
+
+    window.scrollTo({
+      top:0,
+      behavior:'instant'
+    })
+  }
+
   function handleInputChanges(e) {
     const { name, value, checked, type } = e.target;
 
@@ -184,7 +193,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex items-center justify-center mt-8 md:px-1 md:mt-16">
+    <div className="flex items-center justify-center mt-8 md:px-1 md:mt-14">
       <div className="w-[95vw] md:w-[80vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex bg-gray-50/30 justify-start gap-1 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
           <div className=' bg-[url("././assets/signup.png")] w-1/5 max-md:hidden  rounded-md  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
@@ -527,8 +536,8 @@ function Signup() {
                   >
                     I accept the{" "}
                   </label>
-                  <span className=" md:-ms-1 text-blue-600 underline cursor-pointer text-xs sm:text-sm md:text-base">
-                    Terms and Conditions
+                  <span onClick={navigateToTermsOfService} className=" md:-ms-1 text-blue-600 underline cursor-pointer text-xs sm:text-sm md:text-base">
+                    Terms Of Service
                   </span>
                 </div>
 

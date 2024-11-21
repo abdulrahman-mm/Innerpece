@@ -47,7 +47,7 @@ function PaymentPolicy() {
 
           const metaOgImage = document.querySelector("meta[property='og:image']");
           if (metaOgImage) {
-            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${programData.cover_img}` || '');
+            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${apiData.cover_img}` || '');
           }
 
       } catch (err) {
@@ -58,7 +58,7 @@ function PaymentPolicy() {
   }, [id]);
 
   return (
-    <div className="ms-5 me-5 mt-14 md:ms-20 md:mt-10 md:me-20 w-90vw md:w-[55%] ">
+    <div className="ms-5 me-5 mt-8 md:ms-20 md:mt-10 md:me-20 w-90vw md:w-[55%] ">
       <p className="font-semibold text-2xl ">Payment Policy</p>
 
       {apiData.payment_policy && apiData.payment_policy.length > 0 && (

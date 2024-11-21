@@ -13,7 +13,7 @@ import { AiOutlineMail } from "react-icons/ai";
 import { MdOutlinePhone } from "react-icons/md";
 import { BiMessageRoundedDots } from "react-icons/bi";
 
-function Sidebar({LocationShareRef}) {
+function Sidebar({ LocationShareRef }) {
   const location = useLocation();
   const { id } = location.state || {};
   const [apiData, setApiData] = useState([]);
@@ -56,7 +56,6 @@ function Sidebar({LocationShareRef}) {
         modifiedMapHtml = modifiedMapHtml.replace(/height="[^"]*"/g, "");
         modifiedMapHtml = modifiedMapHtml.replace(/style="[^"]*"/g, "");
 
-        console.log("modifiedMapHtml", modifiedMapHtml);
         setMap(modifiedMapHtml);
         // setIsWishlisted(response.data.data.wishlists);
 
@@ -81,7 +80,7 @@ function Sidebar({LocationShareRef}) {
         if (metaOgImage) {
           metaOgImage.setAttribute(
             "content",
-            `https://backoffice.innerpece.com/${programData.cover_img}` || ""
+            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
           );
         }
       } catch (err) {
@@ -129,6 +128,7 @@ function Sidebar({LocationShareRef}) {
       console.error("Error:", error.response?.data || error.message);
     }
   };
+
 
   return (
     <div className=" w-full lg:basis-[22%] xl:basis-[25%] flex-grow mt-3 md:mt-7">
@@ -347,12 +347,11 @@ function Sidebar({LocationShareRef}) {
         </div>
       </div>
 
-      {/* {/* <img src={calendar} alt="" className="mt-10  w-screen" /> */}
-
-      <p ref={LocationShareRef} className="font-semibold mt-10">Where you'll be</p>
-      <div >
-        {/* Render the Google map iframe using dangerouslySetInnerHTML */}
-        <div className="mt-5" dangerouslySetInnerHTML={{ __html: map }} />
+      <p ref={LocationShareRef} className="font-semibold mt-10">
+        Where you'll be
+      </p>
+      <div>
+        <div className="mt-5 text-xs" dangerouslySetInnerHTML={{ __html: map }} />
       </div>
     </div>
   );

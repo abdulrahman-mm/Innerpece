@@ -17,7 +17,7 @@ function ExploreMore() {
   }
 
   return (
-    <div className="w-100vw relative ms-5 me-5 mt-8 md:ms-16 md:me-16   md:mt-16 h-56 ">
+    <div className="w-100vw relative  ms-5 me-5 mt-8 md:ms-16 md:me-16   md:mt-16 h-56 ">
       <img
         src={exploremore}
         alt=""
@@ -29,8 +29,7 @@ function ExploreMore() {
 
       <button
         onClick={onclickBtn}
-        style={{ backgroundColor: "#DBF056" }}
-        className=" absolute cursor-pointer top-28 left-10 text-green-900 p-2 font-bold rounded-lg "
+        className=" absolute cursor-pointer top-28 hover:bg-green-900 hover:text-yellow-300 bg-yellow-300 left-10 text-green-900 p-2 font-bold rounded-lg "
       >
         EXPLORE MORE <MdArrowOutward className="inline-block ms-1 text-2xl" />
       </button>

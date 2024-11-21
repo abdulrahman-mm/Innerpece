@@ -25,20 +25,31 @@ function Header() {
 
       <div className="max-md:hidden">
         <ul className="flex items-center">
-          <li className="md:pe-5 lg:pe-11 cursor-pointer font-semibold hover:text-gray-500">
-            <Link to="/">Home</Link>
+          <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
+            <Link className="cursor-pointer" to="/">
+              Home
+            </Link>
           </li>
-          <li className="md:pe-5 lg:pe-11 cursor-pointer font-semibold hover:text-gray-500">
+          {/* <li className="md:pe-5 lg:pe-11 cursor-pointer font-semibold hover:text-gray-500">
             <Link to="/destinations">Destinations</Link>
+          </li> */}
+          <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
+            <Link className="cursor-pointer" to="/aboutus">
+              About
+            </Link>
           </li>
-          <li className="md:pe-5 lg:pe-11 cursor-pointer font-semibold hover:text-gray-500">
-            <Link to="/aboutus">About</Link>
+          <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
+            <Link className="cursor-pointer" to="/contactus">
+              Contact Us
+            </Link>
           </li>
-          <li className="md:pe-5 lg:pe-11 cursor-pointer font-semibold hover:text-gray-500">
-            <Link to="/contactus">Contact us</Link>
-          </li>
-          <li className="md:me-2 cursor-pointer   lg:me-10 font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-blue-700 hover:border-blue-700   md:px-3 lg:px-6 py-2">
-            <Link to="/login">Login</Link>
+          <li className="">
+            <Link
+              className="cursor-pointer md:me-2    lg:me-10 font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-blue-800 hover:border-blue-800   md:px-3 lg:px-6 py-2"
+              to="/login"
+            >
+              Login
+            </Link>
           </li>
         </ul>
       </div>
@@ -66,11 +77,7 @@ function Header() {
               Home
             </Link>
           </li>
-          <li className="text-xl cursor-pointer">
-            <Link to="/destinations" onClick={() => setIsOpen(false)}>
-              Destinations
-            </Link>
-          </li>
+
           <li className="text-xl cursor-pointer">
             <Link to="/aboutus" onClick={() => setIsOpen(false)}>
               About
@@ -78,14 +85,17 @@ function Header() {
           </li>
           <li className="text-xl cursor-pointer">
             <Link to="/contactus" onClick={() => setIsOpen(false)}>
-              Contact us
+              Contact Us
             </Link>
           </li>
-          <li className="px-6 py-2 mx-auto cursor-pointer font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white">
-            <Link to="/login" onClick={() => setIsOpen(false)}>
-              Login
-            </Link>
-          </li>
+
+          <Link
+            to="/login"
+            onClick={() => setIsOpen(false)}
+            className="px-6 py-2 mx-auto cursor-pointer font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white"
+          >
+            Login
+          </Link>
         </ul>
       </div>
     </div>

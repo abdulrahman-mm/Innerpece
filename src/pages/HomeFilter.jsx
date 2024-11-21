@@ -54,7 +54,6 @@ function DestinationsDetails() {
           }
         );
 
-        console.log("homefilter", response.data.data);
         setApiData(response.data.data);
 
         const firstProgram = response.data.data[0];
@@ -201,6 +200,37 @@ function DestinationsDetails() {
     setToDate(e.target.value);
   };
 
+  const handleClearFilterClicked = async () => {
+    setFilterButtonClicked(false);
+
+    const fetchProgramData = async () => {
+      try {
+        const response = await axios.post(
+          "https://backoffice.innerpece.com/api/get-program",
+          {
+            destination: id,
+          }
+        );
+        setStartDate("");
+        setToDate("");
+        setApiData(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchProgramData();
+  };
+
+  useEffect(() => {
+    if (filterButtonClicked) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    // Clean up on component unmount
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [filterButtonClicked]);
+
   return (
     <div>
       <Header />
@@ -262,7 +292,7 @@ function DestinationsDetails() {
 
       {/* main section */}
 
-      <div className="flex flex-col md:flex-row ustify-between gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
+      <div className="flex flex-col md:flex-row justify-between gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* main section > sideBar */}
         <div className="mt-20 px-7 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[20%] ">
           <p className="text-xl">Search By Filter</p>
@@ -286,9 +316,17 @@ function DestinationsDetails() {
           <button
             value="FILTER"
             onClick={handleFilterClick}
-            className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit"
+            className="bg-sky-800 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
           >
             Filter
+          </button>
+
+          <button
+            className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
+            value="FILTER"
+            onClick={handleClearFilterClicked}
+          >
+            Clear Filter
           </button>
 
           <p className="text-xl">Sort By</p>
@@ -320,13 +358,31 @@ function DestinationsDetails() {
             {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
           </p>
 
-          {filterButtonClicked && (
-            <div className="mt-5 md:hidden flex border-2 flex-col rounded-lg px-3 py-3 pb-5 gap-5">
-              <p className="text-lg">Search By Filter</p>
+         
+          <div
+            className={`fixed bottom-0 left-0 right-0 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
+              filterButtonClicked
+                ? "translate-y-0 opacity-100"
+                : "translate-y-full opacity-0"
+            }`}
+          >
+            <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
+              {/* Filter Header with X button */}
+              <div className="flex justify-between items-center">
+                <p className="text-lg">Search By Filter</p>
+                <button
+                  onClick={() => setFilterButtonClicked(false)}
+                  className="text-gray-600 text-xl font-bold transition-transform duration-300 transform hover:scale-110"
+                >
+                  &times;
+                </button>
+              </div>
 
               <div className="flex flex-wrap gap-5">
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="fromDate">From Date</label>
+                  <label htmlFor="fromDate" className="w-20">
+                    From Date
+                  </label>
                   <input
                     type="date"
                     value={startDate}
@@ -336,7 +392,9 @@ function DestinationsDetails() {
                 </div>
 
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="toDate">To Date</label>
+                  <label htmlFor="toDate" className="w-20">
+                    To Date
+                  </label>
                   <input
                     type="date"
                     value={toDate}
@@ -348,16 +406,26 @@ function DestinationsDetails() {
                 <button
                   value="FILTER"
                   onClick={handleFilterClick}
-                  className="bg-sky-800 active:bg-gray-600 px-8 rounded text-end py-2 text-white place-items-end w-fit"
+                  className="bg-sky-600 hover:bg-sky-800 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
                 >
                   Filter
+                </button>
+
+                <button
+                  className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-full"
+                  value="FILTER"
+                  onClick={handleClearFilterClicked}
+                >
+                  Clear Filter
                 </button>
               </div>
 
               <p className="text-lg">Sort By</p>
 
               <select
-                className="border-2 p-2 rounded outline-none w-fit"
+                name=""
+                id=""
+                className="border-2 p-2 outline-none"
                 onChange={handleSortChange}
                 value={sortBy}
               >
@@ -369,7 +437,7 @@ function DestinationsDetails() {
                 <option value="price_high_to_low">High Price</option>
               </select>
             </div>
-          )}
+          </div>
 
           {currentItems.length > 0 ? (
             currentItems.map((item, index) => (
@@ -516,7 +584,7 @@ function DestinationsDetails() {
               </div>
             ))
           ) : (
-            <div className="flex items-start text-2xl justify-center w-full h-screen ">
+            <div className="flex items-start mt-8 text-2xl justify-center w-full h-full ">
               <p>No programs available.</p>
             </div>
           )}
@@ -545,6 +613,8 @@ function DestinationsDetails() {
             </div>
           </nav>
         </div>
+
+       
       </div>
 
       <Footer />

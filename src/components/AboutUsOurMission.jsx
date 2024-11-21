@@ -4,7 +4,7 @@ import ourmissionimg1 from "../assets/ourmissionimg1.png";
 
 function OurMission() {
   return (
-    <div className="ms-3 me-3 mt-8 md:mt-24 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
+    <div className="ms-3 me-3 mt-8 md:mt-16 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
       <div className="flex flex-col items-center lg:flex-row justify-start lg:gap-32 xl:gap-48">
       
         <div className="basis-[50%] lg:basis-[30%] gap-8">

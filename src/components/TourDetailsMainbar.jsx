@@ -54,7 +54,7 @@ function Mainbar() {
         if (metaOgImage) {
           metaOgImage.setAttribute(
             "content",
-            `https://backoffice.innerpece.com/${programData.cover_img}` || ""
+            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
           );
         }
       } catch (err) {
@@ -68,22 +68,15 @@ function Mainbar() {
     <div className="lg:basis-[45%] xl:basis-[55%] flex-grow ">
       <p className="font-semibold text-2xl">Property Highlights</p>
       <p
-        className="mt-5 text-gray-600 leading-7 "
+        className="mt-3 text-gray-600 leading-7 "
         dangerouslySetInnerHTML={{
           __html: apiData.program_desc,
         }}
       ></p>
 
-      {/* <p className="text-sm font-semibold ms-3 mt-2 cursor-pointer">
-        Read More{" "}
-        <span>
-          <MdOutlineKeyboardArrowDown className="inline-block" />
-        </span>{" "}
-      </p> */}
-
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
-          <div className="border-[1px] px-4 py-3 border-black/40 mt-14 rounded-3xl">
+          <div className="border-[1px] px-4 py-3 border-black/40 mt-8 md:mt-10 rounded-3xl">
             <p className="font-semibold text-2xl">Amenities</p>
 
             <div className="flex flex-wrap flex-col gap-5 mt-5">
@@ -105,19 +98,14 @@ function Mainbar() {
                 })}
               </div>
 
-              {/* <span className="text-sm font-semibold ms-3 cursor-pointer">
-                More Details{" "}
-                <span>
-                  <MdOutlineKeyboardArrowDown className="inline-block" />
-                </span>{" "}
-              </span> */}
+             
             </div>
           </div>
         )}
 
       {apiData.foodBeverages &&
         Object.keys(apiData.foodBeverages).length > 0 && (
-          <div className="border-[1px] px-4 py-3   border-black/40 mt-14 rounded-3xl">
+          <div className="border-[1px] px-4 py-3   border-black/40 mt-8 md:mt-10 rounded-3xl">
             <p className="font-semibold text-2xl">Food and Beverages </p>
 
             <div className="flex  flex-wrap flex-col gap-5 mt-5">
@@ -140,19 +128,14 @@ function Mainbar() {
                 })}
               </div>
 
-              {/* <span className="text-sm font-semibold ms-3 cursor-pointer">
-                More Details{" "}
-                <span>
-                  <MdOutlineKeyboardArrowDown className="inline-block" />
-                </span>{" "}
-              </span> */}
+              
             </div>
           </div>
         )}
 
       {apiData.activities && Object.keys(apiData.activities).length > 0 && (
-        <div className="mt-14">
-          <p className="font-semibold text-2xl ms-4">Activities</p>
+        <div className="mt-8 md:mt-10">
+          <p className="font-semibold text-2xl ">Activities</p>
 
           <div className="flex flex-wrap justify-start mt-5 gap-4">
             {Object.keys(apiData.activities).map((key, index) => {
@@ -180,11 +163,11 @@ function Mainbar() {
 
       {apiData.safety_features &&
         Object.keys(apiData.safety_features).length > 0 && (
-          <div className="border-[1px] px-4 py-3 w-50vw  border-black/40 mt-14 rounded-3xl">
+          <div className="border-[1px] px-4 py-3 w-50vw  border-black/40 mt-8 md:mt-10 rounded-3xl">
             <p className="font-semibold text-2xl">Safety Features</p>
 
             <div className="flex flex-wrap flex-col gap-5 mt-5">
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div className="flex flex-col gap-5 ">
                 {Object.keys(apiData.safety_features).map((key, index) => {
                   const safety_features = apiData.safety_features[key];
 

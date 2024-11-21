@@ -25,7 +25,7 @@ function Faq() {
   };
 
   return (
-    <div className="px-5 md:px-20 lg:px-30 xl:px-40 gap-16 py-8 mt-8 md:mt-12">
+    <div className="px-5 md:px-20 lg:px-30 xl:px-40 gap-16  mt-8 md:mt-14">
       <p className="text-3xl md:text-5xl">FAQ</p>
       <p className="text-2xl md:text-3xl mt-10">Booking and Reservations</p>
       <hr className="mt-8 w-20 border-sky-800" />

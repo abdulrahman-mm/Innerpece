@@ -68,7 +68,7 @@ function Hero({
         if (metaOgImage) {
           metaOgImage.setAttribute(
             "content",
-            `https://backoffice.innerpece.com/${programData.cover_img}` || ""
+            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
           );
         }
       } catch (err) {

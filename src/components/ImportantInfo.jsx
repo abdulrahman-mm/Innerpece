@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
-function ImportantInfo({informationRef}) {
+function ImportantInfo({ informationRef }) {
   const location = useLocation();
 
   const { id, title } = location.state || {};
@@ -33,25 +33,31 @@ function ImportantInfo({informationRef}) {
         // console.log(response.data.data.title);
         // setIsWishlisted(response.data.data.wishlists);
 
-        document.title = response.data.data.title ;
+        document.title = response.data.data.title;
 
         const metaOgTitle = document.querySelector("meta[property='og:title']");
         // console.log("metaOgTitle",metaOgTitle);
-          if (metaOgTitle) {
-            metaOgTitle.setAttribute("content", response.data.data.title);
-          }
+        if (metaOgTitle) {
+          metaOgTitle.setAttribute("content", response.data.data.title);
+        }
 
+        const metaOgDescription = document.querySelector(
+          "meta[property='og:description']"
+        );
+        if (metaOgDescription) {
+          metaOgDescription.setAttribute(
+            "content",
+            response.data.data.program_desc
+          );
+        }
 
-          const metaOgDescription = document.querySelector("meta[property='og:description']");
-          if (metaOgDescription) {
-            metaOgDescription.setAttribute("content", response.data.data.program_desc);
-          }
-
-          const metaOgImage = document.querySelector("meta[property='og:image']");
-          if (metaOgImage) {
-            metaOgImage.setAttribute("content", `https://backoffice.innerpece.com/${programData.cover_img}` || '');
-          }
-
+        const metaOgImage = document.querySelector("meta[property='og:image']");
+        if (metaOgImage) {
+          metaOgImage.setAttribute(
+            "content",
+            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+          );
+        }
       } catch (err) {
         console.log(err);
       }
@@ -60,11 +66,14 @@ function ImportantInfo({informationRef}) {
   }, [id]);
 
   return (
-    <div ref={informationRef}  className="ms-5  me-5 mt-14 md:ms-20 md:mt-10 md:me-20 w-90vw md:w-[55%] ">
+    <div
+      ref={informationRef}
+      className="ms-5  me-5 mt-8 md:ms-20 md:mt-10 md:me-20  md:w-[55%] "
+    >
       <p className="font-semibold text-2xl ">Important Info</p>
 
       {apiData.important_info && (
-        <p className="mt-3">{apiData.important_info}</p>
+        <p className="mt-5 flex flex-wrap">{apiData.important_info}</p>
       )}
     </div>
   );
