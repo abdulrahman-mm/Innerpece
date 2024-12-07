@@ -27,8 +27,8 @@ function Faq() {
   return (
     <div className="px-5 md:px-20 lg:px-30 xl:px-40 gap-16  mt-8 md:mt-14">
       <p className="text-3xl md:text-5xl">FAQ</p>
-      <p className="text-2xl md:text-3xl mt-10">Booking and Reservations</p>
-      <hr className="mt-8 w-20 border-sky-800" />
+      <p className="text-2xl md:text-3xl mt-5 md:mt-10">Booking and Reservations</p>
+      <hr className="mt-5 w-20 border-sky-800" />
 
       <div className="flex flex-col md:w-[70vw] xl:w-[50vw] mt-5 md:mt-12 gap-8">
         {faqs.map((faq, index) => (
@@ -51,7 +51,7 @@ function Faq() {
                 openIndex === index ? " opacity-100" : "max-h-0 opacity-0"
               }`}
             >
-              <p className="mt-4 text-gray-700">{faq.answer}</p>
+              <p className="mt-4  text-gray-700">{faq.answer}</p>
             </div>
 
           </div>

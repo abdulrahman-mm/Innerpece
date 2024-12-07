@@ -41,7 +41,6 @@ function Footer() {
 
   return (
     <div className="mt-8 md:mt-16 ">
-      
       <img
         src={footer1}
         alt=""
@@ -123,15 +122,15 @@ function Footer() {
             </p>
           </div>
 
-          <div className="flex flex-col flex-wrap ">
-            <div className="flex items-center gap-3 pb-5">
+          <div className="flex -mt-6 sm:-mt-0 flex-col flex-wrap ">
+            <div className="flex items-center gap-3 pb-3 md:pb-5">
               <FaCircleArrowRight className="inline-block text-sky-200 text-3xl" />
               <p className="text-xl md:text-2xl text-white font-semibold">
                 Get In Touch
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-x-5 mt-5">
+            <div className="flex flex-wrap gap-x-5 md:mt-5">
               <a
                 href={`https://www.facebook.com/p/Innerpece-100094846880465/?_rdr`}
                 target="_blank"
@@ -165,14 +164,20 @@ function Footer() {
           </div>
 
           <div className="flex flex-col md:items-center  flex-wrap gap-y-3">
-            <div className="flex items-center pb-5">
+            <div className="flex items-center pb-3 md:pb-5">
               <p className="text-white text-xl md:text-2xl font-semibold">
                 Crafting Excellence With{" "}
               </p>
               <FaHeart className="text-white ms-1 " />
             </div>
 
-            <img src={aryulogo} alt="" className="w-20 h-16 md:w-28 md:h-20" />
+            <a href="https://aryutechnologies.com/" target="_blank">
+              <img
+                src={aryulogo}
+                alt=""
+                className="w-20 h-16 md:w-28 md:h-20"
+              />
+            </a>
 
             <p className="text-white text-xs font-semibold">
               <span className="font-bold text-xl me-1">ARYU</span>Technologies
@@ -207,9 +212,13 @@ function Footer() {
           <p className="text-xs md:text-sm text-white ">
             {footerContent.copyright}
           </p>
-          <p className="text-xs md:text-sm text-white ">
+          <a
+            href="https://aryutechnologies.com/"
+            target="_blank"
+            className="text-xs md:text-sm text-white "
+          >
             Powered by Aryu Technologies
-          </p>
+          </a>
         </div>
       </div>
     </div>

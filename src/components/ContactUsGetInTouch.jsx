@@ -84,8 +84,9 @@ function GetInTouch() {
           </p>
 
           <p className="text-gray-400 mt-5 md:mt-8">
-            Id dignissim ac ultrices sed imperdiet id. Odio velit morbi cum a
-            magna euismod. Commodo amet mauris quis at.
+          Connect with our team at Innerpece for all your travel needs and inquiries. We're here to help!
+
+
           </p>
 
           <div className="flex flex-wrap mt-5 md:mt-16 gap-5 md:gap-8">
@@ -95,12 +96,9 @@ function GetInTouch() {
               <div className="flex  flex-col gap-2">
                 <div className="flex  gap-2 text-sky-800">
                   <img src={phoneimg} alt="" className="object-contain" />
-                  <p>1-856-256-2896 x972</p>
+                 <a href="tel:6384131642">+91 6384131642</a> 
                 </div>
-                <div className="flex  gap-2 text-sky-800">
-                  <img src={phoneimg} alt="" className="object-contain" />
-                  <p>1-854-440-6416 x862</p>
-                </div>
+                
               </div>
             </div>
 
@@ -110,12 +108,14 @@ function GetInTouch() {
               <div className="flex  flex-col gap-2 text-sky-800">
                 <div className="flex gap-2">
                   <img src={mail} alt="" className="object-contain" />
-                  <p>support@innerpece.com</p>
+                  <a href="mailto:barath@innerpece.com">barath@innerpece.com</a>
                 </div>
-                <div className="flex gap-2 text-sky-800">
+
+                <div className="flex gap-2">
                   <img src={mail} alt="" className="object-contain" />
-                  <p>office@innerpece.com</p>
+                  <a href="mailto:jay@innerpece.com">jay@innerpece.com</a>
                 </div>
+                
               </div>
             </div>
           </div>

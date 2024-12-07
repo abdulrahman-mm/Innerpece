@@ -62,7 +62,7 @@ function PaymentPolicy() {
       <p className="font-semibold text-2xl ">Payment Policy</p>
 
       {apiData.payment_policy && apiData.payment_policy.length > 0 && (
-        <div className="flex flex-col mt-5 gap-5">
+        <div className="flex flex-col mt-5 md:gap-5">
           {apiData.payment_policy.map((item, index) => (
             <p key={index}>
               <span className="pe-2">{index + 1}.</span>

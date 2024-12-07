@@ -26,7 +26,8 @@ function LetsGetStarted() {
               Ready to adventure and enjoy natural{" "}
             </p>
             <p className="text-white mt-2">
-              Lorem ipsum dolor sit amet consectetur adipisicin
+            Don't wait any longer
+
             </p>
           </div>
         </div>

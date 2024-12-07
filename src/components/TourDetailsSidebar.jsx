@@ -131,7 +131,7 @@ function Sidebar({ LocationShareRef }) {
 
 
   return (
-    <div className=" w-full lg:basis-[22%] xl:basis-[25%] flex-grow mt-3 md:mt-7">
+    <div className=" w-full lg:basis-[22%] xl:basis-[25%] flex-grow mt-8 md:mt-7">
       <div className="flex flex-col p-3 shadow-md bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
         <span className="text-gray-600 ">
           Starting Form{" "}
@@ -319,12 +319,12 @@ function Sidebar({ LocationShareRef }) {
       </div>
 
       <div className="shadow-md mt-10 shadow-black/10 rounded-lg">
-        <div className="flex gap-4 mt-3 ms-3">
+        <div className="flex gap-4 mt-8 ms-3 text-2xl">
           <p className="text-sky-800">|</p>
           <p className="font-semibold">Book With Confidence</p>
         </div>
 
-        <div className="flex flex-wrap  items-start mt-10 justify-between md:flex-col p-5   gap-y-4 gap-2">
+        <div className="flex flex-wrap  items-start  justify-between md:flex-col p-5   gap-y-4 gap-2">
           <div className="flex gap-4 items-center">
             <img src={customerservice} alt="" />
             <p>Customer care available 24/7</p>
@@ -347,7 +347,7 @@ function Sidebar({ LocationShareRef }) {
         </div>
       </div>
 
-      <p ref={LocationShareRef} className="font-semibold mt-10">
+      <p ref={LocationShareRef} className="font-semibold mt-8">
         Where you'll be
       </p>
       <div>

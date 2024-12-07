@@ -236,6 +236,9 @@ function DestinationsDetails() {
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
 
+  console.log(apiData);
+  
+
   const SkeletonLoader = () => {
     return (
       <div className="animate-pulse flex flex-col mt-10 gap-4 px-3 md:px-10 w-full md:w-[80vw]">
@@ -526,7 +529,7 @@ function DestinationsDetails() {
                     </div>
 
                     <div className="flex items-center flex-wrap gap-2">
-                      <p>Upto 12 guests</p>
+                      <p>Upto {item.member_capacity} guests</p>
 
                       <div className="flex items-center gap-3">
                         <PiStarFourFill className="text-gray-400" />

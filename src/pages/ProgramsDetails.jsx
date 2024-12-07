@@ -63,6 +63,8 @@ function Programs() {
     fetchProgramData();
   }, [id]);
 
+  
+
   const handleDateChange = (e) => {
     setStartDate(e.target.value);
   };
@@ -274,8 +276,8 @@ function Programs() {
               {`Explore ${apiData.length > 0 ? apiData[0].theme : ""}`}
             </h1>
             <p className="text-white text-sm md:text-base mt-2 ">
-              Lorem ipsum dolor sit amet consectetur. Sed egestas mauris ornare
-              amet egestas.
+              Find your perfect tour with personalized themes and destinations
+              to match your preferences
             </p>
           </div>
 
@@ -465,7 +467,6 @@ function Programs() {
                   key={index}
                   className="flex  flex-col lg:flex-row mt-5 overflow-hidden   "
                 >
-                  
                   <img
                     src={
                       item.cover_img
@@ -476,7 +477,7 @@ function Programs() {
                     className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full lg:w-72  rounded-none"
                   />
 
-                  <div className="flex flex-wrap flex-grow overflow-hidden   flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">
+                  <div className="flex flex-wrap flex-grow overflow-hidden   flex-col gap-1 md:gap-2 border-2 border-gray-300 py-2 px-3 ">
                     <p className="font-semibold flex-wrap text-2xl md:text-3xl">
                       {item.title}
                     </p>
@@ -496,7 +497,7 @@ function Programs() {
                     </div>
 
                     <div className="flex items-center flex-wrap gap-2">
-                      <p>Upto 12 guests</p>
+                      <p>Upto {item.member_capacity} guests</p>
 
                       <div className="flex items-center gap-3">
                         <PiStarFourFill className="text-gray-400" />
@@ -572,7 +573,7 @@ function Programs() {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-4  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
+                  <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
                     <p className="font-bold text-xl md:text-2xl">
                       ₹{item.price}
                     </p>
@@ -598,7 +599,7 @@ function Programs() {
                   </div>
                 </div>
 
-                <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-widest ">
+                <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-wider md:tracking-widest ">
                   RATED BEST FOR ITS AMENITIES AND SERVICE
                 </p>
               </div>

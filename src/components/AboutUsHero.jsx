@@ -19,24 +19,29 @@ function Hero() {
         </div>
 
         <div className="basis-[60%]">
-          <p className="text-gray-600 tracking-widest font-semibold mt-5 md:mt-0">
-            ABOUT US
-          </p>
-          <p className="font-semibold text-2xl md:text-3xl lg:text-5xl mt-3">
-            Tincidunt eu aliquam
+          <p className="mt-3 text-gray-600 md:text-lg">
+            We are excited to introduce Innerpece, a platform dedicated to
+            providing meaningful travel experiences that focus on nurturing
+            mental well-being and personal growth. Our carefully curated travel
+            programs offer a much-needed mental break while allowing you to
+            connect with innovative entrepreneurs and inspiring creators. Our
+            main objective is to assist you in finding deeper happiness and
+            inner pece through these experiences.
           </p>
 
-          <p className="text-xl font-semibold mt-5 md:mt-8 text-blue-950">
-            Our Vision
+          <p className="mt-3 text-gray-600 md:text-lg">
+            In addition, we understand the importance of family time and offer
+            tailored travel programs designed for families. Explore the beauty
+            and cultural richness of India with our private itineraries, aimed
+            at creating unforgettable moments and strengthening family bonds.
           </p>
-          <p className="mt-3 text-gray-600">
-            Massa ut egestas mattis lectus suscipit. Malesuada nibh gravida enim
-            ac dapibus tincidunt. At varius non integer purus at gravida
-            accumsan volutpat. Nisl senectus malesuada lacus erat proin maecenas
-            sapien sit.Massa ut egestas mattis lectus suscipit. Malesuada nibh
-            gravida enim ac dapibus tincidunt. At varius non integer purus at
-            gravida accumsan volutpat. Nisl senectus malesuada lacus erat proin
-            maecenas sapien sit.
+
+          <p className="mt-3 text-gray-600 md:text-lg">
+            At Innerpece, we are deeply committed to the transformative power of
+            travel. Let us guide you on a journey that not only refreshes your
+            mind but also enriches your life. Discover how our unique travel
+            experiences can lead you to a path of greater fulfillment and
+            connection.
           </p>
         </div>
       </div>

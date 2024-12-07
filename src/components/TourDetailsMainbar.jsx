@@ -64,6 +64,9 @@ function Mainbar() {
     fetchProgramData();
   }, [id]);
 
+  console.log(apiData);
+  
+
   return (
     <div className="lg:basis-[45%] xl:basis-[55%] flex-grow ">
       <p className="font-semibold text-2xl">Property Highlights</p>
@@ -89,6 +92,7 @@ function Mainbar() {
                       <img
                         src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
                         // alt={amenity.amenity_name}
+                        className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
                       <p className="text-lg text-gray-700">
                         {amenity.amenity_name}
@@ -97,8 +101,6 @@ function Mainbar() {
                   );
                 })}
               </div>
-
-             
             </div>
           </div>
         )}
@@ -114,11 +116,11 @@ function Mainbar() {
                   const foodBeverage = apiData.foodBeverages[key];
 
                   return (
-                    <div className="flex gap-5 " key={index}>
+                    <div className="flex items-center gap-5 " key={index}>
                       <img
                         src={`https://backoffice.innerpece.com/${foodBeverage.food_beverage_pic}`}
                         // alt={foodBeverage.food_beverage_pic}
-                        className="bg-contain"
+                        className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
                       <p className="text-lg text-gray-700">
                         {foodBeverage.food_beverage}
@@ -127,8 +129,6 @@ function Mainbar() {
                   );
                 })}
               </div>
-
-              
             </div>
           </div>
         )}
@@ -143,13 +143,13 @@ function Mainbar() {
 
               return (
                 <div
-                  className="flex flex-col justify-start  items-start border-[1px] gap-3 w-32 md:w-40  border-black/40 p-3 rounded-lg py-5  "
+                  className="flex flex-col justify-start  items-start border-[1px] gap-3 w-32 md:w-40  border-black/40 p-3 rounded-lg py-3  "
                   key={index}
                 >
                   <img
                     src={`https://backoffice.innerpece.com/${activities.activities_pic}`}
                     // alt={foodBeverage.food_beverage_pic}
-                    className="bg-contain "
+                    className="w-6 h-6 bg-cover md:w-7 md:h-7"
                   />
                   <p className="text-lg text-gray-700">
                     {activities.activities}
@@ -175,8 +175,7 @@ function Mainbar() {
                     <div className="flex gap-5 " key={index}>
                       <img
                         src={`https://backoffice.innerpece.com/${safety_features.safety_features_pic}`}
-                        // alt={foodBeverage.food_beverage_pic}
-                        className="bg-contain"
+                        className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
                       <p className="text-lg text-gray-700">
                         {safety_features.safety_features}

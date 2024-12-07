@@ -9,11 +9,8 @@ function VisitOurOffice() {
             Visit Our Office
           </p>
           <p className="text-gray-400">
-            Eget lorem mattis amet elementum. Aliquet elementum amet nascetur
-            cras at arcu cras eget. Enim vitae egestas in pulvinar ullamcorper.
-            Orci turpis ante et gravida. Tortor in adipiscing in vitae velit.
-            Tincidunt suspendisse et aenean egestas lectus arcu. Quisque erat
-            sit massa id sed eleifend ac.
+            Visit our office at Innerpece! We're here to discuss your travel
+            plans and get expert help from our friendly team.
           </p>
 
           <a href="https://maps.app.goo.gl/fEHm4NXUYToXK2CMA" target="_blank">

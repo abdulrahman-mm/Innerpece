@@ -16,19 +16,19 @@ function OurStory() {
   }
 
   return (
-    <div className="bg-gradient-to-b mt-8 md:mt-16 pb-20 px-5 md:px-12  lg:px-24  xl:px-32 from-sky-800 to-black ">
-      <div className="flex pt-16 items-center gap-8 w-full md:w-2/3">
+    <div className="bg-gradient-to-b mt-8 md:mt-16 pb-5 md:pb-20 px-5 md:px-12  lg:px-24  xl:px-32 from-sky-800 to-black ">
+      <div className="flex pt-8 md:pt-16 items-center gap-8 w-full md:w-2/3">
         <hr className="w-80 border-white" />
 
         <div className="flex flex-col gap-3 text-white">
           <p className="tracking-widest text-2xl">OUR STORY</p>
-          <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold">
+          <p className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold">
             Vel malesuada odio id lectus viverra
           </p>
         </div>
       </div>
 
-      <div className="flex flex-wrap flex-shrink gap-5 items-center justify-center mt-14">
+      <div className="flex flex-wrap flex-shrink gap-5 items-center justify-center mt-5 md:mt-14">
         <img src={VideoBox1} alt="" className="flex-wrap flex-shrink" />
         <img src={VideoBox2} alt="" className="flex-wrap flex-shrink" />
         <img src={VideoBox3} alt="" className="flex-wrap flex-shrink" />
