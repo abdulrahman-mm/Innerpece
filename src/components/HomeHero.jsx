@@ -90,14 +90,14 @@ function Hero() {
             {homeImage.map((image) => (
               <div
                 key={image.id}
-                className="carousel-item relative h-[40vh] md:h-screen w-screen"
+                className="carousel-item relative h-[40vh] md:h-[60vh] w-screen"
               >
                 {/* Black gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent z-10"></div>
 
                 {/* Image */}
                 <img
-                  className="absolute inset-0 h-full w-full object-cover "
+                  className="absolute inset-0 h-full w-full object-cover  "
                   src={`https://backoffice.innerpece.com/${image.slider_image}`}
                   alt={image.slider_name}
                   loading="lazy"

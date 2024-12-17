@@ -54,7 +54,7 @@ function Programs() {
           }
         );
         setLoading(false);
-        setApiData(response.data.data);
+        setApiData(response.data.data);        
       } catch (err) {
         console.log(err);
         setLoading(false);

@@ -75,8 +75,7 @@ function Mainbar({ apiData, setSortBy, sortBy,themes_name, setApiData }) {
           );
           setSortedData(response.data.data);
           console.log('sorted',response.data.data);
-          setApiData(""); // clear the unsorted data
-          console.log(response.data.data);
+          setApiData(""); // clear the unsorted data  
           setSortedPage(1);
         } catch (error) {
           console.error("Error fetching sorted data", error);

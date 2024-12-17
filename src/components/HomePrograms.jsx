@@ -78,13 +78,13 @@ function Programs() {
                 onClick={() => handleThemeClick(item.id, item.themes_name)}
                 className="mt-5 flex-grow relative  lg:w-72   h-60 cursor-pointer transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl rounded-3xl overflow-hidden"
               >
-                <div className="absolute  -z-20 bg-gradient-to-b from-black/70 to-transparent h-full w-full"></div>
+                <div className="absolute  -z-20 bg-gradient-to-b from-black/95 to-transparent h-full w-full"></div>
                 <img
                   src={`https://backoffice.innerpece.com/${item.theme_pic}`}
                   alt=""
                   className=" hover:scale-150 w-full  h-60 transition duration-300 ease-in-out -z-40 bg-gradient shadow-black object-cover bg-center absolute inset-0"
                 />
-                <p className="absolute z-10 flex justify-center w-full top-4 text-white font-semibold">
+                <p className="absolute z-10 text-2xl flex justify-center w-full top-4 text-white font-semibold">
                   {item.themes_name}
                 </p>
               </div>
