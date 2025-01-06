@@ -5,6 +5,7 @@ import innerpece_logo2 from "../assets/innerpece_logo2.svg";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userLogedIn, setUserLogedIn] = useState(false);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,15 @@ function Header() {
     // Clean up on component unmount
     return () => document.body.classList.remove("overflow-hidden");
   }, [isOpen]);
+
+  useEffect(() => {
+    const storedUserDetails = sessionStorage.getItem("loginDetails");
+    if (storedUserDetails) setUserLogedIn(true);
+  }, []);
+
+  const onClickLogout = () => {
+    sessionStorage.removeItem("loginDetails");
+  };
 
   return (
     <div className="flex justify-between items-center w-full px-5 md:px-11 py-3 md:py-4 bg-black text-white backdrop:blur-lg shadow-2xl shadow-white">
@@ -46,12 +56,22 @@ function Header() {
               Contact Us
             </Link>
           </li>
-          <Link
-            to="/login"
-            className="cursor-pointer md:me-2 lg:me-11  font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 md:px-3 lg:px-6 py-2"
-          >
-            Login
-          </Link>
+          {userLogedIn ? (
+            <Link
+              onClick={onClickLogout}
+              to="/login"
+              className="cursor-pointer  font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 px-5 py-2  text-center"
+            >
+              Logout
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="cursor-pointer font-semibold   border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 px-5 py-2  text-center"
+            >
+              Login
+            </Link>
+          )}
         </ul>
       </div>
 
@@ -88,13 +108,28 @@ function Header() {
               Contact Us
             </Link>
           </li>
-          <Link
-            to="/login"
-            onClick={() => setIsOpen(false)}
-            className="px-6 py-2 cursor-pointer font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700"
-          >
-            Login
-          </Link>
+
+          {userLogedIn ? (
+              <Link
+                to="/login"
+                onClick={() => {
+                  setIsOpen(false)
+                  onClickLogout()
+                }}
+                className="px-6 py-2 cursor-pointer font-semibold border-[#005FC4] border-2 rounded-2xl text-[#005FC4] bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700"
+              >
+                Logout
+              </Link>
+          ) : (
+              <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="px-6 py-2 cursor-pointer font-semibold border-[#005FC4] border-2 rounded-2xl text-[#005FC4] bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700"
+            >
+              Login
+            </Link>
+            
+          )}
         </ul>
       </div>
     </div>

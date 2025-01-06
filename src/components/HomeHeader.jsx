@@ -5,6 +5,7 @@ import innerpece_logo from "../assets/innerpece_logo.svg";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userLogedIn, setUserLogedIn] = useState(false);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -16,6 +17,15 @@ function Header() {
     // Clean up on component unmount
     return () => document.body.classList.remove("overflow-hidden");
   }, [isOpen]);
+
+  useEffect(() => {
+    const storedUserDetails = sessionStorage.getItem("loginDetails");
+    if (storedUserDetails) setUserLogedIn(true);
+  }, []);
+
+  const onClickLogout = () => {
+    sessionStorage.removeItem("loginDetails");
+  };
 
   return (
     <div className="flex justify-between items-center px-5 md:px-11 py-1 md:py-3">
@@ -43,14 +53,26 @@ function Header() {
               Contact Us
             </Link>
           </li>
-          <li className="">
-            <Link
-              className="cursor-pointer md:me-2    lg:me-10 font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-blue-800 hover:border-blue-800   md:px-3 lg:px-6 py-2"
-              to="/login"
-            >
-              Login
-            </Link>
-          </li>
+          {userLogedIn ? (
+            <li className="">
+              <Link
+                onClick={onClickLogout}
+                className="cursor-pointer md:me-2  lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
+                to="/login"
+              >
+                Logout
+              </Link>
+            </li>
+          ) : (
+            <li className="">
+              <Link
+                className="cursor-pointer md:me-2    lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
+                to="/login"
+              >
+                Login
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
 
@@ -89,13 +111,26 @@ function Header() {
             </Link>
           </li>
 
-          <Link
-            to="/login"
-            onClick={() => setIsOpen(false)}
-            className="px-6 py-2 mx-auto cursor-pointer font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white"
-          >
-            Login
-          </Link>
+          {userLogedIn ? (
+            <Link
+              to="/login"
+              onClick={() => {
+                setIsOpen(false);
+                onClickLogout();
+              }}
+              className="px-6 py-2 mx-auto cursor-pointer font-semibold border border-[#005FC4] rounded-2xl text-white bg-[#005FC4]"
+            >
+              Logout
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="px-6 py-2 mx-auto cursor-pointer font-semibold border border-[#005FC4] rounded-2xl text-white bg-[#005FC4]"
+            >
+              Login
+            </Link>
+          )}
         </ul>
       </div>
     </div>

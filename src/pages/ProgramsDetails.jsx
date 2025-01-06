@@ -21,6 +21,9 @@ import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 
 function Programs() {
+    useEffect(() => {
+      document.title = "Program Details - Innerpece";
+    }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   let navigate = useNavigate();
   const { id, themes_name } = location.state || {};
@@ -34,7 +37,7 @@ function Programs() {
   const [toDate, setToDate] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
+  const [itemsPerPage] = useState(8);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -48,13 +51,13 @@ function Programs() {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program",
+          "https://backoffice.innerpece.com/api/v1/get-program",
           {
             theme: id,
           }
         );
         setLoading(false);
-        setApiData(response.data.data);        
+        setApiData(response.data.data);
       } catch (err) {
         console.log(err);
         setLoading(false);
@@ -62,8 +65,6 @@ function Programs() {
     };
     fetchProgramData();
   }, [id]);
-
-  
 
   const handleDateChange = (e) => {
     setStartDate(e.target.value);
@@ -77,7 +78,7 @@ function Programs() {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program",
+          "https://backoffice.innerpece.com/api/v1/get-program",
           {
             theme: id,
           }
@@ -93,16 +94,21 @@ function Programs() {
   };
 
   const handleSortChange = async (event) => {
+
     setFilterButtonClicked(false);
 
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
+    console.log(selectedSort);
+    
+
     try {
       const response = await axios.post(
-        "https://backoffice.innerpece.com/api/sort-program",
+        // "https://backoffice.innerpece.com/api/sort-program",
+        "https://backoffice.innerpece.com/api/v1/filter-program-by-price_sort",
         {
-          sort_by: selectedSort,
+          sort_order: selectedSort,
           theme: themes_name,
         }
       );
@@ -113,6 +119,7 @@ function Programs() {
         const dataObject = response.data.data;
         // Convert the data object to an array
         const dataArray = Object.values(dataObject);
+
         setApiData(dataArray);
       } else {
         console.error("Error sorting programs:", response.data.message);
@@ -178,8 +185,10 @@ function Programs() {
   };
 
   const paginate = (pageNumber) => {
-    window.scrollTo({ top: 0, behavior: "instant" });
     setCurrentPage(pageNumber);
+
+    const id = document.getElementById("program");
+    id.scrollIntoView({ behavior: "instant" });
   };
 
   const handleCardClick = (id, title) => {
@@ -248,13 +257,15 @@ function Programs() {
     );
   };
 
+  console.log(apiData);
+
   return (
     <div>
       <Header />
-      {/* Hero Section */}
 
-      <div className="mt-4 md:mt-7 ms-3 me-3 md:ms-10 md:me-10 ">
-        <div className="gap-3 mt-4 items-center justify-between inline-flex bg-sky-100/80 font-semibold text-sky-800 p-2 rounded-lg">
+      {/* Hero Section */}
+      <div className="mt-4  ms-3 me-3 md:ms-10 md:me-10 ">
+        <div className="gap-3  items-center justify-between inline-flex bg-sky-100/80 font-semibold text-sky-800 p-2 rounded-lg">
           <p onClick={() => navigate("/")} className="cursor-pointer">
             Home
           </p>
@@ -281,7 +292,7 @@ function Programs() {
             </p>
           </div>
 
-          <div className="w-[180px] h-[40px] md:h-auto md:w-[250px] lg:w-[270px] absolute rounded top-[160px] flex items-center justify-between flex-shrink left-16 mt-3 sm:top-40 md:top-48 md:left-24 lg:top-60 xl:top-60 lg:left-36 bg-white  gap-1  md:gap-3 p-1 py-1">
+          {/* <div className="w-[180px] h-[40px] md:h-auto md:w-[250px] lg:w-[270px] absolute rounded top-[160px] flex items-center justify-between flex-shrink left-16 mt-3 sm:top-40 md:top-48 md:left-24 lg:top-60 xl:top-60 lg:left-36 bg-white  gap-1  md:gap-3 p-1 py-1">
             <span className="ms-3">
               {" "}
               <IoIosSearch className="md:text-2xl" />
@@ -290,6 +301,7 @@ function Programs() {
             <input
               type="text"
               value={searchTitle}
+              name="search events"
               onChange={(e) => setSearchTitle(e.target.value)}
               className="outline-none w-[50px] md:w-[80px] lg:w-[100px]"
               placeholder="Search Events "
@@ -302,18 +314,19 @@ function Programs() {
             >
               Search
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
       {/* Main Section  */}
       <div className="flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* Main Section > Sidebar */}
-        <div className="mt-20 py-10 px-7  h-fit flex flex-col gap-5 rounded-md  max-md:hidden border-2 basis-[20%] ">
+        <div className="mt-20 py-10 px-5  h-fit flex flex-col gap-5 rounded-md  max-md:hidden border-2 basis-[10%] ">
           <p className="text-xl">Search By Filter</p>
           <label htmlFor="fromDate">From Date</label>
           <input
             type="date"
+            id="fromDate"
             value={startDate}
             onChange={handleDateChange}
             className="border-2 p-2 rounded"
@@ -323,6 +336,7 @@ function Programs() {
           <input
             type="date"
             value={toDate}
+            id="toDate"
             onChange={handleToChange}
             className="border-2 p-2 rounded"
           />
@@ -346,25 +360,24 @@ function Programs() {
           <p className="text-xl">Sort By</p>
 
           <select
-            name=""
-            id=""
+            name="select"
+            id="select"
             className="border-2 p-2 outline-none"
             onChange={handleSortChange}
             value={sortBy}
           >
-            <option value="" disabled selected>
+            <option value="" disabled>
               Select Sort Option
             </option>
-            <option value="recent">Recent Event</option>
-            <option value="price_low_to_high">Low Price</option>
-            <option value="price_high_to_low">High Price</option>
+            {/* <option value="recent">Recent Event</option> */}
+            <option value="low">Low Price</option>
+            <option value="high">High Price</option>
           </select>
         </div>
 
         {/* Main Section > Mainbar */}
         <div className=" mt-10 w-full ">
           {/* this div will show only in smaller screens */}
-
           <div className="flex justify-between ">
             <p
               onClick={() => setFilterButtonClicked(!filterButtonClicked)}
@@ -397,11 +410,12 @@ function Programs() {
 
               <div className="flex flex-wrap gap-5">
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="fromDate" className="w-20">
+                  <label htmlFor="FrmDate" className="w-20">
                     From Date
                   </label>
                   <input
                     type="date"
+                    id="FrmDate"
                     value={startDate}
                     onChange={handleDateChange}
                     className="border-2 p-2 rounded"
@@ -409,11 +423,12 @@ function Programs() {
                 </div>
 
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="toDate" className="w-20">
+                  <label htmlFor="tDate" className="w-20">
                     To Date
                   </label>
                   <input
                     type="date"
+                    id="tDate"
                     value={toDate}
                     onChange={handleToChange}
                     className="border-2 p-2 rounded"
@@ -442,18 +457,18 @@ function Programs() {
               <p className="text-lg">Sort By</p>
 
               <select
-                name=""
-                id=""
+                name="selectsmaller"
+                id="selectsmaller"
                 className="border-2 p-2 outline-none"
                 onChange={handleSortChange}
                 value={sortBy}
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Select Sort Option
                 </option>
-                <option value="recent">Recent Event</option>
-                <option value="price_low_to_high">Low Price</option>
-                <option value="price_high_to_low">High Price</option>
+                {/* <option value="recent">Recent Event</option> */}
+                <option value="low">Low Price</option>
+                <option value="high">High Price</option>
               </select>
             </div>
           </div>
@@ -462,7 +477,11 @@ function Programs() {
             <SkeletonLoader />
           ) : currentItems.length > 0 ? (
             currentItems.map((item, index) => (
-              <div key={index} className="flex flex-col mt-5  overflow-hidden">
+              <div
+                id="program"
+                key={index}
+                className="flex flex-col mt-5  overflow-hidden"
+              >
                 <div
                   key={index}
                   className="flex  flex-col lg:flex-row mt-5 overflow-hidden   "
@@ -474,7 +493,7 @@ function Programs() {
                         : defaultimage
                     }
                     alt=""
-                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full lg:w-72  rounded-none"
+                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full  lg:w-72  rounded-none"
                   />
 
                   <div className="flex flex-wrap flex-grow overflow-hidden   flex-col gap-1 md:gap-2 border-2 border-gray-300 py-2 px-3 ">
@@ -491,7 +510,7 @@ function Programs() {
                       <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-500" />
                         <p>
-                          <b className="me-1">5</b>of 5
+                          <b className="me-1">{item.totalReviews}</b>of 5
                         </p>
                       </div>
                     </div>
@@ -499,93 +518,76 @@ function Programs() {
                     <div className="flex items-center flex-wrap gap-2">
                       <p>Upto {item.member_capacity} guests</p>
 
-                      <div className="flex items-center gap-3">
-                        <PiStarFourFill className="text-gray-400" />
-                        <p>4 rooms</p>
-                      </div>
+                      {item.bed_room && (
+                        <div className="flex items-center gap-3">
+                          <PiStarFourFill className="text-gray-400" />
+                          <p>
+                            {item.bed_room}{" "}
+                            {item.bed_room > "1" ? "bed rooms" : "bed room"}
+                          </p>
+                        </div>
+                      )}
 
-                      <div className="flex items-center gap-3">
-                        <PiStarFourFill className="text-gray-400" />
-                        <p>5 baths</p>
-                      </div>
+                      {item.bath_room && (
+                        <div className="flex items-center gap-3">
+                          <PiStarFourFill className="text-gray-400" />
+                          <p>
+                            {item.bath_room}{" "}
+                            {item.bath_room > "1" ? "bath rooms" : "bath room"}
+                          </p>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold">Great for:</p>
+                    {item.amenities && item.amenities.length > 0 && (
+                      <div>
+                        <div className="border-b border-gray-400"></div>
 
-                      <div className="flex items-center gap-2">
-                        <IoPeopleSharp className="text-gray-400" />
-                        <p>Senior Citizen</p>
+                        <div className="flex justify-start mt-5 gap-3 flex-wrap items-start">
+                          {item.amenities.slice(0, 3).map((amenity, index) => (
+                            <div
+                              key={index}
+                              className="flex flex-col w-20 flex-wrap"
+                            >
+                              <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
+                                <img
+                                  src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
+                                  alt=""
+                                />
+                              </span>
+                              <p className="text-gray-500 flex-wrap text-xs">
+                                {amenity.amenity_name}
+                              </p>
+                            </div>
+                          ))}
+
+                          {item.amenities.length > 3 && (
+                            <p className="text-gray-500">
+                              {item.amenities.length - 3}+
+                            </p>
+                          )}
+                        </div>
                       </div>
-
-                      <p>|</p>
-
-                      <div className="flex items-center gap-2">
-                        <MdOutlineChildCare className="text-gray-400" />
-                        <p>Kids</p>
-                      </div>
-                    </div>
-
-                    <div className="border-b border-gray-400"></div>
-
-                    <div className="flex justify-start mt-1 gap-2 flex-wrap items-start">
-                      <div className="flex flex-col  w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <LiaSwimmingPoolSolid className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Swimming pool</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <GiHighGrass className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Lawn</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <LuWaves className="text-gray-500 " />
-                        </span>
-                        <p className="text-gray-500 text-xs">Beach View</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <PiBowlFood className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Meals</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <MdTheaters className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Home Theatre</p>
-                      </div>
-
-                      <p className="text-gray-500">20+</p>
-                    </div>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
-                    <p className="font-bold text-xl md:text-2xl">
-                      ₹{item.price}
+                    <p className="text-gray-600">
+                      Starting From <del>{item.price}</del>
                     </p>
 
-                    <div className="flex border flex-wrap justify-center border-sky-700 py-1 px-4 bg-sky-100/50 rounded-lg  items-center gap-2">
+                    <p className="font-bold text-xl md:text-2xl">
+                      {item.actual_price}
+                    </p>
+
+                    {/* <div className="flex border flex-wrap justify-center border-sky-700 py-1 px-4 bg-sky-100/50 rounded-lg  items-center gap-2">
                       <IoBedSharp className="text-xl" />
                       <p className="text-sm">For 4 Rooms</p>
-                    </div>
+                    </div> */}
 
-                    <p className="text-xs text-gray-500">
+                    {/* <p className="text-xs text-gray-500">
                       for 32 Nights + Taxes(4 rooms)
-                    </p>
+                    </p> */}
 
                     <div
                       onClick={() => handleCardClick(item.id, item.title)}
@@ -599,9 +601,9 @@ function Programs() {
                   </div>
                 </div>
 
-                <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-wider md:tracking-widest ">
+                {/* <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-wider md:tracking-widest ">
                   RATED BEST FOR ITS AMENITIES AND SERVICE
-                </p>
+                </p> */}
               </div>
             ))
           ) : (
@@ -611,7 +613,7 @@ function Programs() {
           )}
 
           <nav>
-            <div className="flex justify-center items-center mt-5">
+            <div className="flex justify-center items-center mt-8">
               <ul className="flex space-x-2">
                 {Array.from(
                   { length: Math.ceil(apiData.length / itemsPerPage) },

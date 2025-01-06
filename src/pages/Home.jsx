@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Header from "../components/HomeHeader";
 import Hero from "../components/HomeHero";
 import HomePrograms from "../components/HomePrograms";
@@ -14,6 +15,9 @@ import Footer from "../components/Footer";
 // import Destination from "../components/Destination";
 
 function Home() {
+   useEffect(() => {
+        document.title = "Innerpece";
+      }, []); // Empty dependency array ensures it runs once on mount
   return (
     <div>
       <Header />

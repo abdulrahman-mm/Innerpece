@@ -32,7 +32,7 @@ function TourPlanning({TourPlanningRef}) {
         setApiData(response.data.data);
         // setIsWishlisted(response.data.data.wishlists);
 
-        document.title = apiData.title || "Default Title";
+        // document.title = apiData.title || "Default Title";
 
         const metaOgTitle = document.querySelector("meta[property='og:title']");
           if (metaOgTitle) {
@@ -58,31 +58,39 @@ function TourPlanning({TourPlanningRef}) {
     fetchProgramData();
   }, [id]);
 
+
+  console.log(apiData);
+  
+
   return (
-    <div ref={TourPlanningRef} className="ms-5 me-5 mt-8 w-90vw md:ms-20 md:me-20 md:mt-10 md:w-2/3">
-      <p className="font-semibold text-2xl ">Tour Planning</p>
+    // <div ref={TourPlanningRef} className="ms-5 me-5 mt-8 w-90vw md:ms-20 md:me-20 md:mt-10 md:w-2/3">
+    //   <p className="font-semibold text-2xl ">Tour Planning</p>
 
-      {apiData.tour_planning &&
-        apiData.tour_planning.plan_title.length > 0 && ( // Check for presence and length
-          <div>
-            {apiData.tour_planning.plan_title.map((title, index) => (
-              <div key={index} className="mt-5">
-                <p className="font-semibold text-xl">{title}</p>
-                <p className="font-semibold text-xl">
-                  {apiData.tour_planning.plan_subtitle[index]}
-                </p>
+    //   {apiData.tour_planning &&
+    //     apiData.tour_planning.plan_title.length > 0 && ( // Check for presence and length
+    //       <div>
+    //         {apiData.tour_planning.plan_title.map((title, index) => (
+    //           <div key={index} className="mt-5">
+    //             <p className="font-semibold text-xl">{title}</p>
+    //             <p className="font-semibold text-xl">
+    //               {apiData.tour_planning.plan_subtitle[index]}
+    //             </p>
 
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: apiData.tour_planning.plan_description[index],
-                  }}
-                >
-                  {/* {apiData.tour_planning.plan_description[index].replace(/<\/?[^>]+(>|$)/g, "")} */}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
+    //             <p
+    //               dangerouslySetInnerHTML={{
+    //                 __html: apiData.tour_planning.plan_description[index],
+    //               }}
+    //             >
+    //               {/* {apiData.tour_planning.plan_description[index].replace(/<\/?[^>]+(>|$)/g, "")} */}
+    //             </p>
+    //           </div>
+    //         ))}
+    //       </div>
+    //     )}
+    // </div>
+
+    <div>
+
     </div>
   );
 }

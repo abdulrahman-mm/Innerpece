@@ -7,9 +7,13 @@ import Review from "../components/Review";
 import Footer from "../components/Footer";
 import PaymentPolicy from "../components/PaymentPolicy";
 import ImportantInfo from "../components/ImportantInfo";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 function TourDetails() {
+  useEffect(() => {
+    document.title = "Tour Details - Innerpece";
+  }, []); // Empty dependency array ensures it runs once on mount
+
   let informationRef = useRef(null);
   let TourPlanningRef = useRef(null);
   let LocationShareRef = useRef(null);
@@ -41,15 +45,19 @@ function TourDetails() {
         reviewRefScroll={reviewRefScroll}
       />
       <Featured />
-      <TourDetailsTwoComponents LocationShareRef={LocationShareRef} />
-      <PaymentPolicy />
+      <TourDetailsTwoComponents
+        LocationShareRef={LocationShareRef}
+        informationRef={informationRef}
+        TourPlanningRef={TourPlanningRef}
+        reviewRef={reviewRef}
+      />
+      {/* <PaymentPolicy />
       <ImportantInfo informationRef={informationRef} />
       <TourPlanning TourPlanningRef={TourPlanningRef} />
-      <Review reviewRef={reviewRef} />
+      <Review reviewRef={reviewRef} /> */}
       <Footer />
     </div>
   );
 }
 
 export default TourDetails;
-

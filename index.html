@@ -47,7 +47,9 @@
     <!-- Fetch dynamic favicon and site logo -->
 
     <script>
-      fetch("https://backoffice.innerpece.com/api/header-content")
+      // fetch("https://backoffice.innerpece.com/api/header-content")
+      // fetch("https://backoffice.innerpece.com/api/get-header-footer")
+      fetch("https://backoffice.innerpece.com/api/v1/header-content")
         .then((response) => response.json())
         .then((data) => {
           // Dynamically set the favicon

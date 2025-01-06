@@ -66,15 +66,24 @@ function ImportantInfo({ informationRef }) {
   }, [id]);
 
   return (
-    <div
-      ref={informationRef}
-      className="ms-5  me-5 mt-8 md:ms-20 md:mt-10 md:me-20  md:w-[55%] "
-    >
-      <p className="font-semibold text-2xl ">Important Info</p>
+    // <div
+    //   ref={informationRef}
+    //   className="ms-5  me-5 mt-8 md:ms-20 md:mt-10 md:me-20  md:w-[55%] "
+    // >
+    //   <p className="font-semibold text-2xl ">Important Info</p>
 
-      {apiData.important_info && (
-        <p className="mt-5 flex flex-wrap">{apiData.important_info}</p>
-      )}
+    //   <div>
+    //     {apiData.important_info && (
+    //       <div
+    //         className="mt-5"
+    //         dangerouslySetInnerHTML={{ __html: apiData.important_info }}
+    //       />
+    //     )}
+    //   </div>
+    // </div>
+
+    <div>
+
     </div>
   );
 }

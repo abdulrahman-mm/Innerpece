@@ -23,9 +23,9 @@ function VisitOurOffice() {
         <div className=" basis-[40%]">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3917.1874887123454!2d79.3470095!3d10.9492057!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baacd9db55ca1f5%3A0xa1dba868ae91b9c8!2sInnerpece!5e0!3m2!1sen!2sin!4v1731920601542!5m2!1sen!2sin"
-            allowfullscreen=""
+            // allowfullscreen=""
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
+            // referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
       </div>

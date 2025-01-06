@@ -2,10 +2,19 @@ import React from "react";
 import TourDetailsMainbar from "../components/TourDetailsMainbar";
 import TourDetailsSidebar from "../components/TourDetailsSidebar";
 
-function TwoComponents({LocationShareRef}) {
+function TwoComponents({
+  LocationShareRef,
+  informationRef,
+  TourPlanningRef,
+  reviewRef,
+}) {
   return (
-    <div className="flex md:gap-16 flex-col justify-between md:flex-row bg-gray-50/10 ms-5 me-5 md:ms-10 md:me-10 lg:ms-20 lg:me-20 items-start mt-8 md:mt-10">
-      <TourDetailsMainbar />
+    <div className="flex gap-8 md:gap-12 flex-col justify-between md:flex-row bg-gray-50/10 ms-5 me-5 md:ms-10 md:me-10 lg:ms-20 lg:me-20 items-start">
+      <TourDetailsMainbar
+        informationRef={informationRef}
+        TourPlanningRef={TourPlanningRef}
+        reviewRef={reviewRef}
+      />
       <TourDetailsSidebar LocationShareRef={LocationShareRef} />
     </div>
   );

@@ -38,7 +38,8 @@ function GetInTouch() {
   async function onClickSendMessage() {
     try {
       let response = await axios.post(
-        `https://backoffice.innerpece.com/api/contact`,
+        // `https://backoffice.innerpece.com/api/contact`,
+        `https://backoffice.innerpece.com/api/v1/contact`,
         {
           first_name: firstname,
           last_name: lastname,
@@ -127,12 +128,13 @@ function GetInTouch() {
               <div className="flex flex-grow flex-col gap-3 ">
                 <label htmlFor="firstname">Your First Name</label>
                 <input
-                  placeholder="enter your first name"
+                  placeholder="Enter your first name"
                   type="text"
                   name="firstname"
                   id="firstname"
                   value={firstname}
                   onChange={onChangeInput}
+                  autoComplete='off'
                   className="border-2  bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5  text-sm"
                 />
               </div>
@@ -140,12 +142,13 @@ function GetInTouch() {
               <div className="flex flex-grow flex-col gap-3 ">
                 <label htmlFor="lastname">Your Last Name</label>
                 <input
-                  placeholder="enter your last name"
+                  placeholder="Enter your last name"
                   type="text"
                   name="lastname"
                   id="lastname"
                   onChange={onChangeInput}
                   value={lastname}
+                  autoComplete='off'
                   className="border-2  bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5 text-sm"
                 />
               </div>
@@ -155,12 +158,13 @@ function GetInTouch() {
               <div className="flex flex-grow flex-col gap-3 ">
                 <label htmlFor="email">Your Email</label>
                 <input
-                  placeholder="enter your email"
+                  placeholder="Enter your email"
                   type="text"
                   name="email"
                   id="email"
                   onChange={onChangeInput}
                   value={email}
+                  autoComplete='off'
                   className="border-2 bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5  text-sm"
                 />
               </div>
@@ -168,12 +172,13 @@ function GetInTouch() {
               <div className="flex flex-grow flex-col gap-3 ">
                 <label htmlFor="phone">Your Phone</label>
                 <input
-                  placeholder="enter your phone"
+                  placeholder="Enter your phone"
                   type="number"
                   id="phone"
                   name="phone"
                   onChange={onChangeInput}
                   value={phone}
+                  autoComplete='off'
                   className="border-2 bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5  text-sm"
                 />
               </div>
@@ -187,8 +192,9 @@ function GetInTouch() {
                 rows={7}
                 onChange={onChangeInput}
                 value={message}
-                placeholder="enter your message"
-                className="border-2 bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5  text-sm"
+                autoComplete='off'
+                placeholder="Enter your message"
+                className="border-2 resize-none bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5  text-sm"
               ></textarea>
             </div>
 

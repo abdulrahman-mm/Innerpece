@@ -21,6 +21,9 @@ import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 
 function DestinationsDetails() {
+    useEffect(() => {
+      document.title = "Filter Details - Innerpece";
+    }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { date, city_name } = location.state || {};
   const [apiData, setApiData] = useState([]);
@@ -32,7 +35,7 @@ function DestinationsDetails() {
   const [searchTitle, setSearchTitle] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
+  const [itemsPerPage] = useState(8);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -47,7 +50,7 @@ function DestinationsDetails() {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/home-filter",
+          "https://backoffice.innerpece.com/api/v1/home-filter",
           {
             destination: city_name,
             start_date: date,
@@ -58,7 +61,6 @@ function DestinationsDetails() {
 
         const firstProgram = response.data.data[0];
         const metaOgTitle = document.querySelector("meta[property='og:title']");
-        console.log(metaOgTitle);
         if (metaOgTitle) {
           metaOgTitle.setAttribute(
             "content",
@@ -143,10 +145,11 @@ function DestinationsDetails() {
 
     try {
       const response = await axios.post(
-        "https://backoffice.innerpece.com/api/sort-destination ",
+        // "https://backoffice.innerpece.com/api/v1/home-filter ",
+        "https://backoffice.innerpece.com/api/v1/destination-program-by-price_sort",
         {
-          sort_by: selectedSort,
-          destination: city_name,
+          sort_order: selectedSort,
+          city: city_name,
         }
       );
 
@@ -169,6 +172,7 @@ function DestinationsDetails() {
     try {
       const response = await axios.post(
         "https://backoffice.innerpece.com/api/filter-destination",
+        
         {
           start_date: startDate,
           to_date: toDate,
@@ -206,9 +210,11 @@ function DestinationsDetails() {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program",
+          // "https://backoffice.innerpece.com/api/get-program",
+          "https://backoffice.innerpece.com/api/v1/home-filter",
           {
-            destination: id,
+            destination: city_name,
+            start_date: date,
           }
         );
         setStartDate("");
@@ -220,6 +226,9 @@ function DestinationsDetails() {
     };
     fetchProgramData();
   };
+
+  console.log(apiData);
+  
 
   useEffect(() => {
     if (filterButtonClicked) {
@@ -265,7 +274,7 @@ function DestinationsDetails() {
             </p>
           </div>
 
-          <div className="w-[180px] h-[40px] md:h-auto md:w-[250px] lg:w-[270px] absolute rounded top-[160px] flex items-center justify-between flex-shrink left-16 mt-3 sm:top-40 md:top-48 md:left-24 lg:top-60 xl:top-60 lg:left-36 bg-white  gap-1  md:gap-3 p-1 py-1">
+          {/* <div className="w-[180px] h-[40px] md:h-auto md:w-[250px] lg:w-[270px] absolute rounded top-[160px] flex items-center justify-between flex-shrink left-16 mt-3 sm:top-40 md:top-48 md:left-24 lg:top-60 xl:top-60 lg:left-36 bg-white  gap-1  md:gap-3 p-1 py-1">
             <span className="ms-3">
               {" "}
               <IoIosSearch className="md:text-2xl" />
@@ -286,7 +295,7 @@ function DestinationsDetails() {
             >
               Search
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -294,7 +303,7 @@ function DestinationsDetails() {
 
       <div className="flex flex-col md:flex-row justify-between gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* main section > sideBar */}
-        <div className="mt-20 px-7 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[20%] ">
+        <div className="mt-20 px-5 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[10%] ">
           <p className="text-xl">Search By Filter</p>
 
           <label htmlFor="fromDate">From Date</label>
@@ -342,8 +351,8 @@ function DestinationsDetails() {
               Select Sort Option
             </option>
             <option value="recent">Recent Event</option>
-            <option value="price_low_to_high">Low Price</option>
-            <option value="price_high_to_low">High Price</option>
+            <option value="low">Low Price</option>
+            <option value="high">High Price</option>
           </select>
         </div>
 
@@ -433,8 +442,8 @@ function DestinationsDetails() {
                   Select Sort Option
                 </option>
                 <option value="recent">Recent Event</option>
-                <option value="price_low_to_high">Low Price</option>
-                <option value="price_high_to_low">High Price</option>
+                <option value="low">Low Price</option>
+                <option value="high">High Price</option>
               </select>
             </div>
           </div>
@@ -584,7 +593,7 @@ function DestinationsDetails() {
               </div>
             ))
           ) : (
-            <div className="flex items-start mt-8 text-2xl justify-center w-full h-full ">
+            <div className="flex items-start mt-20 text-2xl justify-center w-full h-full ">
               <p>No programs available.</p>
             </div>
           )}

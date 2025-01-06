@@ -54,9 +54,9 @@ function Hero() {
     async function getApiData() {
       await axios
 
-        .get(`https://backoffice.innerpece.com/api/slider`)
+        .get(`https://backoffice.innerpece.com/api/v1/get-combined-data`)
         .then((response) => {
-          setHomeImage(response.data.sliders);
+          setHomeImage(response.data.data.sliders);
           setLoading(false);
         })
         .catch((err) => {
@@ -67,6 +67,9 @@ function Hero() {
 
     getApiData();
   }, []);
+
+  
+  
 
   return (
     <div className="hero-container relative">
@@ -103,54 +106,52 @@ function Hero() {
                   loading="lazy"
                 />
 
-                <p
-                  className="text-white uppercase  tracking-widest z-10  absolute top-5 sm:top-20 left-7 md:top-40 md:left-28 text-lg md:text-4xl "
-                  style={{ "text-shadow": "2px 2px 3px #000000" }}
-                >
+                {/* <p className="text-white uppercase [text-shadow:2px_2px_3px_#000000]  z-10  absolute top-5 sm:top-20  left-5 md:left-14 text-lg md:text-5xl ">
                   {image.slider_name}
-                </p>
-                <p
-                  className="text-white uppercase  font-semibold z-10 absolute left-7 top-28 sm:top-28 md:top-72 lg:top-64 xl:top-56 md:left-28 text-lg md:text-5xl lg:text-4xl"
-                  style={{ "text-shadow": "2px 2px 8px #000000" }}
-                >
-                  {image.subtitle}
-                </p>
-                
+                </p> */}
+
+                <div className="flex w-full px-5 md:px-20 mt-5 md:mt-20 items-center absolute justify-center">
+                  <p className="text-white flex uppercase font-semibold text-center  z-10   top-5 sm:top-20 text-lg md:text-3xl lg:text-4xl xl:text-5xl ">
+                    {image.slider_name}
+                  </p>
+                </div>
               </div>
-              
             ))}
-            
           </Carousel>
         )
       )}
       {homeImage.length > 0 && (
         <div className="w-100%  flex  absolute bottom-1  left-[2%] right-[2%] md:left-[10%] md:right-[10%]   justify-center ">
-          <div className="   justify-center  bg-white flex  flex-shrink flex-row flex-wrap md:flex-nowrap sm:gap-2 gap-1 rounded mx-1 px-2 sm:px-0 sm:ps-2 py-1 sm:py-0  lg:rounded-full shadow-2xl shadow-white/40">
+          <div className="   justify-center  bg-white flex  flex-shrink flex-row flex-wrap md:flex-nowrap sm:gap-2 gap-1 rounded mx-1 px-2 sm:px-0 sm:ps-1 py-1 sm:py-0   lg:rounded-3xl shadow-2xl shadow-white/40">
             <div
-              className="flex  flex-grow basis-[5%] lg:basis-[7%]   flex-shrink  items-center gap-3 border-gray-400 border-2 rounded md:rounded-3xl py-1 md:py-3 
-         lg:mx-2 my-1 sm:my-2 md:my-4 "
+              className="flex  flex-grow basis-[5%] lg:basis-[7%]   flex-shrink  items-center gap-3 border-gray-400 border-2 rounded md:rounded-3xl  
+         lg:mx-2 my-2  "
             >
-              <IoCompassSharp className="text-2xl ms-2 text-blue-900" />
+              <IoCompassSharp className="text-2xl ms-2 " />
               <input
                 type="text"
                 placeholder="Where to?"
-                className="border-none w-20  lg:w-36 me-5 outline-none  flex-shrink"
+                className="border-none w-20 placeholder-black  lg:w-36 me-5 outline-none  flex-shrink"
                 value={cityName}
+                name="where to"
+                autoComplete="off"
                 onChange={handleInputChange}
               />
             </div>
 
-            <div className="flex flex-grow  basis-[5%] lg:basis-[7%]  flex-shrink   items-center gap-3 border-gray-400 border-2 rounded md:rounded-3xl lg:px-8 md:py-3 lg:mx-2 my-1 sm:my-2 md:my-4">
+            <div className="flex flex-grow  basis-[5%] lg:basis-[7%]  flex-shrink   items-center gap-3 border-gray-400 border-2 rounded md:rounded-3xl lg:px-8 md:py-3 lg:mx-2 my-2">
               <FaRegCalendarAlt className="inline-block md:hidden ms-2" />
               <input
                 type="date"
+                name="date"
                 value={selectedDate}
+                autoComplete="off"
                 onChange={handleDateChange}
                 className="border-none mx-2 rounded outline-none bg-white"
               />
             </div>
 
-            <div className="cursor-pointer  lg:mx-0   my-1 lg:my-0  basis-[5%] lg:basis-[7%] flex-grow  bg-gradient-to-b from-sky-800 to-sky-950 px-2 lg:px-14 py-2 md:py-4 rounded-e  lg:rounded-e-full flex items-center justify-center  ">
+            <div className="cursor-pointer  lg:mx-0   my-1 md:my-0  basis-[5%] lg:basis-[7%] flex-grow  bg-gradient-to-b from-sky-800 to-sky-950 px-2 lg:px-14 py-2 md:py-4 rounded-e  lg:rounded-e-3xl flex items-center justify-center  ">
               <p
                 className="  md:text-xl lg:text-2xl text-center font-semibold text-white"
                 onClick={handleSearch}

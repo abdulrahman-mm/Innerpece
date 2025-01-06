@@ -5,7 +5,7 @@ import ourmissionimg1 from "../assets/ourmissionimg1.png";
 function OurMission() {
   return (
     <div className="ms-3 me-3 mt-8 md:mt-16 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
-      <div className="flex flex-col items-center lg:flex-row justify-start lg:gap-32 xl:gap-48">
+      <div className="flex flex-col items-center justify-between lg:flex-row  lg:gap-32 xl:gap-48">
         <div className="basis-[50%] lg:basis-[30%] gap-8">
           <p className="text-2xl lg:text-3xl xl:text-5xl font-semibold mt-3">
             Why Choose Innerpece?
@@ -54,16 +54,16 @@ function OurMission() {
           </div>
         </div>
 
-        <div className="relative mx-auto basis-[20%] mt-8 lg:mt-0 lg:basis-[50%]">
+        <div className="relative  basis-[20%] mt-8 lg:mt-0 lg:basis-[50%]">
           <img
             src={ourmissionimg1}
             alt=""
-            className="  md:w-auto bg-center bg-contain"
+            className=" w-full  object-cover"
           />
           <img
             src={ourmissionimg2}
             alt=""
-            className="max-md:hidden  absolute top-36  sm:top-40 sm:-left-14 md:top-44 md:-left-28  lg:top-44 lg:-left-16 xl:top-44 xl:-left-24 bg-contain bg-center"
+            className="max-md:hidden  absolute top-36  sm:top-40 sm:-left-14 md:top-44 md:-left-28  lg:top-44 lg:-left-16 xl:top-64 xl:-left-24 bg-contain bg-center"
           />
         </div>
       </div>

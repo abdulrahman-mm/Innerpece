@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import random1 from '../assets/random1.jpg'
 
 function Signup() {
   let navigate = useNavigate();
@@ -48,13 +49,13 @@ function Signup() {
     });
   }
 
-  function navigateToTermsOfService(){
-    navigate('/termsofservice')
+  function navigateToTermsOfService() {
+    navigate("/termsofservice");
 
     window.scrollTo({
-      top:0,
-      behavior:'instant'
-    })
+      top: 0,
+      behavior: "instant",
+    });
   }
 
   function handleInputChanges(e) {
@@ -112,10 +113,18 @@ function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
+    console.log(imageFile);
+    
+    
+
+    
+
     try {
       let response = await axios.post(
-        `https://backoffice.innerpece.com/api/signup`,
+        // `https://backoffice.innerpece.com/api/signup`,
+        "https://backoffice.innerpece.com/api/v1/signup",
         {
+          image_1: imageFile,
           first_name: first_name,
           last_name: last_name,
           email: email,
@@ -131,7 +140,10 @@ function Signup() {
           zip_province_code: zip_province_code,
           newsletter_sub: newsletter_sub,
           terms_condition: terms_condition,
-        }
+        },{
+          headers: {
+          'Content-Type': 'multipart/form-data',
+        }}
       );
 
       setUserDetailsError({
@@ -183,20 +195,40 @@ function Signup() {
       }, 2000);
     } catch (err) {
       console.log(err);
-
-      console.log(err.response.data.errors);
-
       let errors = err.response.data.errors;
-
       setUserDetailsError({ ...errors });
     }
   };
+
+  const [selectedImage, setSelectedImage] = useState(null); // Store the selected image
+  const [imageFile, setImageFile] = useState(null); // For API upload
+  const [openImageModal, setOpenImageModal] = useState(false);
+
+  // Function to handle file input change
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Create a preview URL for the image
+      setSelectedImage(URL.createObjectURL(file));
+      setImageFile(file); // Store the file for upload
+    }
+
+  };
+
+
+  console.log(selectedImage);
+  console.log(imageFile);
+  
+  
+
+
+  
 
   return (
     <div className="flex items-center justify-center mt-8 md:px-1 md:mt-14">
       <div className="w-[95vw] md:w-[80vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex bg-gray-50/30 justify-start gap-1 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
-          <div className=' bg-[url("././assets/signup.png")] w-1/5 max-md:hidden  rounded-md  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+          <div className=' bg-[url("././assets/signup.svg")] w-1/5 max-md:hidden  rounded-md  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
           <div className="w-2/5 flex-grow flex-shrink">
             <div className="flex flex-col gap-2">
@@ -214,15 +246,64 @@ function Signup() {
                 <p className="text-gray-500">get 20% off for web signup</p>
               </div>
 
-              <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
+              {/* Display Selected Image */}
+              {selectedImage && (
+                <div className="mt-8 flex ">
+                  <img
+                    src={selectedImage}
+                    alt="Selected"
+                    onClick={() => setOpenImageModal(true)} // Open modal on click
+                    className="w-28 h-28 object-fill cursor-pointer  rounded-full"
+                  />
+                </div>
+              )}
+
+              <div className="mt-5">
+                <label htmlFor="file" className="font-semibold cursor-pointer">
+                  {`${selectedImage ? "Change Photo" : "Upload Photo"}`}
+                </label>
+
+                {/* Hidden File Input */}
+                <input
+                  id="file"
+                  type="file"
+                  accept="image/*" // Allow only image files
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
+              </div>
+
+              {/* Modal for Larger Image */}
+              {openImageModal && (
+                <div
+                  className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center"
+                  onClick={() => setOpenImageModal(false)} // Close modal on overlay click
+                >
+                  <div className="relative">
+                    <img
+                      src={selectedImage}
+                      alt="Full Size"
+                      className="max-w-full h-[70vh] object-contain"
+                    />
+                    <button
+                      className="absolute top-2 right-2 bg-white rounded-full px-3 py-1"
+                      onClick={() => setOpenImageModal(false)} // Close modal on button click
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-3">
                 <div className="flex flex-col flex-grow gap-1">
                   <label htmlFor="first_name" className="font-semibold">
-                    First Name
+                    First Name *
                   </label>
                   <input
                     type="text"
                     name="first_name"
                     id="first_name"
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     value={first_name}
                     className="border-2 border-gray-300  outline-none p-2 rounded-md"
@@ -237,12 +318,13 @@ function Signup() {
 
                 <div className="flex flex-col flex-grow gap-1">
                   <label htmlFor="last_name" className="font-semibold">
-                    Last Name
+                    Last Name *
                   </label>
                   <input
                     type="text"
                     name="last_name"
                     id="last_name"
+                    autoComplete="off"
                     value={last_name}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none  p-2 rounded-md"
@@ -259,13 +341,14 @@ function Signup() {
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="email" className="font-semibold">
-                    Email Address
+                    Email Address *
                   </label>
                   <input
                     type="email"
                     name="email"
                     id="email"
                     value={email}
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Enter your email"
@@ -279,16 +362,17 @@ function Signup() {
 
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="phone" className="font-semibold">
-                    Phone Number
+                    Phone Number *
                   </label>
                   <input
                     type="number"
                     name="phone"
                     id="phone"
                     value={phone}
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
-                    placeholder="enter your phone number"
+                    placeholder="Enter your phone number"
                   />
                   {userDetailsError.phone && (
                     <p className="text-red-500 text-xs sm:text-sm ">
@@ -301,12 +385,13 @@ function Signup() {
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="password" className="font-semibold">
-                    Create Password
+                    Create Password *
                   </label>
                   <input
                     type="password"
                     name="password"
                     id="password"
+                    autoComplete="off"
                     value={password}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
@@ -324,12 +409,13 @@ function Signup() {
                     htmlFor="password_confirmation"
                     className="font-semibold"
                   >
-                    Confirm Password
+                    Confirm Password *
                   </label>
                   <input
                     type="password"
                     name="password_confirmation"
                     id="password_confirmation"
+                    autoComplete="off"
                     value={password_confirmation}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
@@ -346,13 +432,14 @@ function Signup() {
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="dob" className="font-semibold">
-                    Date Of Birth
+                    Date Of Birth *
                   </label>
                   <input
                     type="date"
                     name="dob"
                     id="dob"
                     value={dob}
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Create Passoword"
@@ -366,13 +453,14 @@ function Signup() {
 
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="street" className="font-semibold">
-                    Street
+                    Street *
                   </label>
                   <input
                     type="text"
                     name="street"
                     id="street"
                     value={street}
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Street"
@@ -388,12 +476,13 @@ function Signup() {
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="city" className="font-semibold">
-                    City
+                    City *
                   </label>
                   <input
                     type="text"
                     name="city"
                     id="city"
+                    autoComplete="off"
                     value={city}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
@@ -408,13 +497,14 @@ function Signup() {
 
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="state" className="font-semibold">
-                    State/Province
+                    State/Province *
                   </label>
                   <input
                     type="text"
                     name="state"
                     id="state"
                     value={state}
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Street"
@@ -430,13 +520,14 @@ function Signup() {
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="zip_province_code" className="font-semibold">
-                    Zip/Postal Code
+                    Zip/Postal Code *
                   </label>
                   <input
                     type="number"
                     name="zip_province_code"
                     id="zip_province_code"
                     value={zip_province_code}
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="zip province code/postal code"
@@ -450,13 +541,14 @@ function Signup() {
 
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="country" className="font-semibold">
-                    Country
+                    Country *
                   </label>
                   <input
                     type="text"
                     name="country"
                     id="country"
                     value={country}
+                    autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Country"
@@ -472,12 +564,13 @@ function Signup() {
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="preferred_lang" className="font-semibold">
-                    Preferred Language
+                    Preferred Language *
                   </label>
                   <input
                     type="text"
                     name="preferred_lang"
                     id="preferred_lang"
+                    autoComplete="off"
                     value={preferred_lang}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
@@ -498,6 +591,7 @@ function Signup() {
                     name="newsletter_sub"
                     id="newsletter_sub"
                     className="scale-125"
+                    autoComplete="off"
                     value="newsletter_sub"
                     checked={newsletter_sub ? true : false}
                     onChange={handleInputChanges}
@@ -524,6 +618,7 @@ function Signup() {
                   <input
                     type="checkbox"
                     name="terms_condition"
+                    autoComplete="off"
                     id="terms_condition"
                     className="scale-125"
                     checked={terms_condition ? true : false}
@@ -536,7 +631,10 @@ function Signup() {
                   >
                     I accept the{" "}
                   </label>
-                  <span onClick={navigateToTermsOfService} className=" md:-ms-1 text-blue-600 underline cursor-pointer text-xs sm:text-sm md:text-base">
+                  <span
+                    onClick={navigateToTermsOfService}
+                    className=" md:-ms-1 text-blue-600 underline cursor-pointer text-xs sm:text-sm md:text-base"
+                  >
                     Terms Of Service
                   </span>
                 </div>

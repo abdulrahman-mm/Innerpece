@@ -39,7 +39,8 @@ function Login() {
   async function onClickSignIn() {
     try {
       let response = await axios.post(
-        `https://backoffice.innerpece.com/api/login`,
+        // `https://backoffice.innerpece.com/api/login`,
+        `https://backoffice.innerpece.com/api/v1/login`,
         {
           email: email,
           password: password,
@@ -111,6 +112,7 @@ function Login() {
                     name="email"
                     id="email"
                     value={email}
+                    autoComplete='off'
                     onChange={onChangeInput}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Enter your Email"
@@ -144,6 +146,7 @@ function Login() {
                   name="password"
                   value={password}
                   onChange={onChangeInput}
+                  autoComplete='off'
                   placeholder="Enter your Password"
                   className="border-2  border-gray-300 outline-none p-2 rounded-md"
                 />

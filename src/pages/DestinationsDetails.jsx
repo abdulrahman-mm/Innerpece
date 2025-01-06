@@ -21,6 +21,9 @@ import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 
 function DestinationsDetails() {
+    useEffect(() => {
+      document.title = "Destination Details - Innerpece";
+    }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { id, city_name } = location.state || {};
   const [apiData, setApiData] = useState([]);
@@ -32,7 +35,7 @@ function DestinationsDetails() {
   const [searchTitle, setSearchTitle] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(2);
+  const [itemsPerPage] = useState(8);
   const [loading, setLoading] = useState(true); // Add a loading state
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -45,13 +48,18 @@ function DestinationsDetails() {
     ? apiData.slice(indexOfFirstItem, indexOfLastItem)
     : [];
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+
+    const id = document.getElementById("destinations");
+    id.scrollIntoView({ behavior: "instant" });
+  };
 
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program",
+          "https://backoffice.innerpece.com/api/v1/get-program",
           {
             destination: id,
           }
@@ -87,7 +95,6 @@ function DestinationsDetails() {
           );
         }
       } catch (err) {
-        console.log(err);
         setLoading(false);
       }
     };
@@ -139,17 +146,24 @@ function DestinationsDetails() {
   };
 
   const handleSortChange = async (event) => {
+    console.log("dsglmrsf");
+    
     setFilterButtonClicked(false);
 
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
+    console.log(selectedSort);
+    
+
     try {
       const response = await axios.post(
-        "https://backoffice.innerpece.com/api/sort-destination ",
+        // "https://backoffice.innerpece.com/api/sort-destination ",
+        // "https://backoffice.innerpece.com/api/v1/filter-program-by-price_sort",
+        "https://backoffice.innerpece.com/api/v1/destination-program-by-price_sort",
         {
-          sort_by: selectedSort,
-          destination: city_name,
+          sort_order: selectedSort,
+          city: city_name,
         }
       );
 
@@ -168,12 +182,15 @@ function DestinationsDetails() {
     }
   };
 
+  console.log(apiData);
+  
+
   const handleFilterClick = async () => {
     setFilterButtonClicked(false);
 
     try {
       const response = await axios.post(
-        "https://backoffice.innerpece.com/api/filter-destination",
+        "https://backoffice.innerpece.com/api/v1/filter-destination",
         {
           start_date: startDate,
           to_date: toDate,
@@ -211,7 +228,8 @@ function DestinationsDetails() {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program",
+          // "https://backoffice.innerpece.com/api/v1/destination",
+          "https://backoffice.innerpece.com/api/v1/get-program",
           {
             destination: id,
           }
@@ -235,9 +253,6 @@ function DestinationsDetails() {
     // Clean up on component unmount
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
-
-  console.log(apiData);
-  
 
   const SkeletonLoader = () => {
     return (
@@ -278,20 +293,22 @@ function DestinationsDetails() {
     );
   };
 
+  console.log(apiData);
+
   return (
     <div>
       <Header />
 
       {/* Hero Section */}
-      <div className="mt-4 md:mt-7 ms-3 me-3 md:ms-10 md:me-10 ">
-        <div className="gap-3 mt-4 items-center justify-between inline-flex bg-sky-100/80 font-semibold text-sky-800 p-2 rounded-lg">
+      <div className="mt-4  ms-3 me-3 md:ms-10 md:me-10 ">
+        <div className="gap-3  items-center justify-between inline-flex bg-sky-100/80 font-semibold text-sky-800 p-2 rounded-lg">
           <p onClick={() => navigate("/")} className="cursor-pointer">
             Home
           </p>
           <b>{">"}</b>
 
           <p className="">{`Explore ${
-            apiData.length > 0 ? apiData[0].title : ""
+            apiData.length > 0 ? apiData[0].destination : ""
           }`}</p>
         </div>
 
@@ -301,10 +318,10 @@ function DestinationsDetails() {
         >
           <div
             id="blur"
-            className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-lg flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1  md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
+            className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-lg flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1 md:px-8  md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
           >
             <h1 className="text-white text-lg md:text-2xl lg:text-4xl font-semibold">{`Explore ${
-              apiData.length > 0 ? apiData[0].title : ""
+              apiData.length > 0 ? apiData[0].destination : ""
             }`}</h1>
             <p className="text-white text-sm md:text-base mt-2 ">
               Find your perfect tour with personalized themes and destinations
@@ -312,7 +329,7 @@ function DestinationsDetails() {
             </p>
           </div>
 
-          <div className="w-[180px] h-[40px] md:h-auto md:w-[250px] lg:w-[270px] absolute rounded top-[160px] flex items-center justify-between flex-shrink left-16 mt-3 sm:top-40 md:top-48 md:left-24 lg:top-60 xl:top-60 lg:left-36 bg-white  gap-1  md:gap-3 p-1 py-1">
+          {/* <div className="w-[180px] h-[40px] md:h-auto md:w-[250px] lg:w-[270px] absolute rounded top-[160px] flex items-center justify-between flex-shrink left-16 mt-3 sm:top-40 md:top-48 md:left-24 lg:top-60 xl:top-60 lg:left-36 bg-white  gap-1  md:gap-3 p-1 py-1">
             <span className="ms-3">
               {" "}
               <IoIosSearch className="md:text-2xl" />
@@ -321,6 +338,7 @@ function DestinationsDetails() {
             <input
               type="text"
               value={searchTitle}
+              name="search events"
               onChange={(e) => setSearchTitle(e.target.value)}
               className="outline-none w-[50px] md:w-[80px] lg:w-[100px]"
               placeholder="Search Events "
@@ -333,7 +351,7 @@ function DestinationsDetails() {
             >
               Search
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -341,13 +359,13 @@ function DestinationsDetails() {
 
       <div className="flex flex-col md:flex-row ustify-between gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* main section > sideBar */}
-
-        <div className="mt-20 px-7 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[20%] ">
+        <div className="mt-20 px-5 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[10%] ">
           <p className="text-xl">Search By Filter</p>
 
           <label htmlFor="fromDate">From Date</label>
           <input
             type="date"
+            id="fromDate"
             value={startDate}
             onChange={handleDateChange}
             className="border-2 p-2 rounded"
@@ -357,6 +375,7 @@ function DestinationsDetails() {
           <input
             type="date"
             value={toDate}
+            id="toDate"
             onChange={handleToChange}
             className="border-2 p-2 rounded"
           />
@@ -380,25 +399,25 @@ function DestinationsDetails() {
           <p className="text-xl">Sort By</p>
 
           <select
-            name=""
-            id=""
+            name="select"
+            id="select"
             className="border-2 p-2 outline-none"
             onChange={handleSortChange}
             value={sortBy}
           >
-            <option value="" disabled selected>
+            <option value="" disabled>
               Select Sort Option
             </option>
             <option value="recent">Recent Event</option>
-            <option value="price_low_to_high">Low Price</option>
-            <option value="price_high_to_low">High Price</option>
+            <option value="low">Low Price</option>
+            <option value="high">High Price</option>
           </select>
         </div>
 
         {/* main section > mainBar */}
 
-        {/* this div will show only in smaller screens */}
         <div className="  w-full ">
+          {/* this will show only in smaller screens */}
           <p
             onClick={() => setFilterButtonClicked(!filterButtonClicked)}
             className={`mt-10 w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${
@@ -415,6 +434,7 @@ function DestinationsDetails() {
                 : "translate-y-full opacity-0"
             }`}
           >
+            {/* this will show only in smaller screens */}
             <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
               {/* Filter Header with X button */}
               <div className="flex justify-between items-center">
@@ -429,10 +449,11 @@ function DestinationsDetails() {
 
               <div className="flex flex-wrap gap-5">
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="fromDate" className="w-20">
+                  <label htmlFor="frmDate" className="w-20">
                     From Date
                   </label>
                   <input
+                    id="frmDate"
                     type="date"
                     value={startDate}
                     onChange={handleDateChange}
@@ -441,11 +462,12 @@ function DestinationsDetails() {
                 </div>
 
                 <div className="flex gap-2 items-center">
-                  <label htmlFor="toDate" className="w-20">
+                  <label htmlFor="tDate" className="w-20">
                     To Date
                   </label>
                   <input
                     type="date"
+                    id="tDate"
                     value={toDate}
                     onChange={handleToChange}
                     className="border-2 p-2 rounded"
@@ -474,18 +496,18 @@ function DestinationsDetails() {
               <p className="text-lg">Sort By</p>
 
               <select
-                name=""
-                id=""
+                name="selectsmaller"
+                id="selectsmaller"
                 className="border-2 p-2 outline-none"
                 onChange={handleSortChange}
                 value={sortBy}
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Select Sort Option
                 </option>
                 <option value="recent">Recent Event</option>
-                <option value="price_low_to_high">Low Price</option>
-                <option value="price_high_to_low">High Price</option>
+                <option value="low">Low Price</option>
+                <option value="high">High Price</option>
               </select>
             </div>
           </div>
@@ -494,7 +516,11 @@ function DestinationsDetails() {
             <SkeletonLoader />
           ) : currentItems.length > 0 ? (
             currentItems.map((item, index) => (
-              <div key={index} className="flex flex-col mt-10  ">
+              <div
+                id="destinations"
+                key={index}
+                className="flex flex-col mt-10  "
+              >
                 <div
                   key={index}
                   className="flex w-full flex-grow flex-col lg:flex-row mt-11    "
@@ -523,7 +549,7 @@ function DestinationsDetails() {
                       <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-500" />
                         <p>
-                          <b className="me-1">5</b>of 5
+                          <b className="me-1">{item.average_rating}</b>of 5
                         </p>
                       </div>
                     </div>
@@ -531,18 +557,22 @@ function DestinationsDetails() {
                     <div className="flex items-center flex-wrap gap-2">
                       <p>Upto {item.member_capacity} guests</p>
 
-                      <div className="flex items-center gap-3">
-                        <PiStarFourFill className="text-gray-400" />
-                        <p>4 rooms</p>
-                      </div>
+                      {item.bed_room && (
+                        <div className="flex items-center gap-3">
+                          <PiStarFourFill className="text-gray-400" />
+                          <p>{item.bed_room}</p>
+                        </div>
+                      )}
 
-                      <div className="flex items-center gap-3">
-                        <PiStarFourFill className="text-gray-400" />
-                        <p>5 baths</p>
-                      </div>
+                      {item.bath_room && (
+                        <div className="flex items-center gap-3">
+                          <PiStarFourFill className="text-gray-400" />
+                          <p>{item.bath_room}</p>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-2 flex-wrap">
+                    {/* <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-semibold">Great for:</p>
 
                       <div className="flex items-center gap-2">
@@ -556,68 +586,57 @@ function DestinationsDetails() {
                         <MdOutlineChildCare className="text-gray-400" />
                         <p>Kids</p>
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="border-b border-gray-400"></div>
+                    {item.amenities&& item.amenities.length > 0 && (
+                      <div>
+                        <div className="border-b border-gray-400"></div>
 
-                    <div className="flex justify-start mt-1 gap-2 flex-wrap items-start">
-                      <div className="flex flex-col  w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <LiaSwimmingPoolSolid className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Swimming pool</p>
+                        <div className="flex justify-start mt-3 gap-3 flex-wrap items-start">
+                          {item.amenities.slice(0, 3).map((amenity, index) => (
+                            <div
+                              key={index}
+                              className="flex flex-col w-20 flex-wrap"
+                            >
+                              <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
+                                <img
+                                  src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
+                                  alt=""
+                                />
+                              </span>
+                              <p className="text-gray-500 flex-wrap text-xs">
+                                {amenity.amenity_name}
+                              </p>
+                            </div>
+                          ))}
+
+                          {item.amenities.length > 3 && (
+                            <p className="text-gray-500">
+                              {item.amenities.length - 3}+
+                            </p>
+                          )}
+                        </div>
                       </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <GiHighGrass className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Lawn</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <LuWaves className="text-gray-500 " />
-                        </span>
-                        <p className="text-gray-500 text-xs">Beach View</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <PiBowlFood className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Meals</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <MdTheaters className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Home Theatre</p>
-                      </div>
-
-                      <p className="text-gray-500">20+</p>
-                    </div>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-4  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2  lg:rounded-lg lg:rounded-s-none rounded-b-none">
-                    <p className="font-bold text-xl md:text-2xl">
-                      ₹{item.actual_price}
+                    <p className="text-gray-600">
+                      Starting From <del>{item.price}</del>
                     </p>
 
-                    <div className="flex border flex-wrap justify-center border-sky-700 py-1 px-4 bg-sky-100/50 rounded-lg  items-center gap-2">
+                    <p className="font-bold text-xl md:text-2xl">
+                      {item.actual_price}
+                    </p>
+
+                    {/* <div className="flex border flex-wrap justify-center border-sky-700 py-1 px-4 bg-sky-100/50 rounded-lg  items-center gap-2">
                       <IoBedSharp className="text-xl" />
                       <p className="text-sm">For 4 Rooms</p>
                     </div>
 
                     <p className="text-xs text-gray-500">
                       for 32 Nights + Taxes(4 rooms)
-                    </p>
+                    </p> */}
 
                     <div
                       onClick={() => handleCardClick(item.id, item.title)}
@@ -631,9 +650,9 @@ function DestinationsDetails() {
                   </div>
                 </div>
 
-                <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-widest ">
+                {/* <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-widest ">
                   RATED BEST FOR ITS AMENITIES AND SERVICE
-                </p>
+                </p> */}
               </div>
             ))
           ) : (

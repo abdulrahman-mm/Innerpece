@@ -15,6 +15,9 @@ function Hero({
   handleLocationShareScroll,
   reviewRefScroll,
 }) {
+  useEffect(() => {
+    document.title = "Tour Details - Innerpece";
+  }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { id, title } = location.state || {};
   const [apiData, setApiData] = useState([]);
@@ -35,7 +38,7 @@ function Hero({
         };
 
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program-details",
+          "https://backoffice.innerpece.com/api/v1/get-program-details",
           payload
         );
 
@@ -50,7 +53,6 @@ function Hero({
           metaOgTitle.setAttribute("content", apiData.title || "Default Title");
         }
 
-        // console.log('metaogtitle',metaOgTitle);
 
         const metaOgDescription = document.querySelector(
           "meta[property='og:description']"
@@ -62,7 +64,6 @@ function Hero({
           );
         }
 
-        // console.log('metadescription',metaOgDescription);
 
         const metaOgImage = document.querySelector("meta[property='og:image']");
         if (metaOgImage) {
@@ -82,8 +83,7 @@ function Hero({
   return (
     <div className="relative ">
       {loading ? (
-        <div className=" h-[50vh] md:h-[40vh] lg:h-[50vh] w-full bg-gray-400 animate-pulse">
-        </div>
+        <div className=" h-[50vh] md:h-[40vh] lg:h-[50vh] w-full bg-gray-500 animate-pulse"></div>
       ) : (
         <img
           src={

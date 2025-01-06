@@ -10,7 +10,7 @@ function Faq() {
   useEffect(() => {
     async function getDataFromApi() {
       let response = await axios.get(
-        `https://backoffice.innerpece.com/api/faq`
+        `https://backoffice.innerpece.com/api/v1/faq`
       );
       setFeqs(response.data.faqs);
     }

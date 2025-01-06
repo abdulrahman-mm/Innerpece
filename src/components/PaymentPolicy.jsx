@@ -31,7 +31,7 @@ function PaymentPolicy() {
         setApiData(response.data.data);
         // setIsWishlisted(response.data.data.wishlists);
 
-        document.title = apiData.title || "Default Title";
+        // document.title = apiData.title || "Default Title";
 
         const metaOgTitle = document.querySelector("meta[property='og:title']");
           if (metaOgTitle) {
@@ -58,20 +58,21 @@ function PaymentPolicy() {
   }, [id]);
 
   return (
-    <div className="ms-5 me-5 mt-8 md:ms-20 md:mt-10 md:me-20 w-90vw md:w-[55%] ">
-      <p className="font-semibold text-2xl ">Payment Policy</p>
+    // <div className="ms-5 me-5 mt-8 md:ms-20 md:mt-10 md:me-20 w-90vw md:w-[55%] ">
+    //   <p className="font-semibold text-2xl ">Payment Policy</p>
 
-      {apiData.payment_policy && apiData.payment_policy.length > 0 && (
-        <div className="flex flex-col mt-5 md:gap-5">
-          {apiData.payment_policy.map((item, index) => (
-            <p key={index}>
-              <span className="pe-2">{index + 1}.</span>
-              {item}
-            </p>
-          ))}
-        </div>
-      )}
-    </div>
+    //   {apiData.payment_policy && apiData.payment_policy.length > 0 && (
+    //     <div className="flex flex-col mt-5 md:gap-5">
+    //       {apiData.payment_policy.map((item, index) => (
+    //         <p key={index}>
+    //           <span className="pe-2">{index + 1}.</span>
+    //           {item}
+    //         </p>
+    //       ))}
+    //     </div>
+    //   )}
+    // </div>
+    <div></div>
   );
 }
 

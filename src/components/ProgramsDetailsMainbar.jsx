@@ -16,30 +16,23 @@ import defaultimage from "../assets/defaultimg.png";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Mainbar({ apiData, setSortBy, sortBy,themes_name, setApiData }) {
+function Mainbar({ apiData, setSortBy, sortBy, themes_name, setApiData }) {
   let navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedPage, setSortedPage] = useState(1);
   const [itemsPerPage] = useState(2);
   const [sortedData, setSortedData] = useState("");
 
-  // console.log(themes_name);
-
-  console.log(apiData);
-
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-
   const currentItems = Array.isArray(apiData)
     ? apiData.slice(indexOfFirstItem, indexOfLastItem)
     : [];
 
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
 
   function onchangeSelect(e) {
     setSortBy(e.target.value);
@@ -64,18 +57,17 @@ function Mainbar({ apiData, setSortBy, sortBy,themes_name, setApiData }) {
 
   useEffect(() => {
     async function fetchSortedData() {
-      console.log(sortBy);
-      console.log(apiData);
+      
 
       if (sortBy) {
         try {
           const response = await axios.post(
-            `https://backoffice.innerpece.com/api/sort-program`,
+            `https://backoffice.innerpece.com/api/v1/sort-program`,
             { sort_by: sortBy, theme: themes_name }
           );
           setSortedData(response.data.data);
-          console.log('sorted',response.data.data);
-          setApiData(""); // clear the unsorted data  
+          console.log("sorted", response.data.data);
+          setApiData(""); // clear the unsorted data
           setSortedPage(1);
         } catch (error) {
           console.error("Error fetching sorted data", error);
@@ -90,8 +82,9 @@ function Mainbar({ apiData, setSortBy, sortBy,themes_name, setApiData }) {
       <div className="flex justify-between md:justify-end">
         <p
           onClick={() => setFilterButtonClicked(!filterButtonClicked)}
-          className={`w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${filterButtonClicked ? "bg-red-500 text-white" : "bg-gray-300"
-            }`}
+          className={`w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${
+            filterButtonClicked ? "bg-red-500 text-white" : "bg-gray-300"
+          }`}
         >
           {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
         </p>
@@ -269,7 +262,7 @@ function Mainbar({ apiData, setSortBy, sortBy,themes_name, setApiData }) {
         </div>
       )}
 
-{sortedData && Object.keys(sortedData).length > 0 && (
+      {sortedData && Object.keys(sortedData).length > 0 && (
         <div>
           {Object.keys(sortedData).map((key, index) => {
             const card = sortedData[key];
@@ -418,31 +411,30 @@ function Mainbar({ apiData, setSortBy, sortBy,themes_name, setApiData }) {
         </div>
       )}
 
-
-
-{/* for unsorted pagination */}
+      {/* for unsorted pagination */}
       <nav>
-  <div className="flex justify-center items-center mt-5">
-    <ul className="flex space-x-2">
-      {Array.from({ length: Math.ceil(apiData.length / itemsPerPage) }, (_, i) => (
-        <li key={i + 1} className="relative">
-          <button
-            onClick={() => paginate(i + 1)}
-            className={`px-4 py-2 border-2 rounded-full text-black ${
-              currentPage === i + 1
-                ? "bg-blue-700 border-blue-700 text-white"
-                : "hover:bg-blue-600 hover:border-blue-600"
-            }`}
-          >
-            {i + 1}
-          </button>
-        </li>
-      ))}
-    </ul>
-  </div>
-</nav>
-
-
+        <div className="flex justify-center items-center mt-5">
+          <ul className="flex space-x-2">
+            {Array.from(
+              { length: Math.ceil(apiData.length / itemsPerPage) },
+              (_, i) => (
+                <li key={i + 1} className="relative">
+                  <button
+                    onClick={() => paginate(i + 1)}
+                    className={`px-4 py-2 border-2 rounded-full text-black ${
+                      currentPage === i + 1
+                        ? "bg-blue-700 border-blue-700 text-white"
+                        : "hover:bg-blue-600 hover:border-blue-600"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                </li>
+              )
+            )}
+          </ul>
+        </div>
+      </nav>
     </div>
   );
 }

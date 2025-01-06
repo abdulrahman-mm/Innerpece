@@ -13,7 +13,8 @@ function Programs() {
 
   useEffect(() => {
     axios
-      .get(`https://backoffice.innerpece.com/api/theme`)
+      .get(`https://backoffice.innerpece.com/api/v1/theme`)
+      // .get(`https://backoffice.innerpece.com/api/get-combined-data`)
       .then((response) => {
         setProgramsData(response.data.themes);
         setLoading(false); // Set loading to false after data is fetched
@@ -43,86 +44,129 @@ function Programs() {
   };
 
   const SkeletonCard = () => (
-    <div className="relative w-56 max-md:hidden h-60 bg-gray-300 rounded animate-pulse">
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-400 to-gray-200 rounded"></div>
-    </div>
+    <div className=" max-md:hidden h-60 bg-gray-500 rounded-3xl animate-pulse"></div>
   );
 
   const SkeletonCarouselCard = () => (
-    <div className="relative w-56 h-60 block md:hidden bg-gray-300 rounded animate-pulse">
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-400 to-gray-200 rounded"></div>
-    </div>
+    <div className="w-full h-60 block md:hidden bg-gray-500 rounded-3xl animate-pulse"></div>
   );
 
-  
+  console.log(programsData);
 
   return (
-    <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16 ">
-      <p className="text-xl md:text-3xl font-semibold">Programs</p>
+    <div className="overflow-hidden">
+      {programsData.length > 0 && (
+        <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16 ">
+          <p className="text-xl md:text-3xl font-semibold">Programs</p>
 
-      {loading ? ( // Show skeleton loaders while fetching data
-        <div className="flex items-center flex-wrap justify-start gap-4 mt-5">
-          {Array(3)
-            .fill(0)
-            .map((_, index) => (
-              <SkeletonCard key={index} />
-            ))}
-          <SkeletonCarouselCard />
+          {loading ? ( // Show skeleton loaders while fetching data
+            <div className="flex items-center flex-1 flex-grow flex-wrap justify-start gap-4 mt-5">
+              {Array(3)
+                .fill(0)
+                .map((_, index) => (
+                  <div className="flex-grow">
+                    <SkeletonCard key={index} />
+                  </div>
+                ))}
+              <SkeletonCarouselCard />
+            </div>
+          ) : programsData && programsData.length > 0 ? ( // Show programs if data exists
+            <div className="">
+              {/* <div className="max-md:hidden flex items-center flex-grow flex-wrap justify-start gap-4 ">
+      {programsData.map((item, index) => (
+        <div
+          key={index}
+          onClick={() => handleThemeClick(item.id, item.themes_name)}
+          className="mt-5 flex-grow relative  lg:w-72   h-60 cursor-pointer transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl rounded-3xl overflow-hidden"
+        >
+          <div className="absolute  -z-20 bg-gradient-to-b from-black/95 to-transparent h-full w-full"></div>
+          <img
+            src={`https://backoffice.innerpece.com/${item.theme_pic}`}
+            alt=""
+            className=" hover:scale-150 w-full  h-60 transition duration-300 ease-in-out -z-40 bg-gradient shadow-black object-cover bg-center absolute inset-0"
+          />
+          <p className="absolute z-10 left-2 right-2 text-2xl flex justify-center w-full top-4 text-white font-semibold">
+            {item.themes_name}
+          </p>
         </div>
-      ) : programsData && programsData.length > 0 ? ( // Show programs if data exists
-        <div className="">
-          <div className="max-md:hidden flex items-center flex-grow flex-wrap justify-start gap-4 ">
-            {programsData.map((item, index) => (
-              <div
-                key={index}
-                onClick={() => handleThemeClick(item.id, item.themes_name)}
-                className="mt-5 flex-grow relative  lg:w-72   h-60 cursor-pointer transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl rounded-3xl overflow-hidden"
-              >
-                <div className="absolute  -z-20 bg-gradient-to-b from-black/95 to-transparent h-full w-full"></div>
-                <img
-                  src={`https://backoffice.innerpece.com/${item.theme_pic}`}
-                  alt=""
-                  className=" hover:scale-150 w-full  h-60 transition duration-300 ease-in-out -z-40 bg-gradient shadow-black object-cover bg-center absolute inset-0"
-                />
-                <p className="absolute z-10 text-2xl flex justify-center w-full top-4 text-white font-semibold">
-                  {item.themes_name}
-                </p>
+      ))}
+    </div> */}
+
+              <div className="max-md:hidden flex items-center flex-grow flex-wrap justify-start gap-4">
+                {programsData.map((item, index) => (
+                  // <div
+                  //   key={index}
+                  //   onClick={() => handleThemeClick(item.id, item.themes_name)}
+                  //   className="mt-5 flex-grow relative lg:w-72 h-60 cursor-pointer transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl rounded-3xl overflow-hidden"
+                  // >
+                  //   <div className="absolute -z-20 bg-gradient-to-b from-black/95 to-transparent h-full w-full"></div>
+                  //   <img
+                  //     src={`https://backoffice.innerpece.com/${item.theme_pic}`}
+                  //     alt=""
+                  //     className="hover:scale-150 w-full h-60 transition duration-300 ease-in-out -z-40 bg-gradient shadow-black object-cover bg-center absolute inset-0"
+                  //   />
+                  //   <p className="absolute z-10 left-0 h-full my-auto right-0 top-4 text-lg xl:text-2xl text-white font-semibold text-center">
+                  //     {item.themes_name}
+                  //   </p>
+                  // </div>
+                  <div
+                    key={index}
+                    onClick={() => handleThemeClick(item.id, item.themes_name)}
+                    className="mt-5 flex-1 relative lg:w-72 h-60 cursor-pointer transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl rounded-3xl overflow-hidden flex items-center justify-center"
+                  >
+                    <div className="absolute -z-20 bg-gradient-to-t from-black/95 to-transparent h-full w-full"></div>
+                    <img
+                      src={`https://backoffice.innerpece.com/${item.theme_pic}`}
+                      alt=""
+                      className="hover:scale-150 w-full h-60 transition duration-300 ease-in-out -z-40 bg-gradient  shadow-black object-cover bg-center absolute inset-0"
+                    />
+                    <p className="absolute z-10 text-lg xl:text-2xl text-white font-semibold text-center">
+                      {item.themes_name}
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className="md:hidden relative w-full flex mt-5">
-            <Swiper
-              effect="cards"
-              grabCursor={true}
-              loop={true}
-              modules={[EffectCards]}
-              className="w-[70vw]"
-            >
-              {programsData.map((item, index) => (
-                <SwiperSlide
-                  key={index}
-                  onClick={() => handleThemeClick(item.id, item.themes_name)}
-                  className="relative rounded-3xl w-56 h-60 cursor-pointer hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl"
+              <div className="md:hidden  relative w-full flex mt-5">
+                <Swiper
+                  effect="cards"
+                  grabCursor={true}
+                  // loop={true}
+                  modules={[EffectCards]}
+                  className="w-[70vw]"
                 >
-                  <div className="absolute -z-20 bg-gradient-to-b from-black/70 to-transparent h-full w-full"></div>
-                  <img
-                    src={`https://backoffice.innerpece.com/${item.theme_pic}`}
-                    alt=""
-                    className="w-full rounded-3xl h-full -z-40 bg-gradient shadow-black object-cover absolute inset-0"
-                  />
-                  <p className="absolute z-10 flex justify-center text-lg w-full top-4 text-white font-semibold">
-                    {item.themes_name}
-                  </p>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-        </div>
-      ) : (
-        // Show fallback message if no data is found
-        <div className="flex items-center justify-center my-20">
-          <p className="md:text-3xl">No Programs Found</p>
+                  {programsData.map((item, index) => (
+                    <SwiperSlide
+                      key={index}
+                      onClick={() =>
+                        handleThemeClick(item.id, item.themes_name)
+                      }
+                      className="relative flex items-center justify-center rounded-3xl w-56 h-60 cursor-pointer hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl"
+                    >
+                      <div className="absolute -z-20 bg-gradient-to-b from-black/70 to-transparent h-full w-full"></div>
+                      <img
+                        src={`https://backoffice.innerpece.com/${item.theme_pic}`}
+                        alt=""
+                        className="w-full rounded-3xl h-full -z-40 bg-gradient shadow-black object-cover absolute inset-0"
+                      />
+                      {/* <p className="absolute z-10 flex justify-center text-lg w-full top-4 text-white font-semibold">
+              {item.themes_name}
+            </p> */}
+
+                      <p className="absolute z-10  text-lg text-white font-semibold text-center">
+                        {item.themes_name}
+                      </p>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+            </div>
+          ) : (
+            // Show fallback message if no data is found
+            <div className="flex items-center justify-center my-20">
+              <p className="md:text-3xl">No Programs Found</p>
+            </div>
+          )}
         </div>
       )}
     </div>
