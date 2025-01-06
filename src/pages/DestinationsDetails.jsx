@@ -21,9 +21,9 @@ import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 
 function DestinationsDetails() {
-    useEffect(() => {
-      document.title = "Destination Details - Innerpece";
-    }, []); // Empty dependency array ensures it runs once on mount
+  useEffect(() => {
+    document.title = "Destination Details - Innerpece";
+  }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { id, city_name } = location.state || {};
   const [apiData, setApiData] = useState([]);
@@ -147,14 +147,13 @@ function DestinationsDetails() {
 
   const handleSortChange = async (event) => {
     console.log("dsglmrsf");
-    
+
     setFilterButtonClicked(false);
 
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
     console.log(selectedSort);
-    
 
     try {
       const response = await axios.post(
@@ -181,9 +180,6 @@ function DestinationsDetails() {
       console.error("Error:", error);
     }
   };
-
-  console.log(apiData);
-  
 
   const handleFilterClick = async () => {
     setFilterButtonClicked(false);
@@ -293,7 +289,6 @@ function DestinationsDetails() {
     );
   };
 
-  console.log(apiData);
 
   return (
     <div>
@@ -357,9 +352,9 @@ function DestinationsDetails() {
 
       {/* main section */}
 
-      <div className="flex flex-col md:flex-row ustify-between gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
+      <div className="flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* main section > sideBar */}
-        <div className="mt-20 px-5 py-10 h-fit flex flex-col gap-6 rounded-md  max-md:hidden border-2 basis-[10%] ">
+        <div className=" mt-20 py-10 px-5  h-fit flex flex-col gap-5 rounded-md  max-md:hidden border-2 basis-[10%]  ">
           <p className="text-xl">Search By Filter</p>
 
           <label htmlFor="fromDate">From Date</label>
@@ -408,7 +403,6 @@ function DestinationsDetails() {
             <option value="" disabled>
               Select Sort Option
             </option>
-            <option value="recent">Recent Event</option>
             <option value="low">Low Price</option>
             <option value="high">High Price</option>
           </select>
@@ -416,7 +410,7 @@ function DestinationsDetails() {
 
         {/* main section > mainBar */}
 
-        <div className="  w-full ">
+        <div className="  w-full mt-10">
           {/* this will show only in smaller screens */}
           <p
             onClick={() => setFilterButtonClicked(!filterButtonClicked)}
@@ -505,7 +499,6 @@ function DestinationsDetails() {
                 <option value="" disabled>
                   Select Sort Option
                 </option>
-                <option value="recent">Recent Event</option>
                 <option value="low">Low Price</option>
                 <option value="high">High Price</option>
               </select>
@@ -519,11 +512,11 @@ function DestinationsDetails() {
               <div
                 id="destinations"
                 key={index}
-                className="flex flex-col mt-10  "
+                className="flex flex-col mt-5  overflow-hidden"
               >
                 <div
                   key={index}
-                  className="flex w-full flex-grow flex-col lg:flex-row mt-11    "
+                  className="flex flex-col lg:flex-row mt-5 overflow-hidden   "
                 >
                   <img
                     src={
@@ -532,10 +525,10 @@ function DestinationsDetails() {
                         : defaultimage
                     }
                     alt=""
-                    className="object-cover w-full lg:w-72 hover:brightness-110 bg-center  rounded-none"
+                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full  lg:w-1/4  rounded-none"
                   />
 
-                  <div className="flex flex-wrap flex-grow  flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">
+                  <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border-2 border-gray-300 py-2 px-3 ">
                     <p className="font-semibold flex-wrap text-2xl md:text-3xl">
                       {item.title}
                     </p>
@@ -561,6 +554,7 @@ function DestinationsDetails() {
                         <div className="flex items-center gap-3">
                           <PiStarFourFill className="text-gray-400" />
                           <p>{item.bed_room}</p>
+                          {item.bed_room > "1" ? "bed rooms" : "bed room"}
                         </div>
                       )}
 
@@ -568,6 +562,7 @@ function DestinationsDetails() {
                         <div className="flex items-center gap-3">
                           <PiStarFourFill className="text-gray-400" />
                           <p>{item.bath_room}</p>
+                          {item.bath_room > "1" ? "bath rooms" : "bath room"}
                         </div>
                       )}
                     </div>
@@ -588,7 +583,7 @@ function DestinationsDetails() {
                       </div>
                     </div> */}
 
-                    {item.amenities&& item.amenities.length > 0 && (
+                    {item.amenities && item.amenities.length > 0 && (
                       <div>
                         <div className="border-b border-gray-400"></div>
 
@@ -620,7 +615,7 @@ function DestinationsDetails() {
                     )}
                   </div>
 
-                  <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-4  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2  lg:rounded-lg lg:rounded-s-none rounded-b-none">
+                  <div className="flex flex-wrap  flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
                     <p className="text-gray-600">
                       Starting From <del>{item.price}</del>
                     </p>
@@ -649,10 +644,6 @@ function DestinationsDetails() {
                     </div>
                   </div>
                 </div>
-
-                {/* <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-widest ">
-                  RATED BEST FOR ITS AMENITIES AND SERVICE
-                </p> */}
               </div>
             ))
           ) : (

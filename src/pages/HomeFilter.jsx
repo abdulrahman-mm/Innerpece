@@ -21,9 +21,9 @@ import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 
 function DestinationsDetails() {
-    useEffect(() => {
-      document.title = "Filter Details - Innerpece";
-    }, []); // Empty dependency array ensures it runs once on mount
+  useEffect(() => {
+    document.title = "Filter Details - Innerpece";
+  }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { date, city_name } = location.state || {};
   const [apiData, setApiData] = useState([]);
@@ -172,7 +172,7 @@ function DestinationsDetails() {
     try {
       const response = await axios.post(
         "https://backoffice.innerpece.com/api/filter-destination",
-        
+
         {
           start_date: startDate,
           to_date: toDate,
@@ -228,7 +228,6 @@ function DestinationsDetails() {
   };
 
   console.log(apiData);
-  
 
   useEffect(() => {
     if (filterButtonClicked) {
@@ -239,6 +238,10 @@ function DestinationsDetails() {
     // Clean up on component unmount
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
+
+
+  console.log(apiData);
+  
 
   return (
     <div>
@@ -350,7 +353,6 @@ function DestinationsDetails() {
             <option value="" disabled selected>
               Select Sort Option
             </option>
-            <option value="recent">Recent Event</option>
             <option value="low">Low Price</option>
             <option value="high">High Price</option>
           </select>
@@ -367,7 +369,6 @@ function DestinationsDetails() {
             {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
           </p>
 
-         
           <div
             className={`fixed bottom-0 left-0 right-0 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
               filterButtonClicked
@@ -441,7 +442,6 @@ function DestinationsDetails() {
                 <option value="" disabled selected>
                   Select Sort Option
                 </option>
-                <option value="recent">Recent Event</option>
                 <option value="low">Low Price</option>
                 <option value="high">High Price</option>
               </select>
@@ -462,10 +462,10 @@ function DestinationsDetails() {
                         : defaultimage
                     }
                     alt=""
-                    className="object-cover w-full lg:w-72  bg-center  rounded-none"
+                    className="object-cover w-full lg:w-1/4  bg-center  rounded-none"
                   />
 
-                  <div className="flex flex-wrap flex-grow  flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">
+                  <div className="flex flex-wrap flex-grow  lg:w-3/4 flex-col gap-2 border-2 border-gray-300 py-2 px-3 ">
                     <p className="font-semibold flex-wrap text-2xl md:text-3xl">
                       {item.title}
                     </p>
@@ -479,100 +479,76 @@ function DestinationsDetails() {
                       <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-500" />
                         <p>
-                          <b className="me-1">5</b>of 5
+                          <b className="me-1">{item.totalReviews}</b>of 5
                         </p>
                       </div>
                     </div>
 
                     <div className="flex items-center flex-wrap gap-2">
-                      <p>Upto 12 guests</p>
+                      <p>Upto {item.member_capacity} guests</p>
 
-                      <div className="flex items-center gap-3">
-                        <PiStarFourFill className="text-gray-400" />
-                        <p>4 rooms</p>
-                      </div>
+                      {item.bed_room && (
+                        <div className="flex items-center gap-3">
+                          <PiStarFourFill className="text-gray-400" />
+                          <p>
+                            {item.bed_room}{" "}
+                            {item.bed_room > "1" ? "bed rooms" : "bed room"}
+                          </p>
+                        </div>
+                      )}
 
-                      <div className="flex items-center gap-3">
-                        <PiStarFourFill className="text-gray-400" />
-                        <p>5 baths</p>
-                      </div>
+                      {item.bath_room && (
+                        <div className="flex items-center gap-3">
+                          <PiStarFourFill className="text-gray-400" />
+                          <p>
+                            {item.bath_room}{" "}
+                            {item.bath_room > "1" ? "bath rooms" : "bath room"}
+                          </p>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <p className="font-semibold">Great for:</p>
+                    {item.amenity_details && item.amenity_details.length>0 && (
+                      <div>
+                        <div className="border-b border-gray-400"></div>
 
-                      <div className="flex items-center gap-2">
-                        <IoPeopleSharp className="text-gray-400" />
-                        <p>Senior Citizen</p>
+                        <div className="flex justify-start mt-5 gap-3 flex-wrap items-start">
+                          {item.amenity_details.slice(0, 3).map((amenity, index) => (
+                            <div
+                              key={index}
+                              className="flex flex-col w-20 flex-wrap"
+                            >
+                              <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
+                                <img
+                                  src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
+                                  alt=""
+                                />
+                              </span>
+                              <p className="text-gray-500 flex-wrap text-xs">
+                                {amenity.amenity_name}
+                              </p>
+                            </div>
+                          ))}
+
+                          {item.amenity_details.length > 3 && (
+                            <p className="text-gray-500">
+                              {item.amenity_details.length - 3}+
+                            </p>
+                          )}
+                        </div>
                       </div>
+                    )}
 
-                      <p>|</p>
 
-                      <div className="flex items-center gap-2">
-                        <MdOutlineChildCare className="text-gray-400" />
-                        <p>Kids</p>
-                      </div>
-                    </div>
-
-                    <div className="border-b border-gray-400"></div>
-
-                    <div className="flex justify-start mt-1 gap-2 flex-wrap items-start">
-                      <div className="flex flex-col  w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <LiaSwimmingPoolSolid className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Swimming pool</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <GiHighGrass className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Lawn</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <LuWaves className="text-gray-500 " />
-                        </span>
-                        <p className="text-gray-500 text-xs">Beach View</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <PiBowlFood className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Meals</p>
-                      </div>
-
-                      <div className="flex flex-col w-14 ">
-                        <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
-                          {" "}
-                          <MdTheaters className="text-gray-500" />
-                        </span>
-                        <p className="text-gray-500 text-xs">Home Theatre</p>
-                      </div>
-
-                      <p className="text-gray-500">20+</p>
-                    </div>
                   </div>
 
-                  <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-4  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2  lg:rounded-lg lg:rounded-s-none rounded-b-none">
-                    <p className="font-bold text-xl md:text-2xl">
-                      ₹{item.actual_price}
+                  <div className="flex flex-wrap  flex-row  lg:w-1/5 lg:flex-col items-center justify-between lg:justify-center gap-4  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2  lg:rounded-lg lg:rounded-s-none rounded-b-none">
+                    <p className="text-gray-600">
+                      Starting From <del>{item.price}</del>
                     </p>
 
-                    <div className="flex border flex-wrap justify-center border-sky-700 py-1 px-4 bg-sky-100/50 rounded-lg  items-center gap-2">
-                      <IoBedSharp className="text-xl" />
-                      <p className="text-sm">For 4 Rooms</p>
-                    </div>
-
-                    <p className="text-xs text-gray-500">
-                      for 32 Nights + Taxes(4 rooms)
+                    <p className="font-bold text-xl md:text-2xl">
+                      ₹{item.actual_price}
                     </p>
 
                     <div
@@ -586,10 +562,6 @@ function DestinationsDetails() {
                     </div>
                   </div>
                 </div>
-
-                <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-widest ">
-                  RATED BEST FOR ITS AMENITIES AND SERVICE
-                </p>
               </div>
             ))
           ) : (
@@ -622,8 +594,6 @@ function DestinationsDetails() {
             </div>
           </nav>
         </div>
-
-       
       </div>
 
       <Footer />

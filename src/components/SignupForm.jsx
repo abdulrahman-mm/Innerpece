@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
-import random1 from '../assets/random1.jpg'
+import random1 from "../assets/random1.jpg";
 
 function Signup() {
   let navigate = useNavigate();
@@ -113,12 +113,6 @@ function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    console.log(imageFile);
-    
-    
-
-    
-
     try {
       let response = await axios.post(
         // `https://backoffice.innerpece.com/api/signup`,
@@ -140,10 +134,12 @@ function Signup() {
           zip_province_code: zip_province_code,
           newsletter_sub: newsletter_sub,
           terms_condition: terms_condition,
-        },{
+        },
+        {
           headers: {
-          'Content-Type': 'multipart/form-data',
-        }}
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       setUserDetailsError({
@@ -212,17 +208,7 @@ function Signup() {
       setSelectedImage(URL.createObjectURL(file));
       setImageFile(file); // Store the file for upload
     }
-
   };
-
-
-  console.log(selectedImage);
-  console.log(imageFile);
-  
-  
-
-
-  
 
   return (
     <div className="flex items-center justify-center mt-8 md:px-1 md:mt-14">

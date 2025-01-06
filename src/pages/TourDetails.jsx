@@ -2,11 +2,7 @@ import Header from "../components/Header";
 import Featuredhero from "../components/FeaturedHero";
 import Featured from "../components/Featured";
 import TourDetailsTwoComponents from "../components/TourDetailsTwoComponents";
-import TourPlanning from "../components/TourPlanning";
-import Review from "../components/Review";
 import Footer from "../components/Footer";
-import PaymentPolicy from "../components/PaymentPolicy";
-import ImportantInfo from "../components/ImportantInfo";
 import { useRef, useEffect } from "react";
 
 function TourDetails() {

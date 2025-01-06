@@ -21,9 +21,9 @@ import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 
 function Programs() {
-    useEffect(() => {
-      document.title = "Program Details - Innerpece";
-    }, []); // Empty dependency array ensures it runs once on mount
+  useEffect(() => {
+    document.title = "Program Details - Innerpece";
+  }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   let navigate = useNavigate();
   const { id, themes_name } = location.state || {};
@@ -94,14 +94,12 @@ function Programs() {
   };
 
   const handleSortChange = async (event) => {
-
     setFilterButtonClicked(false);
 
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
     console.log(selectedSort);
-    
 
     try {
       const response = await axios.post(
@@ -484,7 +482,7 @@ function Programs() {
               >
                 <div
                   key={index}
-                  className="flex  flex-col lg:flex-row mt-5 overflow-hidden   "
+                  className="flex flex-col lg:flex-row mt-5 overflow-hidden   "
                 >
                   <img
                     src={
@@ -493,10 +491,10 @@ function Programs() {
                         : defaultimage
                     }
                     alt=""
-                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full  lg:w-72  rounded-none"
+                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full  lg:w-1/4  rounded-none"
                   />
 
-                  <div className="flex flex-wrap flex-grow overflow-hidden   flex-col gap-1 md:gap-2 border-2 border-gray-300 py-2 px-3 ">
+                  <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border-2 border-gray-300 py-2 px-3 ">
                     <p className="font-semibold flex-wrap text-2xl md:text-3xl">
                       {item.title}
                     </p>
@@ -510,7 +508,7 @@ function Programs() {
                       <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-500" />
                         <p>
-                          <b className="me-1">{item.totalReviews}</b>of 5
+                          <b className="me-1">{item.average_rating}</b>of 5
                         </p>
                       </div>
                     </div>
@@ -571,7 +569,7 @@ function Programs() {
                     )}
                   </div>
 
-                  <div className="flex flex-wrap  flex-row lg:flex-col items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
+                  <div className="flex flex-wrap  flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
                     <p className="text-gray-600">
                       Starting From <del>{item.price}</del>
                     </p>
@@ -579,15 +577,6 @@ function Programs() {
                     <p className="font-bold text-xl md:text-2xl">
                       {item.actual_price}
                     </p>
-
-                    {/* <div className="flex border flex-wrap justify-center border-sky-700 py-1 px-4 bg-sky-100/50 rounded-lg  items-center gap-2">
-                      <IoBedSharp className="text-xl" />
-                      <p className="text-sm">For 4 Rooms</p>
-                    </div> */}
-
-                    {/* <p className="text-xs text-gray-500">
-                      for 32 Nights + Taxes(4 rooms)
-                    </p> */}
 
                     <div
                       onClick={() => handleCardClick(item.id, item.title)}
@@ -600,10 +589,6 @@ function Programs() {
                     </div>
                   </div>
                 </div>
-
-                {/* <p className="bg-sky-800/20 w-90vw  text-sm md:text-base rounded-lg py-2 ps-1 md:ps-5 rounded-t-none tracking-wider md:tracking-widest ">
-                  RATED BEST FOR ITS AMENITIES AND SERVICE
-                </p> */}
               </div>
             ))
           ) : (

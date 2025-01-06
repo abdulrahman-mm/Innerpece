@@ -51,7 +51,8 @@ function Programs() {
     <div className="w-full h-60 block md:hidden bg-gray-500 rounded-3xl animate-pulse"></div>
   );
 
-  console.log(programsData);
+  
+
 
   return (
     <div className="overflow-hidden">

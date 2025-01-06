@@ -68,9 +68,6 @@ function Hero() {
     getApiData();
   }, []);
 
-  
-  
-
   return (
     <div className="hero-container relative">
       {loading ? (
@@ -122,7 +119,7 @@ function Hero() {
       )}
       {homeImage.length > 0 && (
         <div className="w-100%  flex  absolute bottom-1  left-[2%] right-[2%] md:left-[10%] md:right-[10%]   justify-center ">
-          <div className="   justify-center  bg-white flex  flex-shrink flex-row flex-wrap md:flex-nowrap sm:gap-2 gap-1 rounded mx-1 px-2 sm:px-0 sm:ps-1 py-1 sm:py-0   lg:rounded-3xl shadow-2xl shadow-white/40">
+          {/* <div className="   justify-center  bg-white flex  flex-shrink flex-row flex-wrap md:flex-nowrap sm:gap-2 gap-1 rounded mx-1 px-2 sm:px-0 sm:ps-1 py-1 sm:py-0   md:rounded-3xl shadow-2xl shadow-white/40">
             <div
               className="flex  flex-grow basis-[5%] lg:basis-[7%]   flex-shrink  items-center gap-3 border-gray-400 border-2 rounded md:rounded-3xl  
          lg:mx-2 my-2  "
@@ -151,9 +148,50 @@ function Hero() {
               />
             </div>
 
-            <div className="cursor-pointer  lg:mx-0   my-1 md:my-0  basis-[5%] lg:basis-[7%] flex-grow  bg-gradient-to-b from-sky-800 to-sky-950 px-2 lg:px-14 py-2 md:py-4 rounded-e  lg:rounded-e-3xl flex items-center justify-center  ">
+            <div className="cursor-pointer  lg:mx-0   my-1 md:my-0  basis-[5%] lg:basis-[7%] flex-grow  bg-gradient-to-b from-sky-800 to-sky-950 px-2 lg:px-14 py-2 md:py-4 rounded-e  md:rounded-e-3xl flex items-center justify-center  ">
               <p
                 className="  md:text-xl lg:text-2xl text-center font-semibold text-white"
+                onClick={handleSearch}
+              >
+                Find Now
+              </p>
+            </div>
+          </div> */}
+
+          <div className="flex flex-wrap md:flex-nowrap bg-white shadow-2xl shadow-white/40 rounded-lg md:rounded-3xl  px-2 py-2 sm:px-3 sm:py-2 gap-2 sm:gap-3">
+            
+            <div className="flex flex-grow md:flex-grow-0 gap-1">
+              {/* Location Input */}
+              <div className="flex basis-full flex-grow items-center gap-3 border-2 border-gray-400 rounded-lg md:rounded-3xl   md:basis-[25%] lg:basis-[20%] px-2 py-1">
+                <IoCompassSharp className="text-xl sm:text-2xl" />
+                <input
+                  type="text"
+                  placeholder="Where to?"
+                  className="flex-grow border-none placeholder-black outline-none bg-transparent w-full"
+                  value={cityName}
+                  name="where to"
+                  autoComplete="off"
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              {/* Date Input */}
+              <div className="flex flex-grow items-center gap-3 border-2 border-gray-400 rounded-lg md:rounded-3xl  basis-full md:basis-[25%] lg:basis-[20%] px-2 py-1">
+                <input
+                  type="date"
+                  name="date"
+                  value={selectedDate}
+                  autoComplete="off"
+                  onChange={handleDateChange}
+                  className="flex-grow border-none outline-none bg-transparent w-full"
+                />
+              </div>
+            </div>
+
+            {/* Search Button */}
+            <div className="cursor-pointer bg-gradient-to-b from-sky-800 to-sky-950 text-white font-semibold rounded-lg md:rounded-3xl flex-grow flex items-center justify-center basis-full sm:basis-[100%] md:basis-[20%] lg:basis-[15%] px-3 py-2">
+              <p
+                className="text-center text-sm sm:text-base md:text-lg lg:text-xl"
                 onClick={handleSearch}
               >
                 Find Now

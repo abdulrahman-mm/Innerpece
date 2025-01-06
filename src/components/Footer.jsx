@@ -32,7 +32,6 @@ function Footer() {
       });
   }, []);
 
-
   function navigate(navigatePath) {
     navigator(navigatePath);
 
@@ -40,7 +39,7 @@ function Footer() {
       top: 0,
       behavior: "instant",
     });
-  }  
+  }
 
   return (
     <div className="mt-8 md:mt-16 ">
@@ -67,32 +66,34 @@ function Footer() {
                 into customized, unforgettable journeys.
               </p>
 
-                <a className="mt-3 md:mt-5" href="mailto:Info@Webmail.com">
-                  <div className="flex items-center ">
-                    <span className="inline-block me-5">
-                      <IoIosMail className="text-lg md:text-2xl text-sky-300" />
-                    </span>
-                    <p> {footerContent.contact_email}</p>
-                  </div>
-                </a>
-
-                <a className="mt-3 md:mt-5" href={`tel:${footerContent.contact_number}`}>
-                  <div className="flex items-center">
-                    <span className="inline-block me-5">
-                      {/* <FaPhoneAlt className="text-lg md:text-2xl  text-sky-300" /> */}
-                      <FaSquarePhone className="text-lg md:text-2xl  text-sky-300" />
-                    </span>
-                    <p> {footerContent.contact_number}</p>
-                  </div>
-                </a>
-              
-
-                <div className="flex items-center mt-3 md:mt-5">
+              <a className="mt-3 md:mt-5" href="mailto:Info@Webmail.com">
+                <div className="flex items-center ">
                   <span className="inline-block me-5">
-                    <FaMapLocationDot className="text-lg md:text-2xl  text-sky-300" />
+                    <IoIosMail className="text-lg md:text-2xl text-sky-300" />
                   </span>
-                  <p> {footerContent.contact_address}</p>
+                  <p> {footerContent.contact_email}</p>
                 </div>
+              </a>
+
+              <a
+                className="mt-3 md:mt-5"
+                href={`tel:${footerContent.contact_number}`}
+              >
+                <div className="flex items-center">
+                  <span className="inline-block me-5">
+                    {/* <FaPhoneAlt className="text-lg md:text-2xl  text-sky-300" /> */}
+                    <FaSquarePhone className="text-lg md:text-2xl  text-sky-300" />
+                  </span>
+                  <p> {footerContent.contact_number}</p>
+                </div>
+              </a>
+
+              <div className="flex items-center mt-3 md:mt-5">
+                <span className="inline-block me-5">
+                  <FaMapLocationDot className="text-lg md:text-2xl  text-sky-300" />
+                </span>
+                <p> {footerContent.contact_address}</p>
+              </div>
             </div>
 
             <div className="text-white basis-30 flex gap-2 flex-col  md:gap-4">
@@ -137,27 +138,18 @@ function Footer() {
               </div>
 
               <div className="flex flex-wrap gap-x-5 md:mt-5">
-                <a
-                  href={footerContent.facebook}
-                  target="_blank"
-                >
+                <a href={footerContent.facebook} target="_blank">
                   <img src={homefooterfb} alt="" className="cursor-pointer" />
                 </a>
 
-                <a
-                  href={footerContent.linkedin}
-                  target="_blank"
-                >
+                <a href={footerContent.linkedin} target="_blank">
                   <img
                     src={homefooterlinkedin}
                     alt=""
                     className="cursor-pointer"
                   />
                 </a>
-                <a
-                  href={footerContent.instagram}
-                  target="_blank"
-                >
+                <a href={footerContent.instagram} target="_blank">
                   <img
                     src={homefooterinsta}
                     alt=""

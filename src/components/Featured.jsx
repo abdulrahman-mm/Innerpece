@@ -19,8 +19,6 @@ function Featured() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const currentUrl = window.location.href;
   const metaDescription = apiData?.program_desc || "";
-  const [loading, setLoading] = useState(true);
-  const [activeImage, setActiveImage] = useState(0); // Default to the first image
 
   const handleWishlistClick = async () => {
     const loginDetails = JSON.parse(sessionStorage.getItem("loginDetails"));
@@ -88,7 +86,6 @@ function Featured() {
 
         setApiData(response.data.data);
         setIsWishlisted(response.data.data.wishlists);
-        setLoading(false);
 
         // document.title = apiData.title || "Default Title";
 
@@ -116,13 +113,13 @@ function Featured() {
         }
       } catch (err) {
         console.log(err);
-        setLoading(false);
       }
     };
     fetchProgramData();
   }, [id]);
 
   console.log(apiData);
+  
   
 
   return (
@@ -189,10 +186,10 @@ function Featured() {
               <p className="text-gray-700">WishList</p>
             </div>
 
-            {apiData.total_reviews >= 1 && apiData.total_reviews && (
+            {apiData.review_count >= 1 && apiData.review_count && (
               <p className="font-semibold flex items-center md:justify-end">
-                {`${apiData.total_reviews} ${
-                  apiData.total_reviews > 2 ? "Reviews" : "Review"
+                {`${apiData.review_count} ${
+                  apiData.review_count > 2 ? "Reviews" : "Review"
                 }`}
               </p>
             )}

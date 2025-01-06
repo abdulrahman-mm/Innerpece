@@ -1,17 +1,10 @@
 import React from "react";
 import star from "../assets/star.png";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { useLocation } from "react-router-dom";
-import { useState, useEffect, useref } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import DOMPurify from "dompurify";
-import guests from "../assets/guests.png";
-import locationimg from "../assets/location.png";
-import share from "../assets/share.png";
 import defaultimage from "../assets/defaultimg.png";
-import { IoHeartOutline } from "react-icons/io5";
-import { IoHeartSharp } from "react-icons/io5";
-import { FacebookShareButton } from "react-share";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
@@ -27,7 +20,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const [activeImage, setActiveImage] = useState(0); // Default to the first image
   const [rating, setRating] = useState(0); // Current rating
   const [hover, setHover] = useState(0); // Hovered rating
-  const [userReview, setUserReview] = useState(null);
+  const [userReview, setUserReview] = useState("");
   const [date, setDate] = useState(new Date());
   const [userDetails, setUserDetails] = useState();
   const [userId, setUserId] = useState();
@@ -183,9 +176,6 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
     }
   };
 
-  console.log(apiData);
-  
-
   return (
     <div className="w-full md:basis-[45%] xl:basis-[55%] overflow-x-hidden   flex-grow ">
       {loading ? (
@@ -193,36 +183,6 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
       ) : (
         apiData &&
         apiData.gallery_img && (
-          // <Carousel
-          //   swipeable={true}
-          //   draggable={true}
-          //   pauseOnHover={false}
-          //   responsive={responsive}
-          //   infinite={true}
-          //   autoPlay={true}
-          //   autoPlaySpeed={5000}
-          //   arrows={true}
-          //   keyBoardControl={true}
-          //   transitionDuration={1000}
-          //   containerClass="carousel-container"
-          //   itemClass="carousel-item-padding-40-px  block shadow-lg shadow-black/10 mt-5"
-          // >
-          //   {apiData.gallery_img.map((item, index) => (
-          //     <div className="w-[90vw]">
-          //       <img
-          //         key={index}
-          //         src={
-          //           item
-          //             ? `https://backoffice.innerpece.com/${item}`
-          //             : defaultimage
-          //         }
-          //         alt={`Gallery Image ${index + 1}`}
-          //         className="h-96 w-full
-          //        object-cover"
-          //       />
-          //     </div>
-          //   ))}
-          // </Carousel>
           <Carousel
             swipeable={true}
             draggable={true}
@@ -282,13 +242,13 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           <div className="border-[1px] px-4 py-3 border-black/40 mt-8 md:mt-10 rounded-3xl">
             <p className="font-semibold text-2xl">Amenities</p>
 
-            <div className="flex flex-wrap flex-col gap-5 mt-5">
-              <div className="flex  flex-wrap gap-5">
+            <div className="flex flex-wrap flex-col  mt-5">
+              <div className="flex  flex-wrap gap-3 md:gap-5">
                 {Object.keys(apiData.amenity_details).map((key, index) => {
                   const amenity = apiData.amenity_details[key];
 
                   return (
-                    <div className="flex gap-5 " key={index}>
+                    <div className="flex gap-2 " key={index}>
                       <img
                         src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
                         // alt={amenity.amenity_name}
@@ -310,7 +270,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             <p className="font-semibold text-2xl">Food and Beverages </p>
 
             <div className="flex  flex-wrap flex-col gap-5 mt-5">
-              <div className="flex  flex-wrap gap-5">
+              <div className="flex  flex-wrap gap-3 md:gap-5">
                 {Object.keys(apiData.foodBeverages).map((key, index) => {
                   const foodBeverage = apiData.foodBeverages[key];
 
@@ -363,12 +323,12 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             <p className="font-semibold text-2xl">Safety Features</p>
 
             <div className="flex flex-wrap flex-col gap-5 mt-5">
-              <div className="flex flex-col gap-5 ">
+              <div className="flex flex-wrap gap-3 md:gap-5">
                 {Object.keys(apiData.safety_features).map((key, index) => {
                   const safety_features = apiData.safety_features[key];
 
                   return (
-                    <div className="flex gap-5 " key={index}>
+                    <div className="flex gap-2 " key={index}>
                       <img
                         src={`https://backoffice.innerpece.com/${safety_features.safety_features_pic}`}
                         className="w-6 h-6 bg-cover md:w-7 md:h-7"
@@ -437,39 +397,45 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           )}
         </div>
       )}
-      <div className="border border-gray-700 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
-        <div className="flex ">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <button
-              key={star}
-              type="button"
-              className={`w-8 text-2xl h-8 flex  rounded-full ${
-                star <= (hover || rating) ? "text-yellow-500" : "text-gray-300"
-              }`}
-              onClick={() => setRating(star)} // Set rating on click
-              onMouseEnter={() => setHover(star)} // Highlight stars on hover
-              onMouseLeave={() => setHover(0)} // Reset hover effect
-            >
-              ★
-            </button>
-          ))}
+
+      {userDetails && (
+        <div className="border border-gray-700 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
+          <div className="flex ">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                type="button"
+                className={`w-8 text-2xl h-8 flex  rounded-full ${
+                  star <= (hover || rating)
+                    ? "text-yellow-500"
+                    : "text-gray-300"
+                }`}
+                onClick={() => setRating(star)} // Set rating on click
+                onMouseEnter={() => setHover(star)} // Highlight stars on hover
+                onMouseLeave={() => setHover(0)} // Reset hover effect
+              >
+                ★
+              </button>
+            ))}
+          </div>
+          <textarea
+            value={userReview}
+            onChange={(e) => setUserReview(e.target.value)}
+            placeholder="Write a Review"
+            className="w-full resize-none h-fit mt-3 placeholder-black text-wrap border-none outline-none"
+          />
+          <button
+            onClick={onClickPostReview}
+            className="bg-sky-800 transition-all duration-500 hover:bg-sky-900 text-white rounded-full w-fit h-fit py-1 px-8 "
+          >
+            Post
+          </button>
         </div>
-        <textarea
-          value={userReview}
-          onChange={(e) => setUserReview(e.target.value)}
-          placeholder="Write a Review"
-          className="w-full resize-none h-fit mt-3 placeholder-black text-wrap border-none outline-none"
-        />
-        <button
-          onClick={onClickPostReview}
-          className="bg-sky-800 transition-all duration-500 hover:bg-sky-900 text-white rounded-full w-fit h-fit py-1 px-8 "
-        >
-          Post
-        </button>
-      </div>
+      )}
+
       {apiData.reviews && apiData.reviews.length > 0 && (
         <div ref={reviewRef} className="mt-8 md:mt-10">
-          <div className="flex flex-wrap gap-16">
+          <div className="flex flex-wrap gap-0 lg:gap-16">
             <div className="flex w-90vw md:basis-[60%] flex-wrap flex-grow flex-col justify-start ">
               <div className="flex flex-col gap-4  md:flex-row justify-between">
                 <p className="font-semibold text-xl md:text-2xl">
@@ -492,7 +458,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                     <img
                       src={`https://backoffice.innerpece.com/${item.profile_image}`}
                       alt=""
-                      className="w-[60px] h-[60px] md:w-[76px] md:h-[76px] rounded-full"
+                      className="w-[50px] object-cover h-[50px] md:w-[76px] md:h-[76px] rounded-full"
                     />
 
                     <div className="flex flex-col gap-1">
@@ -547,25 +513,3 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 }
 
 export default Mainbar;
-
-// <div className="mt-5">
-//   {apiData && apiData.gallery_img && (
-//     <div className="flex max-md:hidden  flex-wrap overflow-hidden">
-//       {apiData.gallery_img.map((item, index) => (
-//         <img
-//           key={index}
-//           src={
-//             apiData.gallery_img
-//               ? `https://backoffice.innerpece.com/${item}`
-//               : defaultimage
-//           }
-//           alt=""
-//           className={`object-cover cursor-pointer flex-grow h-96 transition-all ease-in-out duration-700 ${
-//             activeImage === index ? "w-[50%] scale-105" : "w-[5%]"
-//           } hover:w-[30%] hover:scale-105`}
-//           onMouseEnter={() => setActiveImage(index)} // Set the hovered image as active
-//         />
-//       ))}
-//     </div>
-//   )}
-// </div>
