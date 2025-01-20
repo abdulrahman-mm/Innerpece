@@ -23,27 +23,24 @@ function OurStory() {
         <div className="flex flex-col gap-3 text-white">
           <p className="tracking-widest text-2xl">OUR STORY</p>
           <p className="text-xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold">
-            Vel malesuada odio id lectus viverra
+          The Journey to Innerpece
           </p>
         </div>
       </div>
 
       <div className="flex flex-wrap flex-shrink gap-5 items-center justify-center mt-5 md:mt-14">
-        <img src={VideoBox1} alt="" className="flex-wrap flex-shrink" />
-        <img src={VideoBox2} alt="" className="flex-wrap flex-shrink" />
-        <img src={VideoBox3} alt="" className="flex-wrap flex-shrink" />
+        <img src={VideoBox1} alt="" className="flex-wrap flex-shrink hover:brightness-125 cursor-pointer" />
+        <img src={VideoBox2} alt="" className="flex-wrap flex-shrink hover:brightness-125 cursor-pointer" />
+        <img src={VideoBox3} alt="" className="flex-wrap flex-shrink hover:brightness-125 cursor-pointer" />
       </div>
 
       <div className="flex items-center justify-between mt-14">
         <p className="w-1/2 text-white/50">
-          Velit ultrices sed lobortis tristique. Quam cras sollicitudin cum amet
-          eget praesent. Semper mollis posuere tincidunt lorem sit adipiscing
-          tincidunt ut amet. Malesuada tincidunt risus in aliquet platea sapien.
-          Netus amet.
+        At Innerpece, we understand the struggles of anxiety, depression, and life’s challenges. Our journey began with a desire to help others find peace, not as a destination, but as a transformative journey. 
         </p>
         <button
           onClick={handleBtnClick}
-          className=" bg-white px-6 py-3 rounded-full"
+          className=" bg-white hover:bg-blue-300 px-6 py-3 rounded-full"
         >
           Get Started
         </button>

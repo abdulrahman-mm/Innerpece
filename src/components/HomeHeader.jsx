@@ -19,12 +19,12 @@ function Header() {
   }, [isOpen]);
 
   useEffect(() => {
-    const storedUserDetails = sessionStorage.getItem("loginDetails");
+    const storedUserDetails = localStorage.getItem("loginDetails");
     if (storedUserDetails) setUserLogedIn(true);
   }, []);
 
   const onClickLogout = () => {
-    sessionStorage.removeItem("loginDetails");
+    localStorage.removeItem("loginDetails");
   };
 
   return (
@@ -40,9 +40,12 @@ function Header() {
               Home
             </Link>
           </li>
-          {/* <li className="md:pe-5 lg:pe-11 cursor-pointer font-semibold hover:text-gray-500">
-            <Link to="/destinations">Destinations</Link>
-          </li> */}
+
+          <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
+            <Link className="cursor-pointer" to="/sendenquiry">
+              Send Enquiry
+            </Link>
+          </li>
           <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
             <Link className="cursor-pointer" to="/aboutus">
               About
@@ -97,6 +100,11 @@ function Header() {
           <li className="text-xl cursor-pointer">
             <Link to="/" onClick={() => setIsOpen(false)}>
               Home
+            </Link>
+          </li>
+          <li className="text-xl cursor-pointer">
+            <Link to="/sendenquiry" onClick={() => setIsOpen(false)}>
+              Send Enquiry
             </Link>
           </li>
 

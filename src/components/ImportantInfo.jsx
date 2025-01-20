@@ -12,7 +12,7 @@ function ImportantInfo({ informationRef }) {
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
-        const storedUserDetails = sessionStorage.getItem("loginDetails");
+        const storedUserDetails = localStorage.getItem("loginDetails");
 
         const userDetails = storedUserDetails
           ? JSON.parse(storedUserDetails)
@@ -24,7 +24,7 @@ function ImportantInfo({ informationRef }) {
         };
 
         const response = await axios.post(
-          "https://backoffice.innerpece.com/api/get-program-details",
+          "https://backoffice.innerpece.com/api/get-program",
           payload
         );
 

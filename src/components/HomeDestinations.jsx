@@ -62,11 +62,11 @@ function Destinations() {
                 <div
                   onClick={() => handleCardClick(item.id, item.city_name)}
                   key={index}
-                  className="flex items-center gap-5 border-2 border-gray-400/30 p-2 pe-0 w-80 rounded-2xl transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl cursor-pointer"
+                  className="flex items-center gap-5 border-2 border-gray-400/20 p-2 pe-0 w-80 rounded-2xl transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl cursor-pointer"
                 >
                   <img
                     src={`https://backoffice.innerpece.com/${item.cities_pic}`}
-                    alt=""
+                    alt={item.city_name}
                     className="w-14 h-14 object-cover rounded-full"
                   />
                   <p className="md:font-semibold text-lg md:text-xl">

@@ -269,7 +269,7 @@ function Programs() {
           </p>
           <b>{">"}</b>
           <p className="">{`Explore ${
-            apiData.length > 0 ? apiData[0].theme : ""
+            apiData.length > 0 ? apiData[0].theme : themes_name
           }`}</p>
         </div>
 
@@ -282,7 +282,7 @@ function Programs() {
             className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-lg flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1 md:px-8 md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
           >
             <h1 className="text-white text-lg md:text-2xl lg:text-4xl font-semibold">
-              {`Explore ${apiData.length > 0 ? apiData[0].theme : ""}`}
+              {`Explore ${apiData.length > 0 ? apiData[0].theme : themes_name}`}
             </h1>
             <p className="text-white text-sm md:text-base mt-2 ">
               Find your perfect tour with personalized themes and destinations
@@ -490,7 +490,7 @@ function Programs() {
                         ? `https://backoffice.innerpece.com/${item.cover_img}`
                         : defaultimage
                     }
-                    alt=""
+                    alt={item.title}
                     className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full  lg:w-1/4  rounded-none"
                   />
 
@@ -502,7 +502,7 @@ function Programs() {
                     <div className="flex items-centeroverflow-hidden justify-between gap-2 flex-wrap">
                       <div className="flex items-center gap-2">
                         <FaLocationDot className="text-sky-800" />
-                        <p>{item.location}</p>
+                        {item.location && <p>{item.location}</p>}
                       </div>
 
                       <div className="flex items-center gap-1">
@@ -592,8 +592,8 @@ function Programs() {
               </div>
             ))
           ) : (
-            <div className="flex my-16 items-center justify-center w-full h-full">
-              <p className="text-3xl">No programs available.</p>
+            <div className="flex my-20 justify-center w-full h-full">
+              <p className="text-xl md:text-3xl">No programs available.</p>
             </div>
           )}
 

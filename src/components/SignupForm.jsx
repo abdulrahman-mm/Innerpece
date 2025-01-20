@@ -39,6 +39,7 @@ function Signup() {
     preferred_lang: "",
     newsletter_sub: false,
     terms_condition: false,
+    image_1: "",
   });
 
   function onClickBtn() {
@@ -176,6 +177,7 @@ function Signup() {
       setPreferredLang("");
       setNewsletterSub("");
       setTermsCondition("");
+      setSelectedImage("");
 
       Swal.fire({
         position: "center",
@@ -248,6 +250,11 @@ function Signup() {
                 <label htmlFor="file" className="font-semibold cursor-pointer">
                   {`${selectedImage ? "Change Photo" : "Upload Photo"}`}
                 </label>
+                {userDetailsError.image_1 && (
+                  <p className="text-red-500 text-xs sm:text-sm ">
+                    {userDetailsError.image_1}
+                  </p>
+                )}
 
                 {/* Hidden File Input */}
                 <input
@@ -599,6 +606,8 @@ function Signup() {
                 </div>
               </div>
 
+             
+
               <div className="flex flex-col gap-1">
                 <div className="flex items-center justify-start gap-2">
                   <input
@@ -633,6 +642,7 @@ function Signup() {
                   )}
                 </div>
               </div>
+              
 
               <button
                 onClick={handleSignup}

@@ -6,37 +6,32 @@ import ourvalueimg3 from "../assets/ourvalueimg3.png";
 function OurValue() {
   return (
     <div className="ms-3 me-3 mt-8 md:mt-16 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
-      <p className="text-xl text-gray-700">OUR VALUE</p>
-      <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold w-full md:w-1/3">
-        Ac gravida at arcu vitae ut nulla. Sed
-      </p>
+      <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold">OUR VALUE</p>
+     
 
       <div className="flex flex-col mt-5 md:mt-14 items-center ">
-        <div className="flex flex-col md:flex-row flex-wrap items-center gap-5 md:gap-8 justify-between">
+        <div className="flex flex-col lg:flex-row flex-wrap items-center gap-5 md:gap-8 justify-between">
           <div className="flex items-center  gap-5 basis-[20%]">
             <hr className="border-sky-800 w-12" />
-            <p className="text-2xl font-semibold text-sky-900">Tellus est et</p>
+            <p className="text-2xl font-semibold text-sky-900">Individual Impact</p>
           </div>
 
           <img src={ourvalueimg1} alt="" className="basis-[30%] flex-wrap" />
 
           <div className="flex flex-col basis-[30%] gap-8 flex-wrap">
             <p className="text-gray-600 text-xl">
-              Nisi venenatis eu nunc sem. Turpis aenean tortor rhoncus eget quam
-              laoreet turpis viverra justo. Massa dignissim enim diam in. Diam
-              imperdiet ornare elit rhoncus diam gravida pharetra. Turpis
-              integer lectus et.
+            At Innerpece, your well-being is our passion. We understand the struggles of anxiety and depression, and we're here to help you embrace peace, clarity, and joy, guiding you to your happiest self.
             </p>
           </div>
         </div>
 
         <hr className="w-full mt-5 mb-5  md:mt-14 md:mb-14 border-sky-800/20" />
 
-        <div className="flex flex-col md:flex-row flex-wrap items-center gap-8 justify-between">
+        <div className="flex flex-col lg:flex-row flex-wrap items-center gap-8 justify-between">
           <div className="flex items-center  gap-5 basis-[20%]">
             <hr className="border-sky-800 w-12" />
             <p className="text-2xl font-semibold text-sky-900">
-              Turpis non lorem
+            Social Impact
             </p>
           </div>
 
@@ -44,21 +39,18 @@ function OurValue() {
 
           <div className="flex flex-col basis-[30%] gap-8 flex-wrap">
             <p className="text-gray-600 text-xl">
-              At integer nibh lacus tortor. Aenean enim mi ipsum aenean
-              adipiscing eu faucibus. Nibh pharetra nulla arcu faucibus proin
-              elit. Ante convallis felis scelerisque et arcu blandit. Elementum
-              elit viverra cras blandit convallis.
+            Our vision is a world where kindness and compassion lead. Through unity in communities, we create a society where love and empathy flourish, one peaceful heart at a time.
             </p>
           </div>
         </div>
 
         <hr className="w-full mt-5 mb-5 md:mt-14 md:mb-14 border-sky-800/20" />
 
-        <div className="flex flex-col md:flex-row flex-wrap items-center gap-8 justify-between">
+        <div className="flex flex-col lg:flex-row flex-wrap items-center gap-8 justify-between">
           <div className="flex items-center  gap-5 basis-[20%]">
             <hr className="border-sky-800 w-12" />
             <p className="text-2xl font-semibold text-sky-900">
-              Enim sit dignissim
+            Industry Impact
             </p>
           </div>
 
@@ -66,10 +58,7 @@ function OurValue() {
 
           <div className="flex flex-col basis-[30%] gap-8 flex-wrap">
             <p className="text-gray-600 text-xl">
-              Eget convallis mattis vel ligula amet nulla lacinia quam
-              malesuada. A pharetra massa pulvinar nulla. Eget nec nunc
-              tristique sed non gravida. Ut auctor tellus suscipit ultrices est
-              pretium. Mus odio et turpis lacinia sit.
+            We don’t stop at individual well-being; our passion extends to workplaces. By fostering a positive environment, we help businesses unlock their potential, driving innovation, productivity, and a wave of positivity across the industry.
             </p>
           </div>
         </div>

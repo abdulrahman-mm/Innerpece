@@ -10,7 +10,7 @@ import { useEffect } from "react";
 function Login() {
   useEffect(() => {
       document.title = "Login - Innerpece";
-    }, []); // Empty dependency array ensures it runs once on mount
+    }, []);
   return (
     <div>
      <Header/>

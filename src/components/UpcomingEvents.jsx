@@ -98,8 +98,7 @@ function UpcomingEvents() {
           {loading ? (
             <div className="mt-5 flex">
               <div className="flex-grow">
-              <SkeletonCarousel />
-
+                <SkeletonCarousel />
               </div>
             </div>
           ) : (
@@ -139,8 +138,9 @@ function UpcomingEvents() {
                       <hr className="w-32 mt-1 mb-1" />
                       <p className="text-gray-500 text-sm md:text-base flex items-center">
                         <MdDateRange className="inline-block me-2 text-red-600 text-lg md:text-xl" />
-                        {items.start_date}
+                        {items.start_date} - {items.end_date}
                       </p>
+              
                     </div>
                   </div>
                 ))}
@@ -164,7 +164,7 @@ function UpcomingEvents() {
                 <div
                   key={index}
                   onClick={() => handleCardClick(items.id, items.title)}
-                  className="cursor-pointer w-[335px] overflow-hidden  border-gray-200 border-2 rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl transition-all ease-in-out duration-500"
+                  className="cursor-pointer w-[335px] overflow-hidden  rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl transition-all ease-in-out duration-500"
                 >
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
@@ -184,8 +184,9 @@ function UpcomingEvents() {
                     <hr className="w-32 mt-1 mb-1" />
                     <p className="text-gray-500 text-sm md:text-base flex items-center">
                       <MdDateRange className="inline-block me-2 text-red-600 text-lg md:text-xl" />
-                      {items.start_date}
+                      {items.start_date} - {items.end_date}
                     </p>
+                    
                   </div>
                 </div>
               ))}

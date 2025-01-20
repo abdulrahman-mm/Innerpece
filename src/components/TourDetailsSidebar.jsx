@@ -23,8 +23,11 @@ import { FaPeopleLine } from "react-icons/fa6";
 import { BsPeopleFill } from "react-icons/bs";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
+import { MdEmojiPeople } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function Sidebar({ LocationShareRef }) {
+  const navigate = useNavigate();
   const location = useLocation();
   const { id } = location.state || {};
   const [apiData, setApiData] = useState([]);
@@ -49,18 +52,37 @@ function Sidebar({ LocationShareRef }) {
   const [success, setSuccess] = useState("");
   const [map, setMap] = useState("");
   const [loading, setLoading] = useState(true);
+  const [userDetails, setUserDetails] = useState(false);
+  const [userId, setUserId] = useState("");
+  const [reference_id, setReferenceId] = useState("");
+
+  const pathName = window.location.pathname;
+  const slicedPathName = pathName.slice(1, 3);
+
+  useEffect(() => {
+    const reference_id = window.location.search.split("=")[1]
+      ? window.location.search.split("=")[1].split("-").slice(0, 2).join("-")
+      : "";
+
+    if (!sessionStorage.getItem("reference_id")) {
+      sessionStorage.setItem("reference_id", reference_id);
+      setReferenceId(reference_id);
+    } else {
+      setReferenceId(sessionStorage.getItem("reference_id"));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
-        const storedUserDetails = sessionStorage.getItem("loginDetails");
+        const storedUserDetails = localStorage.getItem("loginDetails");
 
         const userDetails = storedUserDetails
           ? JSON.parse(storedUserDetails)
           : null;
 
         const payload = {
-          program_id: id,
+          program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
 
@@ -105,15 +127,23 @@ function Sidebar({ LocationShareRef }) {
           );
         }
         setLoading(false);
-
       } catch (err) {
         console.log(err);
         setLoading(false);
-
       }
     };
     fetchProgramData();
-  }, [id]);
+  }, []);
+
+  useEffect(() => {
+    const storedUserDetails = localStorage.getItem("loginDetails");
+    const userDetails = storedUserDetails
+      ? JSON.parse(storedUserDetails)
+      : null;
+    setUserDetails(userDetails);
+
+    setUserId(localStorage.getItem("loginid"));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -121,6 +151,7 @@ function Sidebar({ LocationShareRef }) {
     setErrors({}); // Reset errors on submit
 
     try {
+      const authToken = userId; // Replace with the actual token
 
       const response = await axios.post(
         "https://backoffice.innerpece.com/api/enquiry-form",
@@ -139,12 +170,17 @@ function Sidebar({ LocationShareRef }) {
           travel_destination: travelDestination,
           male_count: maleCount,
           female_count: femaleCount,
+          reference_id: reference_id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the token here
+          },
         }
       );
 
       // Successful submission
       setSuccess(response.data.message);
-
 
       // Clear form values
       setName("");
@@ -166,7 +202,6 @@ function Sidebar({ LocationShareRef }) {
       setTimeout(() => {
         setSuccess("");
       }, 5000); // 5000 ms = 5 seconds
-
     } catch (error) {
       // Handle validation errors if any
       if (error.response && error.response.data.errors) {
@@ -191,16 +226,24 @@ function Sidebar({ LocationShareRef }) {
     };
   }, [show]);
 
+  const handleLoginClick = () => {
+    navigate("/login");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div
-      className={` w-full md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:mt-7 ${
+      className={` w-full md:sticky top-0  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:mt-7 ${
         show ? "fixed" : ""
       }`}
     >
       {loading ? (
         <div className="h-60 w-full bg-gray-500 animate-pulse"></div>
       ) : (
-        <div className="flex flex-col p-3 shadow-md bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
+        <div className="flex flex-col p-3  shadow-md bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
           <span className="text-gray-600 ">
             Starting From{" "}
             <del>INR{` ${apiData.actual_price && apiData.actual_price}`}</del>{" "}
@@ -216,21 +259,79 @@ function Sidebar({ LocationShareRef }) {
             Per Person
           </span>
 
-          <div className="flex flex-wrap justify-center gap-4 pb-4">
+          <div className="flex flex-col items-center flex-wrap justify-center ">
             <div
               style={{ backgroundColor: "#EC3B63" }}
               onClick={handleShow}
               className="flex flex-wrap cursor-pointer flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
             >
               <img src={telegram} alt="" />
-              <p className="text-white font-semibold">Send Enquiry</p>
+              <button
+                disabled={userDetails ? false : true}
+                className="text-white font-semibold"
+              >
+                Book Now
+              </button>
             </div>
+            {!userDetails && (
+              <p className="text-red-500 ">
+                Please{" "}
+                <span
+                  className="hover:underline cursor-pointer"
+                  onClick={handleLoginClick}
+                >
+                  login
+                </span>{" "}
+                to book now
+              </p>
+            )}
           </div>
         </div>
       )}
 
+      <div className="shadow-md mt-5  shadow-black/10 rounded-lg">
+        <div className="flex gap-4  ms-3 text-2xl">
+          <p className="text-sky-800">|</p>
+          <p className="font-semibold">Book With Confidence</p>
+        </div>
+
+        <div className="flex flex-wrap  items-start  justify-between md:flex-col p-5   gap-y-3 gap-2">
+          <div className="flex gap-4 items-center">
+            <img src={customerservice} alt="" />
+            <p>Customer care available 24/7</p>
+          </div>
+
+          <div className="flex gap-4 items-center">
+            <img src={approve} alt="" />
+            <p>Hand-picked Tours & Activities</p>
+          </div>
+
+          <div className="flex gap-4 items-center">
+            <img src={insurance} alt="" />
+            <p>Free Travel Insurance</p>
+          </div>
+
+          <div className="flex gap-4 items-center">
+            <img src={pricetag} alt="" />
+            <p>No-hassle best price guarantee</p>
+          </div>
+        </div>
+      </div>
+
+      <p ref={LocationShareRef} className="font-semibold mt-5">
+        Where you'll be
+      </p>
+      <div>
+        <div
+          className="mt-2 overflow-hidden"
+          dangerouslySetInnerHTML={{ __html: map }}
+        />
+
+        <div></div>
+      </div>
+
       {show && (
-        <div className="fixed inset-0 z-50 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto">
+        <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto">
           <div className="bg-white rounded-lg shadow-lg max-w-full w-[90%] sm:w-[80%]  max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b">
@@ -239,9 +340,9 @@ function Sidebar({ LocationShareRef }) {
               </h2>
               <button
                 onClick={handleClose}
-                className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                className="text-gray-500 font-extrabold text-xl hover:text-gray-700 focus:outline-none"
               >
-                <span className="sr-only">Close</span>✕
+                ✕
               </button>
             </div>
 
@@ -373,6 +474,23 @@ function Sidebar({ LocationShareRef }) {
                         )}
                       </div>
 
+                      {/*influencer id*/}
+                      {reference_id && (
+                        <div className="flex flex-col">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <MdEmojiPeople />
+                            </span>
+                            <input
+                              readOnly
+                              className="w-full text-gray-800 p-2 border-l focus:outline-none"
+                              id="How Many Days"
+                              value={reference_id}
+                            />
+                          </div>
+                        </div>
+                      )}
+
                       {/*how many days*/}
                       <div className="flex flex-col">
                         <div className="flex items-center border rounded-md">
@@ -427,7 +545,7 @@ function Sidebar({ LocationShareRef }) {
                             <RiMoneyRupeeCircleFill />
                           </span>
                           <input
-                            type="text"
+                            type="number"
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Budget Per Head"
                             id="Budget Per Head"
@@ -519,7 +637,7 @@ function Sidebar({ LocationShareRef }) {
                           </span>
                           <input
                             type="date"
-                            className="w-full p-2 border-l focus:outline-none"
+                            className="w-full p-2 border-l text-gray-400 focus:outline-none"
                             placeholder="Travel Date"
                             id="Travel Date"
                             value={travelDate}
@@ -563,7 +681,9 @@ function Sidebar({ LocationShareRef }) {
                           <span className="p-2 border-r">
                             <FaCar />
                           </span>
-                          <label className="ms-2">Cab Needed</label>
+                          <label className="ms-2 text-gray-400">
+                            Cab Needed
+                          </label>
 
                           <div className="flex gap-1 p-2 ms-3">
                             <input
@@ -633,47 +753,6 @@ function Sidebar({ LocationShareRef }) {
           </div>
         </div>
       )}
-
-      <div className="shadow-md mt-10 shadow-black/10 rounded-lg">
-        <div className="flex gap-4 mt-8 ms-3 text-2xl">
-          <p className="text-sky-800">|</p>
-          <p className="font-semibold">Book With Confidence</p>
-        </div>
-
-        <div className="flex flex-wrap  items-start  justify-between md:flex-col p-5   gap-y-4 gap-2">
-          <div className="flex gap-4 items-center">
-            <img src={customerservice} alt="" />
-            <p>Customer care available 24/7</p>
-          </div>
-
-          <div className="flex gap-4 items-center">
-            <img src={approve} alt="" />
-            <p>Hand-picked Tours & Activities</p>
-          </div>
-
-          <div className="flex gap-4 items-center">
-            <img src={insurance} alt="" />
-            <p>Free Travel Insurance</p>
-          </div>
-
-          <div className="flex gap-4 items-center">
-            <img src={pricetag} alt="" />
-            <p>No-hassle best price guarantee</p>
-          </div>
-        </div>
-      </div>
-
-      <p ref={LocationShareRef} className="font-semibold mt-8">
-        Where you'll be
-      </p>
-      <div>
-        <div
-          className="mt-5  object-cover"
-          dangerouslySetInnerHTML={{ __html: map }}
-        />
-
-        <div></div>
-      </div>
     </div>
   );
 }

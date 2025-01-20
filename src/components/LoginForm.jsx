@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -50,8 +51,8 @@ function Login() {
       const loginid = response.data.token;
       const loginDetails = response.data.user_details;
 
-      sessionStorage.setItem("loginid", loginid);
-      sessionStorage.setItem("loginDetails", JSON.stringify(loginDetails));
+      localStorage.setItem("loginid", loginid);
+      localStorage.setItem("loginDetails", JSON.stringify(loginDetails));
 
       setEmail("");
       setPassword("");
@@ -80,10 +81,17 @@ function Login() {
     }
   }
 
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+    console.log("Captcha value:", value);
+  };
+
   return (
     <div className="flex items-center justify-center mt-8 md:mt-14">
-      <div className="80vw md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
+      <div className="w-full sm:w-[80vw] md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
+        
           <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
           <div className="w-2/5 flex-grow flex-shrink">
@@ -112,7 +120,7 @@ function Login() {
                     name="email"
                     id="email"
                     value={email}
-                    autoComplete='off'
+                    autoComplete="off"
                     onChange={onChangeInput}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Enter your Email"
@@ -136,9 +144,9 @@ function Login() {
                   <label htmlFor="password" className="font-semibold">
                     Your Password
                   </label>
-                  <p className="text-red-400 cursor-pointer text-xs md:text-sm font-semibold">
+                  {/* <p className="text-red-400 cursor-pointer text-xs md:text-sm font-semibold">
                     Forgot Password?
-                  </p>
+                  </p> */}
                 </div>
                 <input
                   type="password"
@@ -146,7 +154,7 @@ function Login() {
                   name="password"
                   value={password}
                   onChange={onChangeInput}
-                  autoComplete='off'
+                  autoComplete="off"
                   placeholder="Enter your Password"
                   className="border-2  border-gray-300 outline-none p-2 rounded-md"
                 />
@@ -163,28 +171,19 @@ function Login() {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 mt-2">
-                <input
-                  type="checkbox"
-                  name="checkbox"
-                  id="checkbox"
-                  value="checkboxChecked"
-                  onChange={onChangeInput}
-                  checked={checkboxChecked ? true : false}
-                  className="scale-125"
+              <div className="recaptacha-login  mt-5">
+                <ReCAPTCHA
+                  sitekey="6LfDSrsqAAAAAI2jP2tOdr2l4VkiztyX2S2H0Fxg"
+                  onChange={handleCaptchaChange}
                 />
-                <label
-                  htmlFor="checkbox"
-                  className="text-xs sm:text-sm md:text-base"
-                >
-                  By signing up, you agree to Terms Of Service and Privacy
-                  Policy
-                </label>
               </div>
 
               <button
+                disabled={!captchaValue}
                 onClick={onClickSignIn}
-                className="bg-sky-800 p-3 mt-2 rounded-md text-white"
+                className={`${
+                  !captchaValue ? "bg-gray-400" : "bg-sky-800"
+                } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
               >
                 Sign In
               </button>

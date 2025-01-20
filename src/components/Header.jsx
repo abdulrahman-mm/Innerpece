@@ -19,12 +19,12 @@ function Header() {
   }, [isOpen]);
 
   useEffect(() => {
-    const storedUserDetails = sessionStorage.getItem("loginDetails");
+    const storedUserDetails = localStorage.getItem("loginDetails");
     if (storedUserDetails) setUserLogedIn(true);
   }, []);
 
   const onClickLogout = () => {
-    sessionStorage.removeItem("loginDetails");
+    localStorage.removeItem("loginDetails");
   };
 
   return (
@@ -40,9 +40,12 @@ function Header() {
               Home
             </Link>
           </li>
-          {/* <li className="md:pe-5 lg:pe-11 cursor-pointer hover:text-gray-500">
-            <Link to="/destinations">Destinations</Link>
-          </li> */}
+          <li className="md:pe-5 lg:pe-11  ">
+            <Link to="/sendenquiry" className="cursor-pointer hover:text-gray-500">
+              Send Enquiry
+            </Link>
+          </li>
+
           <li className="md:pe-5 lg:pe-11 ">
             <Link to="/aboutus" className="cursor-pointer hover:text-gray-500">
               About
@@ -99,6 +102,11 @@ function Header() {
             </Link>
           </li>
           <li className="text-black text-xl cursor-pointer">
+            <Link to="/sendenquiry" onClick={() => setIsOpen(false)}>
+              Send Enquiry
+            </Link>
+          </li>
+          <li className="text-black text-xl cursor-pointer">
             <Link to="/aboutus" onClick={() => setIsOpen(false)}>
               About
             </Link>
@@ -110,25 +118,24 @@ function Header() {
           </li>
 
           {userLogedIn ? (
-              <Link
-                to="/login"
-                onClick={() => {
-                  setIsOpen(false)
-                  onClickLogout()
-                }}
-                className="px-6 py-2 cursor-pointer font-semibold border-[#005FC4] border-2 rounded-2xl text-[#005FC4] bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700"
-              >
-                Logout
-              </Link>
+            <Link
+              to="/login"
+              onClick={() => {
+                setIsOpen(false);
+                onClickLogout();
+              }}
+              className="px-6 py-2 cursor-pointer font-semibold border-[#005FC4] border-2 rounded-2xl text-[#005FC4] bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700"
+            >
+              Logout
+            </Link>
           ) : (
-              <Link
+            <Link
               to="/login"
               onClick={() => setIsOpen(false)}
               className="px-6 py-2 cursor-pointer font-semibold border-[#005FC4] border-2 rounded-2xl text-[#005FC4] bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700"
             >
               Login
             </Link>
-            
           )}
         </ul>
       </div>

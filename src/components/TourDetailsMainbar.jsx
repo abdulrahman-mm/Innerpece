@@ -1,15 +1,17 @@
 import React from "react";
 import star from "../assets/star.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import DOMPurify from "dompurify";
 import defaultimage from "../assets/defaultimg.png";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import Swal from "sweetalert2";
 
 function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const location = useLocation();
+  let navigate = useNavigate();
   const { id } = location.state || {};
   const [apiData, setApiData] = useState([]);
   const sanitizedHTML = DOMPurify.sanitize(apiData.program_desc);
@@ -17,80 +19,35 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const [loading, setLoading] = useState(true);
   const currentUrl = window.location.href;
   const metaDescription = apiData?.program_desc || "";
-  const [activeImage, setActiveImage] = useState(0); // Default to the first image
-  const [rating, setRating] = useState(0); // Current rating
-  const [hover, setHover] = useState(0); // Hovered rating
+  const [rating, setRating] = useState(""); // Current rating
+  const [hover, setHover] = useState(""); // Hovered rating
   const [userReview, setUserReview] = useState("");
   const [date, setDate] = useState(new Date());
-  const [userDetails, setUserDetails] = useState();
+  const [userDetails, setUserDetails] = useState(false);
   const [userId, setUserId] = useState();
 
-  useEffect(() => {
-    let interval = setInterval(() => {
-      setDate(new Date());
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  const handleWishlistClick = async () => {
-    const loginDetails = JSON.parse(sessionStorage.getItem("loginDetails"));
-    const token = sessionStorage.getItem("loginid");
-
-    if (!loginDetails || !loginDetails.id) {
-      console.error("User is not logged in");
-      navigate("/login");
-      window.scrollTo({
-        top: 0,
-        behavior: "instant",
-      });
-      return;
-    }
-
-    const { id: user_id } = loginDetails;
-
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
-    const formData = new FormData();
-    formData.append("user_id", user_id);
-    formData.append("program_id", id);
-    formData.append("action", isWishlisted ? "remove" : "add");
-
-    try {
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/add-remove-wishlist",
-        formData,
-        { headers }
-      );
-
-      if (response.status === 201 || response.status === 200) {
-        console.log(
-          `${isWishlisted ? "Removed from" : "Added to"} wishlist successfully.`
-        );
-        setIsWishlisted(!isWishlisted);
-      } else {
-        console.error("Failed to update wishlist.", response);
-      }
-    } catch (error) {
-      console.error("An error occurred while updating wishlist:", error);
-    }
+  const onCLickLoginButton = () => {
+    navigate("/login");
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
   };
+
+  const pathName = window.location.pathname;
+  const slicedPathName = pathName.slice(1, 3);
 
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
-        const storedUserDetails = sessionStorage.getItem("loginDetails");
+        const storedUserDetails = localStorage.getItem("loginDetails");
 
         const userDetails = storedUserDetails
           ? JSON.parse(storedUserDetails)
           : null;
 
         const payload = {
-          program_id: id,
+          program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
 
@@ -134,17 +91,25 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
       }
     };
     fetchProgramData();
-  }, [id]);
+  }, []);
 
   useEffect(() => {
-    const storedUserDetails = sessionStorage.getItem("loginDetails");
+    const storedUserDetails = localStorage.getItem("loginDetails");
     const userDetails = storedUserDetails
       ? JSON.parse(storedUserDetails)
       : null;
     setUserDetails(userDetails);
 
-    const storedUserId = sessionStorage.getItem("loginid");
+    const storedUserId = localStorage.getItem("loginid");
     setUserId(storedUserId);
+
+    let interval = setInterval(() => {
+      setDate(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const onClickPostReview = async () => {
@@ -157,9 +122,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         created_at: date,
       };
 
-      // Assuming you have the auth token stored in a variable or state
-      const authToken = userId; // Replace with the actual token
-
+      const authToken = userId;
       const response = await axios.post(
         "https://backoffice.innerpece.com/api/add_review",
         payload,
@@ -170,14 +133,97 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         }
       );
 
-      console.log(response);
+      const fetchProgramData = async () => {
+        try {
+          const storedUserDetails = localStorage.getItem("loginDetails");
+          const userDetails = storedUserDetails
+            ? JSON.parse(storedUserDetails)
+            : null;
+
+          const payload = {
+            program_id: id ? id : slicedPathName,
+            user_id: userDetails?.id || null,
+          };
+
+          const response = await axios.post(
+            "https://backoffice.innerpece.com/api/v1/get-program-details",
+            // "https://backoffice.innerpece.com/api/v1/get-program",
+            payload
+          );
+
+          console.log(response.data.data);
+
+          setApiData(response.data.data);
+          setLoading(false);
+
+          const metaOgTitle = document.querySelector(
+            "meta[property='og:title']"
+          );
+          if (metaOgTitle) {
+            metaOgTitle.setAttribute(
+              "content",
+              apiData.title || "Default Title"
+            );
+          }
+
+          const metaOgDescription = document.querySelector(
+            "meta[property='og:description']"
+          );
+          if (metaOgDescription) {
+            metaOgDescription.setAttribute(
+              "content",
+              apiData.program_desc || "Default description"
+            );
+          }
+
+          const metaOgImage = document.querySelector(
+            "meta[property='og:image']"
+          );
+          if (metaOgImage) {
+            metaOgImage.setAttribute(
+              "content",
+              `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+            );
+          }
+        } catch (err) {
+          console.log(err);
+          setLoading(false);
+        }
+      };
+      if (response.data) {
+        fetchProgramData();
+      }
+
+      setRating("");
+      setHover("");
+      setUserReview("");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Review Posted",
+        showConfirmButton: false,
+        timer: 1500,
+        customClass: {
+          popup: "w-72 p-4 text-sm", // Tailwind classes
+        },
+      });
     } catch (err) {
       console.log(err);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Write a Review",
+        showConfirmButton: false,
+        timer: 1500,
+        customClass: {
+          popup: "w-72  p-4 text-sm", // Tailwind classes
+        },
+      });
     }
   };
 
   return (
-    <div className="w-full md:basis-[45%] xl:basis-[55%] overflow-x-hidden   flex-grow ">
+    <div className="w-full md:basis-[45%]  xl:basis-[55%] overflow-x-hidden   flex-grow ">
       {loading ? (
         <div className="object-cover mt-3 flex-shrink h-96  w-full bg-gray-500 animate-pulse"></div>
       ) : (
@@ -211,7 +257,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             arrows={true}
             keyBoardControl={true}
             transitionDuration={1000}
-            containerClass="carousel-container mx-auto w-full"
+            containerClass="carousel-container mx-auto z-0 w-full"
             itemClass="carousel-item-padding-40-px block shadow-lg shadow-black/10 mt-5"
           >
             {apiData.gallery_img.map((item, index) => (
@@ -234,9 +280,10 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
       <p className="font-semibold text-2xl mt-8">Highlights</p>
       <p
-        className="mt-3 text-gray-600 leading-7"
+        className="mt-3 md:leading-7 font-sans"
         dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
       ></p>
+
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
           <div className="border-[1px] px-4 py-3 border-black/40 mt-8 md:mt-10 rounded-3xl">
@@ -365,7 +412,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
           <div>
             <div
-              className="mt-5"
+              className="mt-5 md:leading-7 font-sans"
               dangerouslySetInnerHTML={{ __html: apiData.important_info }}
             />
           </div>
@@ -373,14 +420,14 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
       )}
       {apiData.tour_planning && (
         <div ref={TourPlanningRef} className="mt-8 md:mt-10">
-          <p className="font-semibold text-2xl ">Tour Planning</p>
+          <p className="font-semibold text-2xl  ">Tour Planning</p>
 
           {apiData.tour_planning.plan_title.length > 0 && ( // Check for presence and length
             <div>
               {apiData.tour_planning.plan_title.map((title, index) => (
                 <div key={index} className="mt-5">
                   <p className="font-semibold text-xl">{title}</p>
-                  <p className="font-semibold text-xl">
+                  <p className="font-semibold mt-1 text-xl">
                     {apiData.tour_planning.plan_subtitle[index]}
                   </p>
 
@@ -388,6 +435,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                     dangerouslySetInnerHTML={{
                       __html: apiData.tour_planning.plan_description[index],
                     }}
+                    className="font-sans  md:leading-7 "
                   >
                     {/* {apiData.tour_planning.plan_description[index].replace(/<\/?[^>]+(>|$)/g, "")} */}
                   </p>
@@ -398,113 +446,164 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         </div>
       )}
 
-      {userDetails && (
-        <div className="border border-gray-700 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
-          <div className="flex ">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                type="button"
-                className={`w-8 text-2xl h-8 flex  rounded-full ${
-                  star <= (hover || rating)
-                    ? "text-yellow-500"
-                    : "text-gray-300"
-                }`}
-                onClick={() => setRating(star)} // Set rating on click
-                onMouseEnter={() => setHover(star)} // Highlight stars on hover
-                onMouseLeave={() => setHover(0)} // Reset hover effect
-              >
-                ★
-              </button>
-            ))}
-          </div>
-          <textarea
-            value={userReview}
-            onChange={(e) => setUserReview(e.target.value)}
-            placeholder="Write a Review"
-            className="w-full resize-none h-fit mt-3 placeholder-black text-wrap border-none outline-none"
-          />
-          <button
-            onClick={onClickPostReview}
-            className="bg-sky-800 transition-all duration-500 hover:bg-sky-900 text-white rounded-full w-fit h-fit py-1 px-8 "
-          >
-            Post
-          </button>
+      <div className="border border-gray-700 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
+        <div className="flex ">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              disabled={!userDetails}
+              key={star}
+              type="button"
+              className={`w-8 text-2xl h-8 flex  rounded-full ${
+                star <= (hover || rating) ? "text-yellow-500" : "text-gray-300"
+              }`}
+              onClick={() => setRating(star)} // Set rating on click
+              onMouseEnter={() => setHover(star)} // Highlight stars on hover
+              onMouseLeave={() => setHover(0)} // Reset hover effect
+            >
+              ★
+            </button>
+          ))}
         </div>
+        <textarea
+          disabled={!userDetails}
+          value={userReview}
+          onChange={(e) => setUserReview(e.target.value)}
+          placeholder="Write a Review"
+          className="w-full resize-none bg-white h-fit mt-3 placeholder-black text-wrap border-none outline-none"
+        />
+        <button
+          disabled={!userDetails}
+          onClick={onClickPostReview}
+          className="bg-sky-800 transition-all duration-500 hover:bg-sky-900 text-white rounded-full w-fit h-fit py-1 px-8 "
+        >
+          Post
+        </button>
+      </div>
+
+      {!userDetails && (
+        <p className="text-red-500 mt-1">
+          Please{" "}
+          <button
+            onClick={onCLickLoginButton}
+            className="cursor-pointer hover:underline"
+          >
+            Login{" "}
+          </button>
+          {"  "} to add review
+        </p>
       )}
 
       {apiData.reviews && apiData.reviews.length > 0 && (
         <div ref={reviewRef} className="mt-8 md:mt-10">
-          <div className="flex flex-wrap gap-0 lg:gap-16">
-            <div className="flex w-90vw md:basis-[60%] flex-wrap flex-grow flex-col justify-start ">
-              <div className="flex flex-col gap-4  md:flex-row justify-between">
-                <p className="font-semibold text-xl md:text-2xl">
-                  <span className="me-3">|</span>Client's Review
-                </p>
+          <div className="flex flex-wrap flex-col justify-start ">
+            <p className="font-semibold text-xl md:text-2xl">
+              <span className="me-3">|</span>Client's Review
+            </p>
 
-                <div className="flex gap-5 items-center">
-                  <p className=" text-lg">{` ${apiData.review_count} ${
-                    apiData.review_count > 2 ? "Reviews" : "Review"
-                  }`}</p>
-                </div>
-              </div>
+            {/* <div className="mt-5 border-4 h-36 w-36 flex flex-col justify-center items-center border-sky-800 rounded-full">
+              <p className="text-sm">Overall Ratings</p>
+              <p className="text-sm">
+                {apiData.average_rating}
+                <span className="ms-1">Out of 5</span>{" "}
+              </p>
+            </div> */}
 
-              {apiData.reviews.length > 0 &&
-                apiData.reviews.map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex gap-5 mt-3 md:mt-10 w-90vw md:w-3/4 "
-                  >
-                    <img
-                      src={`https://backoffice.innerpece.com/${item.profile_image}`}
-                      alt=""
-                      className="w-[50px] object-cover h-[50px] md:w-[76px] md:h-[76px] rounded-full"
-                    />
-
-                    <div className="flex flex-col gap-1">
-                      <p className="font-semibold text-lg">{item.first_name}</p>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: item.comment,
-                        }}
-                      />
-                      <div className="flex gap-x-2">
-                        <div className="flex gap-1">
+            {apiData.reviews.length > 0 && (
+              <div className="mt-8  h-96 overflow-y-auto">
+                <div className="flex  flex-col mt-5 gap-5 ">
+                  {apiData.reviews.map((item, index) => (
+                    <div
+                      key={index}
+                      className="mx-3 bg-gray-100 p-4 rounded-lg shadow-md"
+                    >
+                      <div className="flex  flex-col gap-1">
+                        <div className="flex gap-1 items-center">
                           {Array(item.rating)
                             .fill(null)
-                            .map((_, index) => (
+                            .map((_, i) => (
                               <img
-                                key={index} // Add a unique key for each element
+                                key={i}
                                 src={star}
-                                alt="star"
-                                className="object-contain w-4"
+                                alt="Star"
+                                className="w-4 md:w-5"
                               />
                             ))}
                         </div>
-                      </div>
 
-                      <div>
-                        <p className="text-gray-500">{item.date}</p>
+                        <p
+                          className="text-gray-600 text-sm md:text-base"
+                          dangerouslySetInnerHTML={{
+                            __html: item.comment,
+                          }}
+                        />
+
+                        <p className="text-gray-500 text-xs md:text-sm">
+                          {item.date}
+                        </p>
+
+                        <hr className="border-black/20 w-full" />
+
+                        <div className="flex gap-3">
+                          <img
+                            src={`https://backoffice.innerpece.com/${item.profile_image}`}
+                            alt="Profile"
+                            className="w-[40px] h-[40px] object-cover rounded-full border-2 border-gray-300"
+                          />
+                          <p className="font-semibold text-lg md:text-xl text-gray-800">
+                            {item.first_name}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-            </div>
+                  ))}
+                  {apiData.client_reviews.map((item, index) => (
+                    <div
+                      key={index}
+                      className="mx-3 bg-gray-100 p-4 rounded-lg shadow-md"
+                    >
+                      <div className="flex  flex-col gap-1">
+                        <div className="flex gap-1 items-center">
+                          {Array(item.rating)
+                            .fill(null)
+                            .map((_, i) => (
+                              <img
+                                key={i}
+                                src={star}
+                                alt="Star"
+                                className="w-4 md:w-5"
+                              />
+                            ))}
+                        </div>
 
-            <div className=" flex-grow md:basis-[30%] mt-1 flex flex-col justify-start gap-16">
-              <p className="font-semibold">
-                {/* {apiData.average_rating} <span className="ms-1">Out of 5</span>{" "} */}
-              </p>
+                        <p
+                          className="text-gray-600 text-sm md:text-base"
+                          dangerouslySetInnerHTML={{
+                            __html: item.client_review,
+                          }}
+                        />
 
-              <div className="mx-auto border-8 h-48 w-48 flex flex-col justify-center items-center border-sky-800 rounded-full">
-                <p>Overall Ratings</p>
-                {/* <p className="font-semibold text-2xl text-sky-800">4.8</p> */}
-                <p>
-                  {apiData.average_rating}{" "}
-                  <span className="ms-1">Out of 5</span>{" "}
-                </p>
+                        <p className="text-gray-500 text-xs md:text-sm">
+                          {item.review_dt}
+                        </p>
+
+                        <hr className="border-black/20 w-full" />
+
+                        <div className="flex gap-3">
+                          <img
+                            src={`https://backoffice.innerpece.com/${item.client_pic}`}
+                            alt="Profile"
+                            className="w-[40px] h-[40px] object-cover rounded-full border-2 border-gray-300"
+                          />
+                          <p className="font-semibold text-lg md:text-xl text-gray-800">
+                            {item.client_name}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

@@ -51,8 +51,6 @@ function Programs() {
     <div className="w-full h-60 block md:hidden bg-gray-500 rounded-3xl animate-pulse"></div>
   );
 
-  
-
 
   return (
     <div className="overflow-hidden">
@@ -118,7 +116,7 @@ function Programs() {
                     <div className="absolute -z-20 bg-gradient-to-t from-black/95 to-transparent h-full w-full"></div>
                     <img
                       src={`https://backoffice.innerpece.com/${item.theme_pic}`}
-                      alt=""
+                      alt={item.themes_name}
                       className="hover:scale-150 w-full h-60 transition duration-300 ease-in-out -z-40 bg-gradient  shadow-black object-cover bg-center absolute inset-0"
                     />
                     <p className="absolute z-10 text-lg xl:text-2xl text-white font-semibold text-center">

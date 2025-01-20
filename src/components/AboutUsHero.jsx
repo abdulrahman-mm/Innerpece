@@ -10,7 +10,7 @@ function Hero() {
         ABOUT US
       </p>
 
-      <div className="flex mt-5 md:mt-14 flex-col md:flex-row items-start justify-start md:gap-10 ">
+      <div className="flex mt-5 md:mt-14 flex-col lg:flex-row items-start justify-start md:gap-10 ">
         <div className=" grid grid-cols-2 items-start justify-center gap-3 basis-[40%]">
           <img src={image2} alt="" className="row-span-2  bg-cover" />
 
@@ -20,28 +20,16 @@ function Hero() {
 
         <div className="basis-[60%]">
           <p className="mt-3 text-gray-600 md:text-lg">
-            We are excited to introduce Innerpece, a platform dedicated to
-            providing meaningful travel experiences that focus on nurturing
-            mental well-being and personal growth. Our carefully curated travel
-            programs offer a much-needed mental break while allowing you to
-            connect with innovative entrepreneurs and inspiring creators. Our
-            main objective is to assist you in finding deeper happiness and
-            inner pece through these experiences.
+          At Innerpece, we create transformative programs that lead you to peace avenue. Our carefully curated offerings help you reconnect with your inner peace, focusing on mental well-being and personal growth. For entrepreneurs, creators, and freelancers, our workcations in serene environments like the Himalayas provide the perfect escape from the hustle, allowing you to work in peace, recharge, and reignite your creativity.
+
           </p>
 
           <p className="mt-3 text-gray-600 md:text-lg">
-            In addition, we understand the importance of family time and offer
-            tailored travel programs designed for families. Explore the beauty
-            and cultural richness of India with our private itineraries, aimed
-            at creating unforgettable moments and strengthening family bonds.
+          We also offer offbeat car and bike rides to explore new horizons, blending productivity with tranquility. Additionally, we provide travel programs for families, designed to create unforgettable moments and strengthen family bonds. Explore India’s cultural richness through our private itineraries, making lasting memories.
           </p>
 
           <p className="mt-3 text-gray-600 md:text-lg">
-            At Innerpece, we are deeply committed to the transformative power of
-            travel. Let us guide you on a journey that not only refreshes your
-            mind but also enriches your life. Discover how our unique travel
-            experiences can lead you to a path of greater fulfillment and
-            connection.
+          We believe in the transformative power of travel. Our programs are crafted to help you find happiness, fulfillment, and deeper connections. Join us, and let us guide you on a journey that refreshes your mind and enriches your life.
           </p>
         </div>
       </div>

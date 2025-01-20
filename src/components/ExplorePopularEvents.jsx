@@ -128,7 +128,7 @@ function ExplorePopularEvents() {
                 <div
                   onClick={() => handleCardClick(items.id, items.title)}
                   key={index}
-                  className="cursor-pointer flex flex-col w-screen bg-white "
+                  className="cursor-pointer flex flex-col w-screen  bg-white "
                 >
                   <img
                     src={
@@ -137,7 +137,7 @@ function ExplorePopularEvents() {
                         : defaultimage
                     }
                     className="w-full h-48 object-cover"
-                    alt=""
+                    alt={items.title}
                   />
                   <div className="p-3">
                     <p className="font-semibold text-lg md:text-xl">
@@ -150,7 +150,11 @@ function ExplorePopularEvents() {
                       <FaStar className="text-yellow-500 me-2" />
 
                       <span className="me-4">{items.average_rating}</span>
-                      <span className="text-gray-400 text-sm">{`(${items.totalReviews})`}</span>
+                      <span className="text-gray-400 text-sm">{`(${
+                        items.reviews.length
+                      } ${
+                        items.reviews.length > 1 ? "Reviews" : "Review"
+                      })`}</span>
                     </p>
                   </div>
                 </div>
@@ -174,7 +178,7 @@ function ExplorePopularEvents() {
                 <div
                   onClick={() => handleCardClick(items.id, items.title)}
                   key={index}
-                  className="w-[335px] h-64  border-gray-200 cursor-pointer transform transition duration-500 ease-in-out hover:-translate-y-1 border-2 rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
+                  className="w-[330px] h-64  cursor-pointer transform transition duration-500 ease-in-out hover:-translate-y-1  rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
                 >
                   <img
                     src={
@@ -183,7 +187,7 @@ function ExplorePopularEvents() {
                         : defaultimage
                     }
                     className="w-full h-32 object-cover rounded-t-lg "
-                    alt=""
+                    alt={items.title}
                   />
                   <div className="p-3">
                     <p className="font-semibold text-lg md:text-xl">
@@ -196,7 +200,11 @@ function ExplorePopularEvents() {
                       <FaStar className="text-yellow-500 me-2" />
 
                       <span className="me-4">{items.average_rating}</span>
-                      <span className="text-gray-400 text-sm">{`(${items.totalReviews})`}</span>
+                      <span className="text-gray-400 text-sm">{`(${
+                        items.reviews.length
+                      } ${
+                        items.reviews.length > 1 ? "Reviews" : "Review"
+                      })`}</span>
                     </p>
                   </div>
                 </div>

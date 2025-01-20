@@ -67,7 +67,7 @@ function Hero() {
 
     getApiData();
   }, []);
-
+    
   return (
     <div className="hero-container relative">
       {loading ? (
@@ -158,10 +158,9 @@ function Hero() {
             </div>
           </div> */}
 
-          <div className="flex flex-wrap md:flex-nowrap bg-white shadow-2xl shadow-white/40 rounded-lg md:rounded-3xl  px-2 py-2 sm:px-3 sm:py-2 gap-2 sm:gap-3">
+          {/* <div className="flex flex-wrap md:flex-nowrap bg-white shadow-2xl shadow-white/40 rounded-lg md:rounded-3xl  px-2 py-2 sm:px-3 sm:py-2 gap-2 sm:gap-3">
             
             <div className="flex flex-grow md:flex-grow-0 gap-1">
-              {/* Location Input */}
               <div className="flex basis-full flex-grow items-center gap-3 border-2 border-gray-400 rounded-lg md:rounded-3xl   md:basis-[25%] lg:basis-[20%] px-2 py-1">
                 <IoCompassSharp className="text-xl sm:text-2xl" />
                 <input
@@ -175,7 +174,6 @@ function Hero() {
                 />
               </div>
 
-              {/* Date Input */}
               <div className="flex flex-grow items-center gap-3 border-2 border-gray-400 rounded-lg md:rounded-3xl  basis-full md:basis-[25%] lg:basis-[20%] px-2 py-1">
                 <input
                   type="date"
@@ -188,7 +186,6 @@ function Hero() {
               </div>
             </div>
 
-            {/* Search Button */}
             <div className="cursor-pointer bg-gradient-to-b from-sky-800 to-sky-950 text-white font-semibold rounded-lg md:rounded-3xl flex-grow flex items-center justify-center basis-full sm:basis-[100%] md:basis-[20%] lg:basis-[15%] px-3 py-2">
               <p
                 className="text-center text-sm sm:text-base md:text-lg lg:text-xl"
@@ -197,7 +194,7 @@ function Hero() {
                 Find Now
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

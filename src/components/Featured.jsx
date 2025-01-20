@@ -7,9 +7,19 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { IoHeartOutline } from "react-icons/io5";
 import { IoHeartSharp } from "react-icons/io5";
-import { FacebookShareButton } from "react-share";
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  FacebookIcon,
+  LinkedinIcon,
+} from "react-share";
 import { MdDateRange } from "react-icons/md";
+import icons8InstagramLogo from "../assets/icons8-instagram-logo.svg";
 
+import { FaFacebookSquare } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa6";
+import { FaInstagramSquare } from "react-icons/fa";
+import { BsInstagram } from "react-icons/bs";
 
 function Featured() {
   const location = useLocation();
@@ -21,8 +31,8 @@ function Featured() {
   const metaDescription = apiData?.program_desc || "";
 
   const handleWishlistClick = async () => {
-    const loginDetails = JSON.parse(sessionStorage.getItem("loginDetails"));
-    const token = sessionStorage.getItem("loginid");
+    const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
+    const token = localStorage.getItem("loginid");
 
     if (!loginDetails || !loginDetails.id) {
       console.error("User is not logged in");
@@ -65,17 +75,20 @@ function Featured() {
     }
   };
 
+  const pathName = window.location.pathname;
+  const slicedPathName = pathName.slice(1, 3);
+
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
-        const storedUserDetails = sessionStorage.getItem("loginDetails");
+        const storedUserDetails = localStorage.getItem("loginDetails");
 
         const userDetails = storedUserDetails
           ? JSON.parse(storedUserDetails)
           : null;
 
         const payload = {
-          program_id: id,
+          program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
 
@@ -116,144 +129,103 @@ function Featured() {
       }
     };
     fetchProgramData();
-  }, [id]);
+  }, []);
 
-  console.log(apiData);
-  
   
 
   return (
     <div className="mt-20 md:mt-28 ms-5 me-5 md:ms-10 md:me-10  lg:ms-20 lg:me-20">
-      <div className="flex flex-col gap-2 md:flex-row flex-wrap justify-between">
-        <div className="flex flex-wrap flex-col items-start justify-between gap-4">
-          <span className="bg-red-500  text-white px-2">Featured</span>
-          <p className="font-semibold text-2xl md:text-4xl">{apiData.title}</p>
+      <div className="flex flex-wrap flex-col items-start justify-between gap-4">
+        <span className="bg-red-500  text-white px-2">Featured</span>
+        <p className="font-semibold text-2xl md:text-4xl">{apiData.title}</p>
 
-          <div className="flex flex-wrap gap-3">
-            {/* <div className="flex flex-wrap gap-2">
-              <img src={hours} alt="" className="object-contain" />
-              <p className="text-gray-600">5 Hours</p>
-            </div> */}
-
-            {apiData.member_capacity && (
-              <div className="flex items-center flex-wrap gap-2">
-                <img src={guests} alt="" className="object-contain" />
-                <p className="text-gray-600">
-                  {apiData.member_capacity}{" "}
-                  {apiData.member_capacity === "1" ? "member" : "members"}
-                </p>
-              </div>
-            )}
-
-            {apiData.state && apiData.city && apiData.country && (
-              <div className="flex items-center flex-wrap gap-2">
-                <img src={locationimg} alt="" className="object-contain" />
-                <p className="text-gray-600">
-                  {apiData.city}, {apiData.state}, {apiData.country}
-                </p>
-              </div>
-            )}
-
-            {apiData.start_date && (
-              <div className="flex items-center flex-wrap gap-2">
-                      <MdDateRange className="inline-block  text-red-600 text-lg md:text-xl" />
-                      {apiData.start_date}
-
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-row  flex-wrap md:flex-col gap-5 ">
-          <div className="flex flex-wrap items-center gap-2 md:gap-5">
-            <FacebookShareButton
-              url={currentUrl}
-              quote={metaDescription}
-              hashtag="#innerpece"
-            >
-              <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
-                <img src={share} alt="" />
-                <p className="text-gray-700">Share</p>
-              </div>
-            </FacebookShareButton>
-
-            {/* wishlist */}
-            <div
-              className="flex items-center cursor-pointer border-2  border-gray-700 rounded-full p-2 gap-2 px-3"
-              onClick={() => handleWishlistClick(id)}
-            >
-              {isWishlisted ? <IoHeartSharp /> : <IoHeartOutline />}
-              <p className="text-gray-700">WishList</p>
-            </div>
-
-            {apiData.review_count >= 1 && apiData.review_count && (
-              <p className="font-semibold flex items-center md:justify-end">
-                {`${apiData.review_count} ${
-                  apiData.review_count > 2 ? "Reviews" : "Review"
-                }`}
+        <div className="flex flex-wrap gap-5">
+          {apiData.member_capacity && (
+            <div className="flex items-center flex-wrap gap-1">
+              <img src={guests} alt="" className="object-contain" />
+              <p className="text-gray-600">
+                {apiData.member_capacity}{" "}
+                {apiData.member_capacity === "1" ? "member" : "members"}
               </p>
-            )}
+            </div>
+          )}
+
+          {apiData.location && (
+            <div className="flex items-center flex-wrap gap-1">
+              <img src={locationimg} alt="" className="object-contain" />
+              <p className="text-gray-600">
+                {apiData.location}
+              </p>
+            </div>
+          )}
+
+          {apiData.start_date && apiData.end_date && (
+            <div className="flex items-center flex-wrap gap-1">
+              <MdDateRange className="inline-block  text-red-600 text-lg md:text-xl" />
+              {apiData.start_date} - {apiData.end_date}
+            </div>
+          )}
+
+
+          <div className="flex flex-row  flex-wrap md:flex-col gap-5 ">
+            <div className="flex flex-wrap items-center gap-2 md:gap-5">
+              {/* <FacebookShareButton
+                url={currentUrl}
+                quote={metaDescription}
+                hashtag="#innerpece"
+                
+              >
+                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                  <FacebookIcon size={22} round={true} />
+                  <p className="text-gray-700">Share</p>
+                </div>
+              </FacebookShareButton>
+
+              <LinkedinShareButton
+                url={currentUrl}
+                quote={metaDescription}
+                hashtag="#innerpece"
+              >
+                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                  <LinkedinIcon size={22} round={true} />
+                  <p className="text-gray-700">Share</p>
+                </div>
+              </LinkedinShareButton> */}
+
+              <a href="https://www.instagram.com/" target="_blank">
+                <div className="flex items-center cursor-pointer border-2 border-gray-700  rounded-full p-2 gap-2 px-3">
+                  <img src={icons8InstagramLogo} alt="" className="object-cover h-6 w-6" />
+                  <p className="text-gray-700">Share</p>
+                </div>
+              </a>
+              <a href="https://www.facebook.com/login.php/" target="_blank">
+                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                  <FacebookIcon size={22} round={true} />
+                  <p className="text-gray-700">Share</p>
+                </div>
+              </a>
+              <a href="https://www.linkedin.com/feed/" target="_blank">
+                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                  <LinkedinIcon size={22} round={true} />
+                  <p className="text-gray-700">Share</p>
+                </div>
+              </a>
+
+
+              {/* wishlist */}
+              <div
+                className="flex items-center cursor-pointer border-2  border-gray-700 rounded-full p-2 gap-2 px-3"
+                onClick={() => handleWishlistClick(id)}
+              >
+                {isWishlisted ? <IoHeartSharp /> : <IoHeartOutline />}
+                <p className="text-gray-700">WishList</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* {loading ? (
-        <div className="object-cover mt-3 flex-shrink h-96  md:w-52 lg:w-64 xl:w-80 bg-gray-400 animate-pulse"></div>
-      ) : (
-        <div className="mt-5">
-          {apiData && apiData.gallery_img && (
-            <div className="flex max-md:hidden flex-wrap overflow-hidden">
-              {apiData.gallery_img.map((item, index) => (
-                <img
-                  key={index}
-                  src={
-                    apiData.gallery_img
-                      ? `https://backoffice.innerpece.com/${item}`
-                      : defaultimage
-                  }
-                  alt=""
-                  className={`object-cover cursor-pointer h-96 transition-all ease-in-out duration-700 ${
-                    activeImage === index ? "w-[30%] scale-105" : "w-[5%]"
-                  } hover:w-[30%] hover:scale-105`}
-                  onMouseEnter={() => setActiveImage(index)} // Set the hovered image as active
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {apiData && apiData.gallery_img && (
-        <Carousel
-          swipeable={true}
-          draggable={true}
-          pauseOnHover={false}
-          responsive={responsive}
-          infinite={true}
-          autoPlay={true}
-          autoPlaySpeed={5000}
-          arrows={true}
-          keyBoardControl={true}
-          transitionDuration={1000}
-          containerClass="carousel-container"
-          itemClass="carousel-item-padding-40-px   block md:hidden shadow-lg shadow-black/10 mt-5"
-        >
-          {apiData.gallery_img.map((item, index) => (
-            <img
-              key={index}
-              src={
-                item ? `https://backoffice.innerpece.com/${item}` : defaultimage
-              }
-              alt={`Gallery Image ${index + 1}`}
-              className="h-72  w-full object-cover"
-            />
-          ))}
-        </Carousel>
-      )} */}
     </div>
   );
 }
 
 export default Featured;
-
-// className={`object-cover flex-shrink h-96  md:w-52 lg:w-64 xl:w-80`}

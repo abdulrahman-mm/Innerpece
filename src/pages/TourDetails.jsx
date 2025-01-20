@@ -47,10 +47,6 @@ function TourDetails() {
         TourPlanningRef={TourPlanningRef}
         reviewRef={reviewRef}
       />
-      {/* <PaymentPolicy />
-      <ImportantInfo informationRef={informationRef} />
-      <TourPlanning TourPlanningRef={TourPlanningRef} />
-      <Review reviewRef={reviewRef} /> */}
       <Footer />
     </div>
   );
