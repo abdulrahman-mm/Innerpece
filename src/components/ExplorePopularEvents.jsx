@@ -144,7 +144,7 @@ function ExplorePopularEvents() {
                       {items.title}
                     </p>
                     <p className="text-gray-400 text-sm md:text-base">
-                      {items.location}
+                      {items.current_location && items.current_location}
                     </p>
                     <p className="text-gray-500 flex items-center mt-2 text-sm md:text-base">
                       <FaStar className="text-yellow-500 me-2" />
@@ -173,12 +173,12 @@ function ExplorePopularEvents() {
                 ))}
             </div>
           ) : popularEventsData.length > 0 ? (
-            <div className="max-md:hidden flex flex-wrap  items-center justify-start mt-5 gap-x-5 gap-y-14">
+            <div className="max-md:hidden grid  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-5">
               {popularEventsData.map((items, index) => (
                 <div
                   onClick={() => handleCardClick(items.id, items.title)}
                   key={index}
-                  className="w-[330px] h-64  cursor-pointer transform transition duration-500 ease-in-out hover:-translate-y-1  rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
+                  className="w-full h-64 cursor-pointer transform transition duration-500 ease-in-out hover:-translate-y-1 rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
                 >
                   <img
                     src={
@@ -186,7 +186,7 @@ function ExplorePopularEvents() {
                         ? `https://backoffice.innerpece.com/${items.cover_img}`
                         : defaultimage
                     }
-                    className="w-full h-32 object-cover rounded-t-lg "
+                    className="w-full h-32 object-cover rounded-t-lg"
                     alt={items.title}
                   />
                   <div className="p-3">
@@ -194,17 +194,16 @@ function ExplorePopularEvents() {
                       {items.title}
                     </p>
                     <p className="text-gray-400 text-sm md:text-base">
-                      {items.location}
+                      {items.current_location && items.current_location}
                     </p>
                     <p className="text-gray-500 flex items-center mt-2 text-sm md:text-base">
                       <FaStar className="text-yellow-500 me-2" />
-
                       <span className="me-4">{items.average_rating}</span>
-                      <span className="text-gray-400 text-sm">{`(${
-                        items.reviews.length
-                      } ${
-                        items.reviews.length > 1 ? "Reviews" : "Review"
-                      })`}</span>
+                      <span className="text-gray-400 text-sm">
+                        {`(${items.reviews.length} ${
+                          items.reviews.length > 1 ? "Reviews" : "Review"
+                        })`}
+                      </span>
                     </p>
                   </div>
                 </div>

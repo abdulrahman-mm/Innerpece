@@ -21,8 +21,17 @@ import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 
 function Programs() {
+      const [isLoading, setIsLoading] = useState(true); // Loading state
+  
+
+
   useEffect(() => {
     document.title = "Program Details - Innerpece";
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 200); // Adjust time as needed
+
+    return () => clearTimeout(timer); // Cleanup timeout
   }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   let navigate = useNavigate();
@@ -255,7 +264,13 @@ function Programs() {
     );
   };
 
-  console.log(apiData);
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
+        <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -500,10 +515,13 @@ function Programs() {
                     </p>
 
                     <div className="flex items-centeroverflow-hidden justify-between gap-2 flex-wrap">
-                      <div className="flex items-center gap-2">
-                        <FaLocationDot className="text-sky-800" />
-                        {item.location && <p>{item.location}</p>}
-                      </div>
+                      {item.current_location && (
+                        <div className="flex items-center gap-2">
+                          <FaLocationDot className="text-sky-800" />
+
+                          <p>{item.current_location}</p>
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-500" />

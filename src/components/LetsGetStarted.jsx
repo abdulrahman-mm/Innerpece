@@ -7,7 +7,11 @@ function LetsGetStarted() {
   let navigate = useNavigate();
 
   function onclickBtn() {
-    navigate("/login");
+    if (localStorage.getItem("loginDetails")) {
+      navigate("/sendenquiry");
+    } else {
+      navigate("/login");
+    }
 
     window.scrollTo({
       top: "0",
@@ -15,39 +19,6 @@ function LetsGetStarted() {
     });
   }
   return (
-    // <div className='image relative w-[90vw] h-96 rounded-md'>
-
-    // <video src={sea} loop autoPlay muted  className="absolute w-full h-full z-50 "></video>
-
-    //   <div className="flex gap-2 absolute z-40 md:gap-5 justify-between md:justify-between flex-wrap items-center h-full  md:mx-20">
-    //     <div className="flex flex-wrap">
-    //       <div>
-    //         <GiMountainCave className="text-white text-[60px] me-7" />
-    //       </div>
-
-    //       <div>
-    //         <p className="text-white text-lg md:text-3xl font-semibold">
-    //           Ready to adventure and enjoy natural{" "}
-    //         </p>
-    //         <p className="text-white mt-2">
-    //         Don't wait any longer
-
-    //         </p>
-    //       </div>
-    //     </div>
-
-    //     <div>
-    //       <button
-    //         onClick={onclickBtn}
-    //         className="bg-white p-3 font-semibold rounded "
-    //       >
-    //         LET'S GET STARTED
-    //       </button>
-    //     </div>
-    //   </div>
-
-    // </div>
-
     <div className="image mt-8 md:ms-16 md:me-16  md:mt-16 relative w-[90vw] mx-auto h-60 lg:h-44 rounded-md overflow-hidden">
       {/* Video Section */}
       <video

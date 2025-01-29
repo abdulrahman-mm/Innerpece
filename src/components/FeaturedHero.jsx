@@ -7,6 +7,7 @@ import defaultimage from "../assets/defaultimg.png";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 function Hero({
   handleInformationScroll,
@@ -22,6 +23,7 @@ function Hero({
   const { id, title } = location.state || {};
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [ogImage, setOgImage] = useState("");
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.slice(1, 3);
@@ -45,33 +47,8 @@ function Hero({
         );
 
         setApiData(response.data.data);
+        setOgImage(response.data.data.cover_img);
         setLoading(false);
-        // setIsWishlisted(response.data.data.wishlists);
-
-        // document.title = apiData.title || "Default Title";
-
-        const metaOgTitle = document.querySelector("meta[property='og:title']");
-        if (metaOgTitle) {
-          metaOgTitle.setAttribute("content", apiData.title || "Default Title");
-        }
-
-        const metaOgDescription = document.querySelector(
-          "meta[property='og:description']"
-        );
-        if (metaOgDescription) {
-          metaOgDescription.setAttribute(
-            "content",
-            apiData.program_desc || "Default description"
-          );
-        }
-
-        const metaOgImage = document.querySelector("meta[property='og:image']");
-        if (metaOgImage) {
-          metaOgImage.setAttribute(
-            "content",
-            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
-          );
-        }
       } catch (err) {
         console.log(err);
         setLoading(false);
@@ -80,8 +57,37 @@ function Hero({
     fetchProgramData();
   }, []);
 
+  useEffect(() => {
+    const metaTag = document.querySelector("meta[property='og:image']");
+    if (metaTag) {
+
+      metaTag.content = apiData?.cover_img
+        ? `https://backoffice.innerpece.com/${apiData.cover_img}`
+        : "default-image-url";
+
+    } else {
+      const newMetaTag = document.createElement("meta");
+      newMetaTag.setAttribute("property", "og:image");
+      newMetaTag.content = apiData?.cover_img
+        ? `https://backoffice.innerpece.com/${apiData.cover_img}`
+        : "default-image-url";
+      document.head.appendChild(newMetaTag);
+    }
+  }, [apiData]);
+
   return (
     <div className="relative ">
+      <Helmet>
+        <meta
+          property="og:image"
+          content={
+            apiData.cover_img
+              ? `https://backoffice.innerpece.com/${apiData.cover_img}`
+              : defaultimage
+          }
+        />
+      </Helmet>
+
       {loading ? (
         <div className=" h-[50vh] md:h-[40vh] lg:h-[50vh] w-full bg-gray-500 animate-pulse"></div>
       ) : (

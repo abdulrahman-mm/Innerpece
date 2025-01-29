@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import axios from "axios";
+import defaultimg from "../assets/defaultimg.png";
 
 function UpcomingEvents() {
   const [upcomingEventsData, setUpcomingEventsData] = useState([]);
@@ -123,7 +124,11 @@ function UpcomingEvents() {
                     className="cursor-pointer flex flex-col w-screen bg-white rounded-lg overflow-hidden" // Apply rounded corners and prevent overflow
                   >
                     <img
-                      src={`https://backoffice.innerpece.com/${items.cover_img}`}
+                      src={
+                        items.cover_img
+                          ? `https://backoffice.innerpece.com/${items.cover_img}`
+                          : defaultimg
+                      }
                       className="object-cover h-48"
                       alt=""
                     />
@@ -140,7 +145,6 @@ function UpcomingEvents() {
                         <MdDateRange className="inline-block me-2 text-red-600 text-lg md:text-xl" />
                         {items.start_date} - {items.end_date}
                       </p>
-              
                     </div>
                   </div>
                 ))}
@@ -168,7 +172,12 @@ function UpcomingEvents() {
                 >
                   <div className="relative overflow-hidden rounded-t-lg">
                     <img
-                      src={`https://backoffice.innerpece.com/${items.cover_img}`}
+                      // src={`https://backoffice.innerpece.com/${items.cover_img}`}
+                      src={
+                        items.cover_img
+                          ? `https://backoffice.innerpece.com/${items.cover_img}`
+                          : defaultimg
+                      }
                       className="w-full h-32 object-cover transition-transform duration-500 ease-in-out hover:scale-110"
                       alt=""
                     />
@@ -186,7 +195,6 @@ function UpcomingEvents() {
                       <MdDateRange className="inline-block me-2 text-red-600 text-lg md:text-xl" />
                       {items.start_date} - {items.end_date}
                     </p>
-                    
                   </div>
                 </div>
               ))}

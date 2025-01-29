@@ -28,7 +28,7 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-between items-center px-5 md:px-11 py-1 md:py-3">
+    <div className="flex justify-between items-center px-5  py-1 md:py-3">
       <div onClick={() => navigate("/")} className="cursor-pointer">
         <img src={innerpece_logo} alt="" />
       </div>
@@ -56,11 +56,19 @@ function Header() {
               Contact Us
             </Link>
           </li>
+          {userLogedIn && (
+            <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
+              <Link className="cursor-pointer" to="/profile">
+                My Profile
+            </Link>
+          </li>
+          )}
+
           {userLogedIn ? (
             <li className="">
               <Link
                 onClick={onClickLogout}
-                className="cursor-pointer md:me-2  lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
+                className="cursor-pointer lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
                 to="/login"
               >
                 Logout
@@ -69,7 +77,7 @@ function Header() {
           ) : (
             <li className="">
               <Link
-                className="cursor-pointer md:me-2    lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
+                className="cursor-pointer lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
                 to="/login"
               >
                 Login
@@ -118,6 +126,14 @@ function Header() {
               Contact Us
             </Link>
           </li>
+
+          {userLogedIn && (
+            <li className="text-xl cursor-pointer">
+              <Link to="/profile" onClick={() => setIsOpen(false)}>
+                My Profile
+            </Link>
+          </li>
+          )}
 
           {userLogedIn ? (
             <Link

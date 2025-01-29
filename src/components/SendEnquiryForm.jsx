@@ -25,6 +25,10 @@ import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
 import { MdEmojiPeople } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { FaChildReaching } from "react-icons/fa6";
+import { FaChild } from "react-icons/fa6";
+import sendenquiry_coverimage from '../assets/sendenquiry_coverimage.jpeg'
+import sendenquiry_formimage from '../assets/sendenquiry_formimage.jpeg'
 
 const SendEnquiryForm = () => {
   const [name, setName] = useState("");
@@ -38,20 +42,21 @@ const SendEnquiryForm = () => {
   const [totalCount, setTotalCount] = useState("");
   const [maleCount, setMaleCount] = useState("");
   const [femaleCount, setFemaleCount] = useState("");
+  const [childCount, setChildCount] = useState("");
   const [travelDate, setTravelDate] = useState("");
   const [howManyRoomsYouNeed, setHowManyRoomsYouNeed] = useState("");
   const [comments, setCommends] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState("");
   const [success, setSuccess] = useState("");
+  const [failure, setFailure] = useState("");
   const [reference_id, setReferenceId] = useState("");
   const [userId, setUserId] = useState("");
+  const [childAge, setChildAge] = useState([]);
 
   useEffect(() => {
     const storedReferenceId = sessionStorage.getItem("reference_id");
-
     setReferenceId(storedReferenceId);
-    console.log(storedReferenceId);
-
     setUserId(localStorage.getItem("loginid"));
   }, []);
 
@@ -60,7 +65,12 @@ const SendEnquiryForm = () => {
     setSuccess("");
     setErrors({}); // Reset errors on submit
 
+    setFailure("");
+    setSuccess("");
+
     try {
+      setLoading("Sending...");
+
       const authToken = userId; // Replace with the actual token
 
       const response = await axios.post(
@@ -81,6 +91,8 @@ const SendEnquiryForm = () => {
           male_count: maleCount,
           female_count: femaleCount,
           reference_id: reference_id,
+          child_count: childCount,
+          child_age: childAge,
         },
         {
           headers: {
@@ -90,29 +102,35 @@ const SendEnquiryForm = () => {
       );
 
       // Successful submission
+      setLoading("");
+      setFailure("");
       setSuccess(response.data.message);
 
       // Clear form values
-      setName("");
-      setPhone("");
-      setEmail("");
+      // setName("");
+      // setPhone("");
+      // setEmail("");
       setCommends("");
       setBudgetPerHead("");
       setIsCabNeed("");
       setHowManyDays("");
-      setYourResidenceLocation("");
+      // setYourResidenceLocation("");
       setHowManyRoomsYouNeed("");
       setTotalCount("");
       setTravelDate("");
       setTravelDestination("");
       setMaleCount("");
       setFemaleCount("");
+      setChildCount("");
+      setChildAge([]);
 
       // Clear success message after 5 seconds
       setTimeout(() => {
         setSuccess("");
       }, 5000); // 5000 ms = 5 seconds
     } catch (error) {
+      setLoading("");
+      setFailure("Error try again");
       // Handle validation errors if any
       if (error.response && error.response.data.errors) {
         setErrors(error.response.data.errors);
@@ -121,14 +139,40 @@ const SendEnquiryForm = () => {
     }
   };
 
+  useEffect(() => {
+    const loggedUserDetails = localStorage.getItem("loginDetails")
+      ? JSON.parse(localStorage.getItem("loginDetails"))
+      : null;
+
+    if (loggedUserDetails) {
+      const {
+        first_name: loggedUser_fistName,
+        last_name: loggedUser_lastName,
+        email: loggedUser_email,
+        phone: loggedUser_phone,
+        city: loggedUser_city,
+      } = loggedUserDetails;
+
+      setName(loggedUser_fistName + " " + loggedUser_lastName);
+      setEmail(loggedUser_email);
+      setPhone(loggedUser_phone);
+      setYourResidenceLocation(loggedUser_city);
+    }
+  }, []);
+
+  const onChangeChildAge = (e, key, index) => {
+    const updatedChildCount = [...childAge];
+    updatedChildCount[index] = e.target.value;
+    setChildAge(updatedChildCount);
+  };
+
   return (
     <div className="flex items-center justify-center mt-8 md:mt-14">
-      <div className="80vw md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
+      <div className="80vw md:w-[91vw] lg:w-[70vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
-          <div className=' bg-[url("././assets/send_enquiry_image.jpg")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+          <div className=' bg-[url("././assets/sendenquiry_formimage.jpeg")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
           <div className="md:basis-1/2">
-           
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col gap-4">
                 {/* Name Input */}
@@ -226,7 +270,6 @@ const SendEnquiryForm = () => {
                     </div>
                   </div>
                 )}
-                
 
                 {/*how many days*/}
                 <div className="flex flex-col">
@@ -237,8 +280,8 @@ const SendEnquiryForm = () => {
                     <input
                       type="number"
                       className="w-full p-2 border-l focus:outline-none"
-                      placeholder="How Many Days"
-                      id="How Many Days"
+                      placeholder="No of days you would like to travel"
+                      id="No of days you would like to travel"
                       value={howManyDays}
                       onChange={(e) => setHowManyDays(e.target.value)}
                     />
@@ -249,7 +292,6 @@ const SendEnquiryForm = () => {
                 </div>
 
                 {/*travel destination*/}
-
                 <div className="flex flex-col">
                   <div className="flex items-center border rounded-md">
                     <span className="p-2">
@@ -286,6 +328,9 @@ const SendEnquiryForm = () => {
                       onChange={(e) => setBudgetPerHead(e.target.value)}
                     />
                   </div>
+                  <p className="text-gray-500 text-xs">
+                    Note : Excluding flight/train cost
+                  </p>
                   {errors.budget_per_head && (
                     <p className="text-red-500 text-xs">
                       {errors.budget_per_head[0]}
@@ -362,6 +407,58 @@ const SendEnquiryForm = () => {
                   </div>
                 </div>
 
+                {/*Child count*/}
+                <div className="flex flex-col">
+                  <div className="flex items-center border rounded-md">
+                    <span className="p-2">
+                      <FaChildReaching />
+                    </span>
+                    <input
+                      type="number"
+                      className="w-full p-2 border-l focus:outline-none"
+                      placeholder="Child Count"
+                      id="Child Count"
+                      value={childCount}
+                      onChange={(e) => setChildCount(e.target.value)}
+                    />
+                  </div>
+                  {errors.child_count && (
+                    <p className="text-red-500 text-xs">
+                      {errors.child_count[0]}
+                    </p>
+                  )}
+                </div>
+
+                {/* child age based on child count */}
+                {childCount > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {Array(Number(childCount))
+                      .fill(null)
+                      .map((item, index) => (
+                        <div className="flex items-center w-full border rounded-md">
+                          <span className="p-2">
+                            <FaChild />
+                          </span>
+                          <input
+                            type="number"
+                            placeholder={` ${index + 1}st Child Age`}
+                            className="w-full p-2 border focus:outline-none"
+                            onChange={(e) =>
+                              onChangeChildAge(
+                                e,
+                                ` ${index + 1}st_Child_Age`,
+                                index
+                              )
+                            }
+                          />
+                        </div>
+                      ))}
+                  </div>
+                )}
+                {errors.child_age && (
+                  <p className="text-red-500 text-xs">{errors.child_age[0]}</p>
+                )}
+
                 {/*travel date*/}
                 <div className="flex flex-col">
                   <div className="flex items-center border rounded-md">
@@ -393,8 +490,8 @@ const SendEnquiryForm = () => {
                     <input
                       type="number"
                       className="w-full p-2 border-l focus:outline-none"
-                      placeholder="How Many Rooms You Need"
-                      id="How Many Rooms You Need"
+                      placeholder="No of rooms required"
+                      id="No of rooms required"
                       value={howManyRoomsYouNeed}
                       onChange={(e) => setHowManyRoomsYouNeed(e.target.value)}
                     />
@@ -464,10 +561,20 @@ const SendEnquiryForm = () => {
                 </div>
               </div>
               {success && (
-              <div className="bg-green-100 text-green-700 p-2 rounded mb-4">
-                {success}
-              </div>
-            )}
+                <div className="bg-green-100 text-green-700 p-2 rounded mb-4">
+                  {success}
+                </div>
+              )}
+              {loading && (
+                <div className="bg-orange-100  text-orange-700 p-2 rounded mb-4">
+                  {loading}
+                </div>
+              )}
+              {failure && (
+                <div className="bg-red-100  text-red-700 p-2 rounded mb-4">
+                  {failure}
+                </div>
+              )}
 
               {/* Submit Button */}
               <div className="text-center mt-4">

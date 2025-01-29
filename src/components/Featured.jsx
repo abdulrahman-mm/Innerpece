@@ -10,16 +10,13 @@ import { IoHeartSharp } from "react-icons/io5";
 import {
   FacebookShareButton,
   LinkedinShareButton,
+  WhatsappShareButton,
   FacebookIcon,
   LinkedinIcon,
+  WhatsappIcon,
 } from "react-share";
 import { MdDateRange } from "react-icons/md";
 import icons8InstagramLogo from "../assets/icons8-instagram-logo.svg";
-
-import { FaFacebookSquare } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa6";
-import { FaInstagramSquare } from "react-icons/fa";
-import { BsInstagram } from "react-icons/bs";
 
 function Featured() {
   const location = useLocation();
@@ -102,28 +99,28 @@ function Featured() {
 
         // document.title = apiData.title || "Default Title";
 
-        const metaOgTitle = document.querySelector("meta[property='og:title']");
-        if (metaOgTitle) {
-          metaOgTitle.setAttribute("content", apiData.title || "Default Title");
-        }
+        // const metaOgTitle = document.querySelector("meta[property='og:title']");
+        // if (metaOgTitle) {
+        //   metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+        // }
 
-        const metaOgDescription = document.querySelector(
-          "meta[property='og:description']"
-        );
-        if (metaOgDescription) {
-          metaOgDescription.setAttribute(
-            "content",
-            apiData.program_desc || "Default description"
-          );
-        }
+        // const metaOgDescription = document.querySelector(
+        //   "meta[property='og:description']"
+        // );
+        // if (metaOgDescription) {
+        //   metaOgDescription.setAttribute(
+        //     "content",
+        //     apiData.program_desc || "Default description"
+        //   );
+        // }
 
-        const metaOgImage = document.querySelector("meta[property='og:image']");
-        if (metaOgImage) {
-          metaOgImage.setAttribute(
-            "content",
-            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
-          );
-        }
+        // const metaOgImage = document.querySelector("meta[property='og:image']");
+        // if (metaOgImage) {
+        //   metaOgImage.setAttribute(
+        //     "content",
+        //     `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+        //   );
+        // }
       } catch (err) {
         console.log(err);
       }
@@ -131,7 +128,8 @@ function Featured() {
     fetchProgramData();
   }, []);
 
-  
+  console.log(currentUrl);
+  console.log(metaDescription);
 
   return (
     <div className="mt-20 md:mt-28 ms-5 me-5 md:ms-10 md:me-10  lg:ms-20 lg:me-20">
@@ -150,12 +148,10 @@ function Featured() {
             </div>
           )}
 
-          {apiData.location && (
+          {apiData.current_location && (
             <div className="flex items-center flex-wrap gap-1">
               <img src={locationimg} alt="" className="object-contain" />
-              <p className="text-gray-600">
-                {apiData.location}
-              </p>
+              <p className="text-gray-600">{apiData.current_location}</p>
             </div>
           )}
 
@@ -166,14 +162,12 @@ function Featured() {
             </div>
           )}
 
-
           <div className="flex flex-row  flex-wrap md:flex-col gap-5 ">
             <div className="flex flex-wrap items-center gap-2 md:gap-5">
-              {/* <FacebookShareButton
+              <FacebookShareButton
                 url={currentUrl}
                 quote={metaDescription}
                 hashtag="#innerpece"
-                
               >
                 <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
                   <FacebookIcon size={22} round={true} />
@@ -190,11 +184,26 @@ function Featured() {
                   <LinkedinIcon size={22} round={true} />
                   <p className="text-gray-700">Share</p>
                 </div>
-              </LinkedinShareButton> */}
+              </LinkedinShareButton>
 
-              <a href="https://www.instagram.com/" target="_blank">
+              <WhatsappShareButton
+                url={currentUrl}
+                quote={metaDescription}
+                hashtag="#innerpece"
+              >
+                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                  <WhatsappIcon size={22} round={true} />
+                  <p className="text-gray-700">Share</p>
+                </div>
+              </WhatsappShareButton>
+
+              {/* <a href="https://www.instagram.com/" target="_blank">
                 <div className="flex items-center cursor-pointer border-2 border-gray-700  rounded-full p-2 gap-2 px-3">
-                  <img src={icons8InstagramLogo} alt="" className="object-cover h-6 w-6" />
+                  <img
+                    src={icons8InstagramLogo}
+                    alt=""
+                    className="object-cover h-6 w-6"
+                  />
                   <p className="text-gray-700">Share</p>
                 </div>
               </a>
@@ -209,8 +218,7 @@ function Featured() {
                   <LinkedinIcon size={22} round={true} />
                   <p className="text-gray-700">Share</p>
                 </div>
-              </a>
-
+              </a> */}
 
               {/* wishlist */}
               <div

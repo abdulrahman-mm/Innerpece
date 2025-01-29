@@ -63,28 +63,28 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
         // document.title = apiData.title || "Default Title";
 
-        const metaOgTitle = document.querySelector("meta[property='og:title']");
-        if (metaOgTitle) {
-          metaOgTitle.setAttribute("content", apiData.title || "Default Title");
-        }
+        // const metaOgTitle = document.querySelector("meta[property='og:title']");
+        // if (metaOgTitle) {
+        //   metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+        // }
 
-        const metaOgDescription = document.querySelector(
-          "meta[property='og:description']"
-        );
-        if (metaOgDescription) {
-          metaOgDescription.setAttribute(
-            "content",
-            apiData.program_desc || "Default description"
-          );
-        }
+        // const metaOgDescription = document.querySelector(
+        //   "meta[property='og:description']"
+        // );
+        // if (metaOgDescription) {
+        //   metaOgDescription.setAttribute(
+        //     "content",
+        //     apiData.program_desc || "Default description"
+        //   );
+        // }
 
-        const metaOgImage = document.querySelector("meta[property='og:image']");
-        if (metaOgImage) {
-          metaOgImage.setAttribute(
-            "content",
-            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
-          );
-        }
+        // const metaOgImage = document.querySelector("meta[property='og:image']");
+        // if (metaOgImage) {
+        //   metaOgImage.setAttribute(
+        //     "content",
+        //     `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+        //   );
+        // }
       } catch (err) {
         console.log(err);
         setLoading(false);
@@ -284,6 +284,34 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
       ></p>
 
+      {apiData.tour_planning && (
+        <div ref={TourPlanningRef} className="mt-8 md:mt-10">
+          <p className="font-semibold text-2xl  ">Tour Planning</p>
+
+          {apiData.tour_planning.plan_title.length > 0 && ( // Check for presence and length
+            <div>
+              {apiData.tour_planning.plan_title.map((title, index) => (
+                <div key={index} className="mt-5">
+                  <p className="font-semibold text-xl">{title}</p>
+                  <p className="font-semibold mt-1 text-xl">
+                    {apiData.tour_planning.plan_subtitle[index]}
+                  </p>
+
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: apiData.tour_planning.plan_description[index],
+                    }}
+                    className="font-sans  md:leading-7 "
+                  >
+                    {/* {apiData.tour_planning.plan_description[index].replace(/<\/?[^>]+(>|$)/g, "")} */}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
           <div className="border-[1px] px-4 py-3 border-black/40 mt-8 md:mt-10 rounded-3xl">
@@ -418,33 +446,6 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           </div>
         </div>
       )}
-      {apiData.tour_planning && (
-        <div ref={TourPlanningRef} className="mt-8 md:mt-10">
-          <p className="font-semibold text-2xl  ">Tour Planning</p>
-
-          {apiData.tour_planning.plan_title.length > 0 && ( // Check for presence and length
-            <div>
-              {apiData.tour_planning.plan_title.map((title, index) => (
-                <div key={index} className="mt-5">
-                  <p className="font-semibold text-xl">{title}</p>
-                  <p className="font-semibold mt-1 text-xl">
-                    {apiData.tour_planning.plan_subtitle[index]}
-                  </p>
-
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: apiData.tour_planning.plan_description[index],
-                    }}
-                    className="font-sans  md:leading-7 "
-                  >
-                    {/* {apiData.tour_planning.plan_description[index].replace(/<\/?[^>]+(>|$)/g, "")} */}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
       <div className="border border-gray-700 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
         <div className="flex ">
@@ -510,7 +511,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
             {apiData.reviews.length > 0 && (
               <div className="mt-8  h-96 overflow-y-auto">
-                <div className="flex  flex-col mt-5 gap-5 ">
+                <div className="flex  flex-col-reverse mt-5 gap-5 ">
                   {apiData.reviews.map((item, index) => (
                     <div
                       key={index}
@@ -556,12 +557,12 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                       </div>
                     </div>
                   ))}
-                  {apiData.client_reviews.map((item, index) => (
+                  {/* {apiData.client_reviews.map((item, index) => (
                     <div
                       key={index}
                       className="mx-3 bg-gray-100 p-4 rounded-lg shadow-md"
                     >
-                      <div className="flex  flex-col gap-1">
+                      <div className="flex   flex-col gap-1">
                         <div className="flex gap-1 items-center">
                           {Array(item.rating)
                             .fill(null)
@@ -600,7 +601,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               </div>
             )}

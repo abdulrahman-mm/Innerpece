@@ -41,6 +41,11 @@ function Footer() {
     });
   }
 
+  function onClickSitemap(){
+    window.location.href = '/sitemap.xml'; // This will redirect to the sitemap
+
+  }
+
   return (
     <div className="mt-8 md:mt-16 ">
       <img
@@ -51,6 +56,7 @@ function Footer() {
 
       <div className="bg-[url('././assets/footer2.png')]   bg-center bg-cover  ">
         <div className="footer py-5  md:py-10 px-5  lg:px-20 flex flex-col gap-10 ">
+          
           <div className="gap-8  md:gap-12 flex-wrap flex-col md:flex-row flex  justify-start xl:justify-between">
             <div className="flex flex-col basis-[30%] flex-wrap text-white ">
               <div>
@@ -66,7 +72,7 @@ function Footer() {
                 into customized, unforgettable journeys.
               </p>
 
-              <a className="mt-3 md:mt-5" href="mailto:Info@Webmail.com">
+              <a className="mt-3 md:mt-5" href={`mailto:${footerContent.contact_email}`}>
                 <div className="flex items-center ">
                   <span className="inline-block me-5">
                     <IoIosMail className="text-lg md:text-2xl text-sky-300" />
@@ -114,6 +120,13 @@ function Footer() {
               >
                 Contact
               </p>
+              <p
+                onClick={() => navigate("/faq")}
+                className="text-lg text-gray-400 cursor-pointer hover:text-white"
+              >
+                FAQ
+              </p>
+
               <p
                 onClick={() => navigate("/termsofservice")}
                 className="text-lg text-gray-400 cursor-pointer hover:text-white"
@@ -209,6 +222,8 @@ function Footer() {
               </div>
             </div>
           </div>
+
+          <p onClick={onClickSitemap} className="text-gray-400 cursor-pointer hover:text-gray-500 w-full -my-5 text-end">Sitemap</p>
 
           <div className="flex flex-wrap gap-8 items-center justify-between ">
             <p className="text-xs md:text-sm text-white ">

@@ -21,8 +21,16 @@ import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 
 function DestinationsDetails() {
+        const [isLoading, setIsLoading] = useState(true); // Loading state
+  
   useEffect(() => {
     document.title = "Destination Details - Innerpece";
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 200); // Adjust time as needed
+
+    return () => clearTimeout(timer); // Cleanup timeout
+    
   }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { id, city_name } = location.state || {};
@@ -129,7 +137,6 @@ function DestinationsDetails() {
     }
   };
 
-  console.log(city_name);
   
 
   const handleCardClick = (id, title) => {
@@ -292,6 +299,13 @@ function DestinationsDetails() {
       </div>
     );
   };
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
+        <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -537,10 +551,12 @@ function DestinationsDetails() {
                     </p>
 
                     <div className="flex  items-center justify-between gap-2 flex-wrap">
+                    {item.current_location &&
                       <div className="flex items-center gap-2">
                         <FaLocationDot className="text-sky-800" />
-                        {item.location && <p>{item.location}</p>}
+                         <p>{item.current_location}</p>
                       </div>
+}
 
                       <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-500" />

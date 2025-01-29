@@ -25,6 +25,8 @@ import { MdOutlineCalendarMonth } from "react-icons/md";
 import { FaHouse } from "react-icons/fa6";
 import { MdEmojiPeople } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { FaChildReaching } from "react-icons/fa6";
+import { FaChild } from "react-icons/fa6";
 
 function Sidebar({ LocationShareRef }) {
   const navigate = useNavigate();
@@ -49,12 +51,17 @@ function Sidebar({ LocationShareRef }) {
   const [howManyRoomsYouNeed, setHowManyRoomsYouNeed] = useState("");
   const [comments, setCommends] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState("");
   const [success, setSuccess] = useState("");
+  const [failure, setFailure] = useState("");
   const [map, setMap] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loadingform, setLoadingform] = useState("");
   const [userDetails, setUserDetails] = useState(false);
   const [userId, setUserId] = useState("");
   const [reference_id, setReferenceId] = useState("");
+  const [childCount, setChildCount] = useState("");
+  const [childAge, setChildAge] = useState([]);
+  const [image, setImage] = useState("");
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.slice(1, 3);
@@ -91,6 +98,7 @@ function Sidebar({ LocationShareRef }) {
           payload
         );
         setApiData(response.data.data);
+        setImage(response.data.data.cover_img);
         // console.log(response.data.data.google_map);
         let modifiedMapHtml = response.data.data.google_map;
 
@@ -104,28 +112,28 @@ function Sidebar({ LocationShareRef }) {
 
         // document.title = apiData.title || "Default Title";
 
-        const metaOgTitle = document.querySelector("meta[property='og:title']");
-        if (metaOgTitle) {
-          metaOgTitle.setAttribute("content", apiData.title || "Default Title");
-        }
+        // const metaOgTitle = document.querySelector("meta[property='og:title']");
+        // if (metaOgTitle) {
+        //   metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+        // }
 
-        const metaOgDescription = document.querySelector(
-          "meta[property='og:description']"
-        );
-        if (metaOgDescription) {
-          metaOgDescription.setAttribute(
-            "content",
-            apiData.program_desc || "Default description"
-          );
-        }
+        // const metaOgDescription = document.querySelector(
+        //   "meta[property='og:description']"
+        // );
+        // if (metaOgDescription) {
+        //   metaOgDescription.setAttribute(
+        //     "content",
+        //     apiData.program_desc || "Default description"
+        //   );
+        // }
 
-        const metaOgImage = document.querySelector("meta[property='og:image']");
-        if (metaOgImage) {
-          metaOgImage.setAttribute(
-            "content",
-            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
-          );
-        }
+        // const metaOgImage = document.querySelector("meta[property='og:image']");
+        // if (metaOgImage) {
+        //   metaOgImage.setAttribute(
+        //     "content",
+        //     `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+        //   );
+        // }
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -150,7 +158,12 @@ function Sidebar({ LocationShareRef }) {
     setSuccess("");
     setErrors({}); // Reset errors on submit
 
+    setFailure("");
+    setSuccess("");
+
     try {
+      setLoadingform("Sending...");
+
       const authToken = userId; // Replace with the actual token
 
       const response = await axios.post(
@@ -167,10 +180,14 @@ function Sidebar({ LocationShareRef }) {
           rooms_count: howManyRoomsYouNeed,
           total_count: totalCount,
           travel_date: travelDate,
-          travel_destination: travelDestination,
+          travel_destination: apiData.title,
           male_count: maleCount,
           female_count: femaleCount,
           reference_id: reference_id,
+          program_title: apiData.title,
+          child_count: childCount,
+          child_age: childAge,
+          image,
         },
         {
           headers: {
@@ -180,23 +197,27 @@ function Sidebar({ LocationShareRef }) {
       );
 
       // Successful submission
+      setLoadingform("");
+      setFailure("");
       setSuccess(response.data.message);
 
       // Clear form values
-      setName("");
-      setPhone("");
-      setEmail("");
+      // setName("");
+      // setPhone("");
+      // setEmail("");
       setCommends("");
       setBudgetPerHead("");
       setIsCabNeed("");
       setHowManyDays("");
-      setYourResidenceLocation("");
+      // setYourResidenceLocation("");
       setHowManyRoomsYouNeed("");
       setTotalCount("");
       setTravelDate("");
       setTravelDestination("");
       setMaleCount("");
       setFemaleCount("");
+      setChildCount("")
+      setChildAge([])
 
       // Clear success message after 5 seconds
       setTimeout(() => {
@@ -204,6 +225,8 @@ function Sidebar({ LocationShareRef }) {
       }, 5000); // 5000 ms = 5 seconds
     } catch (error) {
       // Handle validation errors if any
+      setLoadingform("");
+      setFailure("Error try again");
       if (error.response && error.response.data.errors) {
         setErrors(error.response.data.errors);
       }
@@ -234,6 +257,35 @@ function Sidebar({ LocationShareRef }) {
     });
   };
 
+  const onChangeChildAge = (e, key, index) => {
+    const updatedChildCount = [...childAge];
+    updatedChildCount[index] = e.target.value;
+    setChildAge(updatedChildCount);
+  };
+
+  useEffect(() => {
+    const loggedUserDetails = localStorage.getItem("loginDetails")
+      ? JSON.parse(localStorage.getItem("loginDetails"))
+      : null;
+
+    if (loggedUserDetails) {
+      const {
+        first_name: loggedUser_fistName,
+        last_name: loggedUser_lastName,
+        email: loggedUser_email,
+        phone: loggedUser_phone,
+        city: loggedUser_city,
+      } = loggedUserDetails;
+
+      setName(loggedUser_fistName + " " + loggedUser_lastName);
+      setEmail(loggedUser_email);
+      setPhone(loggedUser_phone);
+      setYourResidenceLocation(loggedUser_city);
+    }
+  }, []);
+
+  
+
   return (
     <div
       className={` w-full md:sticky top-0  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:mt-7 ${
@@ -260,19 +312,29 @@ function Sidebar({ LocationShareRef }) {
           </span>
 
           <div className="flex flex-col items-center flex-wrap justify-center ">
-            <div
-              style={{ backgroundColor: "#EC3B63" }}
-              onClick={handleShow}
-              className="flex flex-wrap cursor-pointer flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
+            {/* <div
+              // style={{ backgroundColor: "#EC3B63" }}
+              className="flex flex-wrap  flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
             >
               <img src={telegram} alt="" />
               <button
+                onClick={handleShow}
                 disabled={userDetails ? false : true}
                 className="text-white font-semibold"
               >
                 Book Now
               </button>
-            </div>
+            </div> */}
+
+            <button
+              onClick={handleShow}
+              disabled={userDetails ? false : true}
+              className="flex flex-wrap bg-red-500 text-white font-semibold flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
+            >
+              <img src={telegram} alt="" />
+              Book Now
+            </button>
+
             {!userDetails && (
               <p className="text-red-500 ">
                 Please{" "}
@@ -378,11 +440,6 @@ function Sidebar({ LocationShareRef }) {
 
                 {/* Form Section */}
                 <div className="md:basis-1/2">
-                  {success && (
-                    <div className="bg-green-100 text-green-700 p-2 rounded mb-4">
-                      {success}
-                    </div>
-                  )}
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="flex flex-col gap-4">
                       {/* Name Input */}
@@ -491,30 +548,7 @@ function Sidebar({ LocationShareRef }) {
                         </div>
                       )}
 
-                      {/*how many days*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <FaCalendarDays />
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="How Many Days"
-                            id="How Many Days"
-                            value={howManyDays}
-                            onChange={(e) => setHowManyDays(e.target.value)}
-                          />
-                        </div>
-                        {errors.days && (
-                          <p className="text-red-500 text-xs">
-                            {errors.days[0]}
-                          </p>
-                        )}
-                      </div>
-
                       {/*travel destination*/}
-
                       <div className="flex flex-col">
                         <div className="flex items-center border rounded-md">
                           <span className="p-2">
@@ -525,15 +559,37 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Travel Destination"
                             id="Travel Destination"
-                            value={travelDestination}
-                            onChange={(e) =>
-                              setTravelDestination(e.target.value)
-                            }
+                            value={apiData.title}
+                            // onChange={(e) =>
+                            //   setTravelDestination(e.target.value)
+                            // }
                           />
                         </div>
                         {errors.travel_destination && (
                           <p className="text-red-500 text-xs">
                             {errors.travel_destination[0]}
+                          </p>
+                        )}
+                      </div>
+
+                      {/*how many days*/}
+                      <div className="flex flex-col">
+                        <div className="flex items-center border rounded-md">
+                          <span className="p-2">
+                            <FaCalendarDays />
+                          </span>
+                          <input
+                            type="number"
+                            className="w-full p-2 border-l focus:outline-none"
+                            placeholder="Number of days you would like to travel"
+                            id="Number of days you would like to travel"
+                            value={howManyDays}
+                            onChange={(e) => setHowManyDays(e.target.value)}
+                          />
+                        </div>
+                        {errors.days && (
+                          <p className="text-red-500 text-xs">
+                            {errors.days[0]}
                           </p>
                         )}
                       </div>
@@ -553,6 +609,9 @@ function Sidebar({ LocationShareRef }) {
                             onChange={(e) => setBudgetPerHead(e.target.value)}
                           />
                         </div>
+                        <p className="text-gray-500 text-xs">
+                          Note : Excluding flight/train cost
+                        </p>
                         {errors.budget_per_head && (
                           <p className="text-red-500 text-xs">
                             {errors.budget_per_head[0]}
@@ -629,6 +688,60 @@ function Sidebar({ LocationShareRef }) {
                         </div>
                       </div>
 
+                      {/*Child count*/}
+                      <div className="flex flex-col">
+                        <div className="flex items-center border rounded-md">
+                          <span className="p-2">
+                            <FaChildReaching />
+                          </span>
+                          <input
+                            type="number"
+                            className="w-full p-2 border-l focus:outline-none"
+                            placeholder="Child Count"
+                            id="Child Count"
+                            value={childCount}
+                            onChange={(e) => setChildCount(e.target.value)}
+                          />
+                        </div>
+                        {errors.child_count && (
+                          <p className="text-red-500 text-xs">
+                            {errors.child_count[0]}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* child age based on child count */}
+                      {childCount > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {Array(Number(childCount))
+                            .fill(null)
+                            .map((item, index) => (
+                              <div className="flex items-center w-full border rounded-md">
+                                <span className="p-2">
+                                  <FaChild />
+                                </span>
+                                <input
+                                  type="number"
+                                  placeholder={` ${index + 1}st Child Age`}
+                                  className="w-full p-2 border focus:outline-none"
+                                  onChange={(e) =>
+                                    onChangeChildAge(
+                                      e,
+                                      ` ${index + 1}st_Child_Age`,
+                                      index
+                                    )
+                                  }
+                                />
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                      {errors.child_age && (
+                        <p className="text-red-500 text-xs">
+                          {errors.child_age[0]}
+                        </p>
+                      )}
+
                       {/*travel date*/}
                       <div className="flex flex-col">
                         <div className="flex items-center border rounded-md">
@@ -660,8 +773,8 @@ function Sidebar({ LocationShareRef }) {
                           <input
                             type="number"
                             className="w-full p-2 border-l focus:outline-none"
-                            placeholder="How Many Rooms You Need"
-                            id="How Many Rooms You Need"
+                            placeholder="No of rooms required"
+                            id="No of rooms required"
                             value={howManyRoomsYouNeed}
                             onChange={(e) =>
                               setHowManyRoomsYouNeed(e.target.value)
@@ -736,6 +849,21 @@ function Sidebar({ LocationShareRef }) {
                         )}
                       </div>
                     </div>
+                    {success && (
+                      <div className="bg-green-100 text-green-700 p-2 rounded mb-4">
+                        {success}
+                      </div>
+                    )}
+                    {loadingform && (
+                      <div className="bg-orange-100  text-orange-700 p-2 rounded mb-4">
+                        {loadingform}
+                      </div>
+                    )}
+                    {failure && (
+                      <div className="bg-red-100  text-red-700 p-2 rounded mb-4">
+                        {failure}
+                      </div>
+                    )}
 
                     {/* Submit Button */}
                     <div className="text-center mt-4">

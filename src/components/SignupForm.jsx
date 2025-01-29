@@ -500,7 +500,7 @@ function Signup() {
                     autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
-                    placeholder="Street"
+                    placeholder="State"
                   />
                   {userDetailsError.state && (
                     <p className="text-red-500 text-xs sm:text-sm ">
@@ -523,7 +523,7 @@ function Signup() {
                     autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
-                    placeholder="zip province code/postal code"
+                    placeholder="zip/postal code"
                   />
                   {userDetailsError.zip_province_code && (
                     <p className="text-red-500 text-xs sm:text-sm ">
