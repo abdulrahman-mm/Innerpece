@@ -27,8 +27,8 @@ import { MdEmojiPeople } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { FaChildReaching } from "react-icons/fa6";
 import { FaChild } from "react-icons/fa6";
-import sendenquiry_coverimage from '../assets/sendenquiry_coverimage.jpeg'
-import sendenquiry_formimage from '../assets/sendenquiry_formimage.jpeg'
+import sendenquiry_coverimage from "../assets/sendenquiry_coverimage.jpeg";
+import sendenquiry_formimage from "../assets/sendenquiry_formimage.jpeg";
 
 const SendEnquiryForm = () => {
   const [name, setName] = useState("");
@@ -182,7 +182,10 @@ const SendEnquiryForm = () => {
                       <IoIosContact />
                     </span>
                     <input
+                      autoComplete="on"
+                      id="name"
                       type="text"
+                      name="name"
                       className="w-full p-2 border-l focus:outline-none"
                       placeholder="Name"
                       value={name}
@@ -201,10 +204,12 @@ const SendEnquiryForm = () => {
                       <AiOutlineMail />
                     </span>
                     <input
+                      autoComplete="on"
                       type="email"
                       className="w-full p-2 border-l focus:outline-none"
                       placeholder="Email"
                       id="email"
+                      name="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
@@ -221,10 +226,12 @@ const SendEnquiryForm = () => {
                       <MdOutlinePhone />
                     </span>
                     <input
+                      autoComplete="on"
                       type="text"
                       className="w-full p-2 border-l focus:outline-none"
                       placeholder="Phone"
                       id="phone"
+                      name="phone"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                     />
@@ -245,6 +252,7 @@ const SendEnquiryForm = () => {
                       className="w-full p-2 border-l focus:outline-none"
                       placeholder="Your Residence Location"
                       id="Your Residence Location"
+                      name="Your Residence Location"
                       value={yourResidenceLocation}
                       onChange={(e) => setYourResidenceLocation(e.target.value)}
                     />
@@ -262,7 +270,7 @@ const SendEnquiryForm = () => {
                         <MdEmojiPeople />
                       </span>
                       <input
-                        readOnly
+                        // readOnly
                         className="w-full text-gray-800 p-2 border-l focus:outline-none"
                         id="How Many Days"
                         value={reference_id}
@@ -509,7 +517,7 @@ const SendEnquiryForm = () => {
                     <span className="p-2 border-r">
                       <FaCar />
                     </span>
-                    <label className="ms-2 text-gray-400">Cab Needed</label>
+                    <p className="ms-2 text-gray-400">Cab Needed</p>
 
                     <div className="flex gap-1 p-2 ms-3">
                       <input

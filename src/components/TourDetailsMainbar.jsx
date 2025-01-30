@@ -261,9 +261,8 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             itemClass="carousel-item-padding-40-px block shadow-lg shadow-black/10 mt-5"
           >
             {apiData.gallery_img.map((item, index) => (
-              <div className=" overflow-x-hidden ">
+              <div key={item.id || index} className="overflow-x-hidden">
                 <img
-                  key={index}
                   src={
                     item
                       ? `https://backoffice.innerpece.com/${item}`
@@ -466,6 +465,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           ))}
         </div>
         <textarea
+          name="Review"
           disabled={!userDetails}
           value={userReview}
           onChange={(e) => setUserReview(e.target.value)}

@@ -60,9 +60,9 @@ function Featured() {
       );
 
       if (response.status === 201 || response.status === 200) {
-        console.log(
-          `${isWishlisted ? "Removed from" : "Added to"} wishlist successfully.`
-        );
+        // console.log(
+        //   `${isWishlisted ? "Removed from" : "Added to"} wishlist successfully.`
+        // );
         setIsWishlisted(!isWishlisted);
       } else {
         console.error("Failed to update wishlist.", response);
@@ -128,8 +128,7 @@ function Featured() {
     fetchProgramData();
   }, []);
 
-  console.log(currentUrl);
-  console.log(metaDescription);
+ 
 
   return (
     <div className="mt-20 md:mt-28 ms-5 me-5 md:ms-10 md:me-10  lg:ms-20 lg:me-20">

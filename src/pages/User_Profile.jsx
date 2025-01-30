@@ -38,7 +38,6 @@ const User_Profile = () => {
       ? JSON.parse(localStorage.getItem("loginDetails"))
       : null;
 
-    console.log(loggedUserDetails);
 
     if (loggedUserDetails) {
       setUserLogedIn(true);
@@ -179,6 +178,7 @@ const User_Profile = () => {
                   First Name
                 </label>
                 <input
+                autoComplete='on'
                   id="firstName"
                   name="FirstName"
                   value={firstName}
@@ -196,6 +196,8 @@ const User_Profile = () => {
                   Last Name
                 </label>
                 <input
+                                autoComplete='on'
+
                   id="lastName"
                   name="LastName"
                   type="text"
@@ -214,6 +216,8 @@ const User_Profile = () => {
                 </label>
                 <input
                   readOnly
+                  autoComplete='on'
+
                   id="email"
                   name="Email"
                   type="email"
@@ -231,6 +235,8 @@ const User_Profile = () => {
                   Phone No
                 </label>
                 <input
+                                autoComplete='on'
+
                   id="phone"
                   name="PhoneNo"
                   type="number"
@@ -249,6 +255,7 @@ const User_Profile = () => {
                 </label>
                 <input
                   id="dob"
+                  
                   name="Dob"
                   type="date"
                   className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
@@ -265,6 +272,7 @@ const User_Profile = () => {
                   Street
                 </label>
                 <input
+                
                   id="street"
                   name="Street"
                   type="text"
@@ -283,6 +291,7 @@ const User_Profile = () => {
                 </label>
                 <input
                   id="city"
+                  
                   name="City"
                   type="text"
                   className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
@@ -299,6 +308,7 @@ const User_Profile = () => {
                   State
                 </label>
                 <input
+                
                   id="state"
                   name="State"
                   type="text"
@@ -316,6 +326,7 @@ const User_Profile = () => {
                   Zip/Postal Code
                 </label>
                 <input
+                
                   id="zipCode"
                   name="ZipCode"
                   type="number"
@@ -336,6 +347,8 @@ const User_Profile = () => {
                   id="country"
                   name="Country"
                   type="text"
+                  autoComplete='on'
+
                   className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
                   value={country}
                   onChange={(e) => onChangeInput(e)}

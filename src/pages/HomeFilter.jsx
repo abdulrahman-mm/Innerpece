@@ -153,7 +153,6 @@ function DestinationsDetails() {
         }
       );
 
-      console.log("API response:", response.data); // Inspect response data
 
       if (response.data.status === "success") {
         const dataObject = response.data.data;
@@ -186,7 +185,6 @@ function DestinationsDetails() {
         if (data.length === 0) {
           setApiData([]); // No data found, set empty array
         } else {
-          console.log("filtered data", data);
           setApiData(data); // Set the retrieved data as an array
         }
       }
@@ -227,7 +225,6 @@ function DestinationsDetails() {
     fetchProgramData();
   };
 
-  console.log(apiData);
 
   useEffect(() => {
     if (filterButtonClicked) {
@@ -240,7 +237,6 @@ function DestinationsDetails() {
   }, [filterButtonClicked]);
 
 
-  console.log(apiData);
   
 
   return (

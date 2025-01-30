@@ -42,7 +42,6 @@ function DestinationsDetailsMainbar({
           );
           setSortedData(response.data.data);
           setApiData(""); // clear the unsorted data
-          console.log(response.data.data);
         } catch (error) {
           console.error("Error fetching sorted data", error);
         }
@@ -68,7 +67,6 @@ function DestinationsDetailsMainbar({
     });
   };
 
-  console.log(apiData);
 
   return (
     <div className=" pb-52 ">

@@ -84,7 +84,6 @@ function Login() {
   const [captchaValue, setCaptchaValue] = useState(null);
   const handleCaptchaChange = (value) => {
     setCaptchaValue(value);
-    console.log("Captcha value:", value);
   };
 
   return (

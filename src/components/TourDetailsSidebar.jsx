@@ -112,28 +112,28 @@ function Sidebar({ LocationShareRef }) {
 
         // document.title = apiData.title || "Default Title";
 
-        // const metaOgTitle = document.querySelector("meta[property='og:title']");
-        // if (metaOgTitle) {
-        //   metaOgTitle.setAttribute("content", apiData.title || "Default Title");
-        // }
+        const metaOgTitle = document.querySelector("meta[property='og:title']");
+        if (metaOgTitle) {
+          metaOgTitle.setAttribute("content", apiData.title || "Default Title");
+        }
 
-        // const metaOgDescription = document.querySelector(
-        //   "meta[property='og:description']"
-        // );
-        // if (metaOgDescription) {
-        //   metaOgDescription.setAttribute(
-        //     "content",
-        //     apiData.program_desc || "Default description"
-        //   );
-        // }
+        const metaOgDescription = document.querySelector(
+          "meta[property='og:description']"
+        );
+        if (metaOgDescription) {
+          metaOgDescription.setAttribute(
+            "content",
+            apiData.program_desc || "Default description"
+          );
+        }
 
-        // const metaOgImage = document.querySelector("meta[property='og:image']");
-        // if (metaOgImage) {
-        //   metaOgImage.setAttribute(
-        //     "content",
-        //     `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
-        //   );
-        // }
+        const metaOgImage = document.querySelector("meta[property='og:image']");
+        if (metaOgImage) {
+          metaOgImage.setAttribute(
+            "content",
+            `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+          );
+        }
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -450,6 +450,8 @@ function Sidebar({ LocationShareRef }) {
                           </span>
                           <input
                             type="text"
+                            id="name"
+                            name="name"
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Name"
                             value={name}
@@ -474,6 +476,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Email"
                             id="email"
+                            name="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                           />
@@ -496,6 +499,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Phone"
                             id="phone"
+                            name="phone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                           />
@@ -518,6 +522,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Your Residence Location"
                             id="Your Residence Location"
+                            name="Your Residence Location"
                             value={yourResidenceLocation}
                             onChange={(e) =>
                               setYourResidenceLocation(e.target.value)
@@ -542,6 +547,7 @@ function Sidebar({ LocationShareRef }) {
                               readOnly
                               className="w-full text-gray-800 p-2 border-l focus:outline-none"
                               id="How Many Days"
+                              name="How Many Days"
                               value={reference_id}
                             />
                           </div>
@@ -559,6 +565,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Travel Destination"
                             id="Travel Destination"
+                            name="Travel Destination"
                             value={apiData.title}
                             // onChange={(e) =>
                             //   setTravelDestination(e.target.value)
@@ -583,6 +590,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Number of days you would like to travel"
                             id="Number of days you would like to travel"
+                            name="Number of days you would like to travel"
                             value={howManyDays}
                             onChange={(e) => setHowManyDays(e.target.value)}
                           />
@@ -605,6 +613,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Budget Per Head"
                             id="Budget Per Head"
+                            name="Budget Per Head"
                             value={budgetPerHead}
                             onChange={(e) => setBudgetPerHead(e.target.value)}
                           />
@@ -630,6 +639,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Total Count"
                             id="Total Count"
+                            name="Total Count"
                             value={totalCount}
                             onChange={(e) => setTotalCount(e.target.value)}
                           />
@@ -654,6 +664,7 @@ function Sidebar({ LocationShareRef }) {
                                 className="w-full p-2 border-l focus:outline-none"
                                 placeholder="Male Count"
                                 id="Male Count"
+                                name="Male Count"
                                 value={maleCount}
                                 onChange={(e) => setMaleCount(e.target.value)}
                               />
@@ -675,6 +686,7 @@ function Sidebar({ LocationShareRef }) {
                                 className="w-full p-2 border-l focus:outline-none"
                                 placeholder="Female Count"
                                 id="Female Count"
+                                name="Female Count"
                                 value={femaleCount}
                                 onChange={(e) => setFemaleCount(e.target.value)}
                               />
@@ -699,6 +711,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="Child Count"
                             id="Child Count"
+                            name="Child Count"
                             value={childCount}
                             onChange={(e) => setChildCount(e.target.value)}
                           />
@@ -721,6 +734,8 @@ function Sidebar({ LocationShareRef }) {
                                   <FaChild />
                                 </span>
                                 <input
+                                id="number"
+                                name="number"
                                   type="number"
                                   placeholder={` ${index + 1}st Child Age`}
                                   className="w-full p-2 border focus:outline-none"
@@ -753,6 +768,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l text-gray-400 focus:outline-none"
                             placeholder="Travel Date"
                             id="Travel Date"
+                            name="Travel Date"
                             value={travelDate}
                             onChange={(e) => setTravelDate(e.target.value)}
                           />
@@ -775,6 +791,7 @@ function Sidebar({ LocationShareRef }) {
                             className="w-full p-2 border-l focus:outline-none"
                             placeholder="No of rooms required"
                             id="No of rooms required"
+                            name="No of rooms required"
                             value={howManyRoomsYouNeed}
                             onChange={(e) =>
                               setHowManyRoomsYouNeed(e.target.value)
@@ -837,6 +854,7 @@ function Sidebar({ LocationShareRef }) {
                           <textarea
                             className="w-full p-2 border-l focus:outline-none"
                             id="message"
+                            name="message"
                             placeholder="Comments"
                             value={comments}
                             onChange={(e) => setCommends(e.target.value)}

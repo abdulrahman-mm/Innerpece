@@ -66,7 +66,6 @@ function Mainbar({ apiData, setSortBy, sortBy, themes_name, setApiData }) {
             { sort_by: sortBy, theme: themes_name }
           );
           setSortedData(response.data.data);
-          console.log("sorted", response.data.data);
           setApiData(""); // clear the unsorted data
           setSortedPage(1);
         } catch (error) {

@@ -3,7 +3,6 @@ import { IoIosSearch } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 function DestinationsDetailsHero({ apiData }) {
-  console.log(apiData);
 
   let navigate = useNavigate();
 

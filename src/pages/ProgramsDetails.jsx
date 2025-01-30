@@ -108,7 +108,6 @@ function Programs() {
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
-    console.log(selectedSort);
 
     try {
       const response = await axios.post(
@@ -120,7 +119,6 @@ function Programs() {
         }
       );
 
-      console.log("API response:", response.data); // Inspect response data
 
       if (response.data.status === "success") {
         const dataObject = response.data.data;
@@ -181,7 +179,6 @@ function Programs() {
         if (data.length === 0) {
           setApiData([]); // No data found, set empty array
         } else {
-          console.log("filtered data", data);
           setApiData(data); // Set the retrieved data as an array
         }
       }

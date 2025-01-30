@@ -157,14 +157,12 @@ function DestinationsDetails() {
   };
 
   const handleSortChange = async (event) => {
-    console.log("dsglmrsf");
 
     setFilterButtonClicked(false);
 
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
-    console.log(selectedSort);
 
     try {
       const response = await axios.post(
@@ -177,7 +175,6 @@ function DestinationsDetails() {
         }
       );
 
-      console.log("API response:", response.data); // Inspect response data
 
       if (response.data.status === "success") {
         const dataObject = response.data.data;
@@ -211,7 +208,6 @@ function DestinationsDetails() {
         if (data.length === 0) {
           setApiData([]); // No data found, set empty array
         } else {
-          console.log("filtered data", data);
           setApiData(data); // Set the retrieved data as an array
         }
       }
