@@ -55,11 +55,13 @@ function Programs() {
   return (
     <div className="overflow-hidden">
       {programsData.length > 0 && (
-        <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16 ">
-          <p className="text-xl md:text-3xl font-semibold">Programs</p>
+        <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+          <p className="text-xl md:text-3xl font-semibold font-mulish leading-loose text-[#3E3E3E]">
+            Programs
+          </p>
 
           {loading ? ( // Show skeleton loaders while fetching data
-            <div className="flex items-center flex-1 flex-grow flex-wrap justify-start gap-4 mt-5">
+            <div className="flex items-center flex-1 flex-grow flex-wrap justify-start gap-7 mt-8 md:mt-10">
               {Array(3)
                 .fill(0)
                 .map((_, index) => (
@@ -71,12 +73,12 @@ function Programs() {
             </div>
           ) : programsData && programsData.length > 0 ? ( // Show programs if data exists
             <div className="">
-              <div className="max-md:hidden flex items-center flex-grow flex-wrap justify-start gap-4">
+              <div className="max-md:hidden mt-8 md:mt-10 flex items-center flex-grow flex-wrap justify-start gap-7">
                 {programsData.map((item, index) => (
                   <div
                     key={index}
                     onClick={() => handleThemeClick(item.id, item.themes_name)}
-                    className="mt-5 flex-1 relative lg:w-72 h-60 cursor-pointer transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl rounded-3xl overflow-hidden flex items-center justify-center"
+                    className="mt-5 flex-1 relative lg:w-72 h-60 cursor-pointer transition-all ease-in-out duration-500 hover:-translate-y-1  rounded-3xl overflow-hidden flex items-center justify-center"
                   >
                     <div className="absolute -z-20 bg-gradient-to-t from-black/95 to-transparent h-full w-full"></div>
                     <img
@@ -86,20 +88,21 @@ function Programs() {
                           : defaultimg
                       }
                       alt={item.themes_name}
-                      className="hover:scale-150 w-full h-60 transition duration-300 ease-in-out -z-40 bg-gradient  shadow-black object-cover bg-center absolute inset-0"
+                      className="w-full h-60  -z-40 bg-gradient  shadow-black object-cover bg-center  absolute inset-0"
                     />
-                    <p className="absolute z-10 text-lg xl:text-2xl text-white font-semibold text-center">
+                    <p className="absolute   font-mulish text-lg xl:text-xl text-white font-semibold text-center">
+                      {/* Entrepreneurs */}
                       {item.themes_name}
                     </p>
                   </div>
                 ))}
               </div>
 
-              <div className="md:hidden  relative w-full flex mt-5">
+              <div className="md:hidden h-60  relative w-full flex mt-5">
                 <Swiper
                   effect="cards"
                   grabCursor={true}
-                  // loop={true}
+                  loop={true}
                   modules={[EffectCards]}
                   className="w-[70vw]"
                 >
@@ -121,9 +124,8 @@ function Programs() {
                         alt=""
                         className="w-full rounded-3xl h-full -z-40 bg-gradient shadow-black object-cover absolute inset-0"
                       />
-                     
 
-                      <p className="absolute z-10  text-lg text-white font-semibold text-center">
+                      <p className="absolute z-10 w-full h-full flex items-center justify-center text-lg text-white font-semibold text-center">
                         {item.themes_name}
                       </p>
                     </SwiperSlide>

@@ -6,7 +6,7 @@ import privacy_terms_img from'../assets/privacy_terms_img.png'
 function TermsOfServices_Hero() {
   let navigate = useNavigate();
   return (
-    <div className="relative w-full h-[30vh] md:h-[50vh] ">
+    <div className="relative w-full h-[30vh] md:h-[50vh] font-mulish">
       <img
         className="absolute w-full h-full z-30 "
         // src="https://demo.innerpece.com/static/media/Terms_condition_img.576cf52b.svg"

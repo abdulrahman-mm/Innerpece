@@ -1,37 +1,29 @@
 import React from "react";
-import Header from "../components/Header.jsx";
-import Footer from "../components/Footer.jsx";
+import { lazy,Suspense } from "react";
+let Header=lazy(()=>import("../components/Header"))
+let Footer=lazy(()=>import("../components/Footer"))
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaLocationDot } from "react-icons/fa6";
 import { PiStarFourFill } from "react-icons/pi";
-import { IoPeopleSharp } from "react-icons/io5";
-import { MdOutlineChildCare } from "react-icons/md";
-import { LiaSwimmingPoolSolid } from "react-icons/lia";
-import { GiHighGrass } from "react-icons/gi";
-import { LuWaves } from "react-icons/lu";
-import { PiBowlFood } from "react-icons/pi";
-import { MdTheaters } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
-import { IoBedSharp } from "react-icons/io5";
 import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 import { useNavigate } from "react-router-dom";
-import { IoIosSearch } from "react-icons/io";
+import whatsapp from "../assets/whatsapp.svg";
+
 
 function Programs() {
-      const [isLoading, setIsLoading] = useState(true); // Loading state
-  
-
+  // const [isLoading, setIsLoading] = useState(true); // Loading state
 
   useEffect(() => {
     document.title = "Program Details - Innerpece";
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 200); // Adjust time as needed
+    // const timer = setTimeout(() => {
+    //   setIsLoading(false);
+    // }, 200); // Adjust time as needed
 
-    return () => clearTimeout(timer); // Cleanup timeout
+    // return () => clearTimeout(timer); // Cleanup timeout
   }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   let navigate = useNavigate();
@@ -108,7 +100,6 @@ function Programs() {
     const selectedSort = event.target.value;
     setSortBy(selectedSort);
 
-
     try {
       const response = await axios.post(
         // "https://backoffice.innerpece.com/api/sort-program",
@@ -118,7 +109,6 @@ function Programs() {
           theme: themes_name,
         }
       );
-
 
       if (response.data.status === "success") {
         const dataObject = response.data.data;
@@ -224,7 +214,7 @@ function Programs() {
 
   const SkeletonLoader = () => {
     return (
-      <div className="animate-pulse flex flex-col mt-10 gap-4 px-3 md:px-10 w-full md:w-[77vw]">
+      <div className="animate-pulse flex flex-col  gap-4 px-3 md:px-10 w-full md:w-[77vw]">
         {[...Array(2)].map((_, index) => (
           <div
             key={index}
@@ -261,20 +251,42 @@ function Programs() {
     );
   };
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
-        <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
+  //       <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
-      <Header />
 
-      {/* Hero Section */}
-      <div className="mt-4  ms-3 me-3 md:ms-10 md:me-10 ">
+
+<div
+        onClick={() => window.open("https://wa.me/6384131642")}
+        className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
+      >
+        <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
+          <p>Whatsapp Enquiry</p>
+        </div>
+        <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
+      </div>
+
+      <Suspense
+        fallback={
+          <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
+            <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+        }
+      >
+        <Header />
+
+        {/* Hero Section */}
+
+      {/* <div className="mt-4  ms-3 me-3 md:ms-10 md:me-10 "> */}
+
+      <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16 ">
         <div className="gap-3  items-center justify-between inline-flex bg-sky-100/80 font-semibold text-sky-800 p-2 rounded-lg">
           <p onClick={() => navigate("/")} className="cursor-pointer">
             Home
@@ -287,11 +299,12 @@ function Programs() {
 
         <div
           id="hero"
-          className="h-64 md:h-80  lg:h-[380px] rounded-lg mt-8 md:mt-10 lg:mt-16 relative bg-[url('././assets/explorepopularpackagehero.jpg')] bg-cover bg-center"
+          className="h-64 md:h-80 lg:h-[380px] rounded-lg md:rounded-2xl mt-8   md:mt-16
+ relative bg-[url('././assets/explorepopularpackagehero.jpg')] bg-cover bg-center"
         >
           <div
             id="blur"
-            className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-lg flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1 md:px-8 md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
+            className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1 md:px-8 md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
           >
             <h1 className="text-white text-lg md:text-2xl lg:text-4xl font-semibold">
               {`Explore ${apiData.length > 0 ? apiData[0].theme : themes_name}`}
@@ -301,38 +314,14 @@ function Programs() {
               to match your preferences
             </p>
           </div>
-
-          {/* <div className="w-[180px] h-[40px] md:h-auto md:w-[250px] lg:w-[270px] absolute rounded top-[160px] flex items-center justify-between flex-shrink left-16 mt-3 sm:top-40 md:top-48 md:left-24 lg:top-60 xl:top-60 lg:left-36 bg-white  gap-1  md:gap-3 p-1 py-1">
-            <span className="ms-3">
-              {" "}
-              <IoIosSearch className="md:text-2xl" />
-            </span>
-
-            <input
-              type="text"
-              value={searchTitle}
-              name="search events"
-              onChange={(e) => setSearchTitle(e.target.value)}
-              className="outline-none w-[50px] md:w-[80px] lg:w-[100px]"
-              placeholder="Search Events "
-            />
-
-            <button
-              style={{ background: "#283D74" }}
-              onClick={handleSearchClick}
-              className=" text-white px-1 py-1  md:px-6 md:py-2 rounded font-semibold"
-            >
-              Search
-            </button>
-          </div> */}
         </div>
       </div>
 
       {/* Main Section  */}
-      <div className="flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5 mt-2 md:mt-7 ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
+      <div className="flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5  ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10 ">
         {/* Main Section > Sidebar */}
-        <div className="mt-20 py-10 px-5  h-fit flex flex-col gap-5 rounded-md  max-md:hidden border-2 basis-[10%] ">
-          <p className="text-xl">Search By Filter</p>
+        <div className="mt-20 py-5 px-5 sticky top-5 h-fit flex flex-col gap-4 md:rounded-lg  max-md:hidden border-2 basis-[10%] ">
+          <p className="text-xl font-medium">Search By Filter</p>
           <label htmlFor="fromDate">From Date</label>
           <input
             type="date"
@@ -352,7 +341,7 @@ function Programs() {
           />
 
           <button
-            className="bg-sky-600 hover:bg-sky-700 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
+            className="bg-sky-800 hover:bg-sky-900 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
             value="FILTER"
             onClick={handleFilterClick}
           >
@@ -360,14 +349,14 @@ function Programs() {
           </button>
 
           <button
-            className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
+            className="bg-red-600 hover:bg-red-700 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
             value="FILTER"
             onClick={handleClearFilterClicked}
           >
             Clear Filter
           </button>
 
-          <p className="text-xl">Sort By</p>
+          <p className="">Sort By</p>
 
           <select
             name="select"
@@ -490,11 +479,11 @@ function Programs() {
               <div
                 id="program"
                 key={index}
-                className="flex flex-col mt-5  overflow-hidden"
+                className="flex flex-col mt-10  overflow-hidden"
               >
                 <div
                   key={index}
-                  className="flex flex-col lg:flex-row mt-5 overflow-hidden   "
+                  className="flex flex-col lg:flex-row  overflow-hidden   "
                 >
                   <img
                     src={
@@ -503,10 +492,10 @@ function Programs() {
                         : defaultimage
                     }
                     alt={item.title}
-                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full  lg:w-1/4  rounded-none"
+                    className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full rounded-t-xl lg:rounded-s-xl lg:rounded-r-none  lg:w-1/4 "
                   />
 
-                  <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border-2 border-gray-300 py-2 px-3 ">
+                  <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border-2 lg:border-l-0  border-gray-300 py-2 px-3 ">
                     <p className="font-semibold flex-wrap text-2xl md:text-3xl">
                       {item.title}
                     </p>
@@ -562,7 +551,7 @@ function Programs() {
                               key={index}
                               className="flex flex-col w-20 flex-wrap"
                             >
-                              <span className="border-2 p-2 w-9 border-gray-300 rounded-full">
+                              <span className="border-2 p-2  h-9 w-9 border-gray-300 rounded-full">
                                 <img
                                   src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
                                   alt=""
@@ -584,7 +573,7 @@ function Programs() {
                     )}
                   </div>
 
-                  <div className="flex flex-wrap  flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 border-2 border-gray-300  px-3 py-2   rounded-b-none">
+                  <div className="flex flex-wrap  flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border-2 border-gray-300  px-3 py-2   ">
                     <p className="text-gray-600">
                       Starting From <del>{item.price}</del>
                     </p>
@@ -600,7 +589,7 @@ function Programs() {
                       <p className="text-white cursor-pointer  md:text-xl font-semibold ">
                         View
                       </p>
-                      <FaArrowRight className="text-white" />
+                      <FaArrowRight className="text-white h-full " />
                     </div>
                   </div>
                 </div>
@@ -639,6 +628,7 @@ function Programs() {
       </div>
 
       <Footer />
+      </Suspense>
     </div>
   );
 }

@@ -28,13 +28,14 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-between items-center px-5  py-1 md:py-3">
+    <div className="flex justify-between items-center ms-5 me-5 md:ms-16 md:me-16  py-1 md:py-4">
       <div onClick={() => navigate("/")} className="cursor-pointer">
         <img src={innerpece_logo} alt="" />
       </div>
 
       <div className="max-md:hidden">
         <ul className="flex items-center">
+          {/* ms-5 me-5 md:ms-16 md:me-16  */}
           <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
             <Link className="cursor-pointer" to="/">
               Home
@@ -68,7 +69,7 @@ function Header() {
             <li className="">
               <Link
                 onClick={onClickLogout}
-                className="cursor-pointer lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
+                className="cursor-pointer  font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
                 to="/login"
               >
                 Logout
@@ -77,7 +78,7 @@ function Header() {
           ) : (
             <li className="">
               <Link
-                className="cursor-pointer lg:me-10 font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
+                className="cursor-pointer  font-semibold border border-[#005FC4] hover:border-bl rounded-2xl text-white bg-[#005FC4] hover:text-[#005FC4] hover:bg-white md:px-3 lg:px-6 py-2"
                 to="/login"
               >
                 Login

@@ -4,7 +4,7 @@ import privacy_terms_img from'../assets/privacy_terms_img.png'
 function Privacypolicy_Hero() {
      let navigate=useNavigate()
   return (
-    <div className="relative w-full h-[30vh] md:h-[50vh]">
+    <div className="relative w-full h-[30vh] md:h-[50vh] font-mulish">
       <img
         className="absolute w-full h-full z-30 object-cover object-center"
         src={privacy_terms_img}

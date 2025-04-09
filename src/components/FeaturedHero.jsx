@@ -7,7 +7,9 @@ import defaultimage from "../assets/defaultimg.png";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet";
+// import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function Hero({
   handleInformationScroll,
@@ -60,11 +62,9 @@ function Hero({
   useEffect(() => {
     const metaTag = document.querySelector("meta[property='og:image']");
     if (metaTag) {
-
       metaTag.content = apiData?.cover_img
         ? `https://backoffice.innerpece.com/${apiData.cover_img}`
         : "default-image-url";
-
     } else {
       const newMetaTag = document.createElement("meta");
       newMetaTag.setAttribute("property", "og:image");
@@ -87,6 +87,19 @@ function Hero({
           }
         />
       </Helmet>
+
+      <HelmetProvider>
+        <Helmet>
+          <meta
+            property="og:image"
+            content={
+              apiData.cover_img
+                ? `https://backoffice.innerpece.com/${apiData.cover_img}`
+                : defaultimage
+            }
+          />
+        </Helmet>
+      </HelmetProvider>
 
       {loading ? (
         <div className=" h-[50vh] md:h-[40vh] lg:h-[50vh] w-full bg-gray-500 animate-pulse"></div>
@@ -113,27 +126,21 @@ function Hero({
             alt={apiData.title}
             className="object-contain h-6 md:h-8"
           />
-          <p className="text-sm md:text-base lg:text-lg font-semibold">
-            Information
-          </p>
+          <p className="text-sm md:text-base font-semibold">Information</p>
         </div>
         <div
           onClick={handleTourPlanningScroll}
           className="flex flex-grow cursor-pointer   py-1  gap-2 md:gap-3 items-center"
         >
           <img src={vector2} alt="" className="object-contain h-6 md:h-8" />
-          <p className="text-sm md:text-base lg:text-lg font-semibold">
-            Tour Planning
-          </p>
+          <p className="text-sm md:text-base  font-semibold">Tour Planning</p>
         </div>
         <div
           onClick={handleLocationShareScroll}
           className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center"
         >
           <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
-          <p className="text-sm md:text-base lg:text-lg font-semibold">
-            Location Share
-          </p>
+          <p className="text-sm md:text-base  font-semibold">Location Share</p>
         </div>
         {apiData.review_count > 0 && (
           <div

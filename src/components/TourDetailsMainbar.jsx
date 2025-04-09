@@ -9,6 +9,8 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Swal from "sweetalert2";
 
+import ReCAPTCHA from "react-google-recaptcha";
+
 function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const location = useLocation();
   let navigate = useNavigate();
@@ -25,14 +27,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const [date, setDate] = useState(new Date());
   const [userDetails, setUserDetails] = useState(false);
   const [userId, setUserId] = useState();
-
-  const onCLickLoginButton = () => {
-    navigate("/login");
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
-  };
+  const [loginCliked, setLoginClicked] = useState(false);
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.slice(1, 3);
@@ -58,8 +53,10 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         );
 
         setApiData(response.data.data);
+
         // setIsWishlisted(response.data.data.wishlists);
         setLoading(false);
+        // console.log(apiData.reviews);
 
         // document.title = apiData.title || "Default Title";
 
@@ -222,8 +219,90 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
     }
   };
 
+  const handleLoginClick = () => {
+    setLoginClicked(true);
+  };
+
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginCheckboxChecked, setLoginCheckBoxChecked] = useState("");
+  const [loginError, setLoginError] = useState({});
+
+  function onClickBtn() {
+    navigate("/signup");
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  }
+
+  function onChangeInput(e) {
+    const { name, value } = e.target;
+
+    if (name === "loginEmail") {
+      setLoginEmail(value);
+    }
+
+    if (name === "loginPassword") {
+      setLoginPassword(value);
+    }
+
+    if (name === "checkbox") {
+      setLoginCheckBoxChecked(loginCheckboxChecked ? "" : "checkbox checked");
+    }
+  }
+
+  async function onClickSignIn() {
+    try {
+      let response = await axios.post(
+        // `https://backoffice.innerpece.com/api/login`,
+        `https://backoffice.innerpece.com/api/v1/login`,
+        {
+          email: loginEmail,
+          password: loginPassword,
+        }
+      );
+
+      const loginid = response.data.token;
+      const loginDetails = response.data.user_details;
+
+      localStorage.setItem("loginid", loginid);
+      localStorage.setItem("loginDetails", JSON.stringify(loginDetails));
+
+      setLoginEmail("");
+      setLoginPassword("");
+      setLoginError("");
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Login successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      setLoginClicked(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+
+      let errors = err.response.data.errors
+        ? err.response.data.errors
+        : err.response.data;
+      setLoginError({ ...errors });
+      console.log(errors);
+    }
+  }
+
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
   return (
-    <div className="w-full md:basis-[45%]  xl:basis-[55%] overflow-x-hidden   flex-grow ">
+    <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden   flex-grow ">
       {loading ? (
         <div className="object-cover mt-3 flex-shrink h-96  w-full bg-gray-500 animate-pulse"></div>
       ) : (
@@ -269,7 +348,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                       : defaultimage
                   }
                   alt={`Gallery Image ${index + 1}`}
-                  className="h-[30vh] md:h-[40vh] lg:h-[50vh] w-full object-cover rounded-lg"
+                  className="h-[30vh]  lg:h-[440px] w-full object-cover rounded-lg"
                 />
               </div>
             ))}
@@ -485,7 +564,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         <p className="text-red-500 mt-1">
           Please{" "}
           <button
-            onClick={onCLickLoginButton}
+            onClick={handleLoginClick}
             className="cursor-pointer hover:underline"
           >
             Login{" "}
@@ -510,7 +589,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             </div> */}
 
             {apiData.reviews.length > 0 && (
-              <div className="mt-8  h-96 overflow-y-auto">
+              <div className="mt-8  overflow-y-auto">
                 <div className="flex  flex-col-reverse mt-5 gap-5 ">
                   {apiData.reviews.map((item, index) => (
                     <div
@@ -605,6 +684,134 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {loginCliked && (
+        <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
+          <div className="flex items-center justify-center  bg-white">
+            <div className="w-screen   md:w-[70vw] py-3  lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
+              <button
+                onClick={() => setLoginClicked(false)}
+                className="text-gray-500 w-full pe-5  font-extrabold text-xl hover:text-gray-700 focus:outline-none placeholder:text-gray-600 placeholder:text-sm flex justify-end"
+              >
+                ✕
+              </button>
+              <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
+                <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+
+                <div className="w-full md:w-2/5 flex-grow flex-shrink">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-xl md:text-2xl lg:text-3xl font-semibold">
+                      Log In To Get Started
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 items-center">
+                      <p
+                        style={{ backgroundColor: "#EB9009" }}
+                        className="text-white px-2 rounded"
+                      >
+                        20% off
+                      </p>
+                      <p className="text-gray-500">
+                        get 20% off for web signup
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
+                      <div className="flex flex-col flex-grow gap-2">
+                        <label htmlFor="loginEmail" className="font-semibold">
+                          Email
+                        </label>
+                        <input
+                          type="text"
+                          name="loginEmail"
+                          id="loginEmail"
+                          value={loginEmail}
+                          autoComplete="off"
+                          onChange={onChangeInput}
+                          className="border-2 border-gray-300 outline-none p-2 rounded-md"
+                          placeholder="Enter your Email"
+                        />
+                        {loginError.email && (
+                          <p className="text-red-500 text-xs sm:text-sm ">
+                            {loginError.email}
+                          </p>
+                        )}
+
+                        {loginError.error === "Unauthorized User " && (
+                          <p className="text-red-500 text-xs sm:text-sm ">
+                            {loginError.error}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col mt-5 gap-2">
+                      <div className="flex items-center justify-between">
+                        <label htmlFor="password" className="font-semibold">
+                          Your Password
+                        </label>
+                        {/* <p className="text-red-400 cursor-pointer text-xs md:text-sm font-semibold">
+                    Forgot Password?
+                  </p> */}
+                      </div>
+                      <input
+                        onFocus={(e) => (e.target.type = "text")}
+                        onBlur={(e) => (e.target.type = "password")}
+                        type="loginPassword"
+                        id="loginPassword"
+                        name="loginPassword"
+                        value={loginPassword}
+                        onChange={onChangeInput}
+                        autoComplete="off"
+                        placeholder="Enter your Password"
+                        className="border-2  border-gray-300 outline-none p-2 rounded-md"
+                      />
+                      {loginError.password && (
+                        <p className="text-red-500 text-xs sm:text-sm ">
+                          {loginError.password}
+                        </p>
+                      )}
+
+                      {loginError.error === "Incorrect password" && (
+                        <p className="text-red-500 text-xs sm:text-sm ">
+                          {loginError.error}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="recaptacha-login  mt-5 ">
+                      <ReCAPTCHA
+                        sitekey="6LfDSrsqAAAAAI2jP2tOdr2l4VkiztyX2S2H0Fxg"
+                        onChange={handleCaptchaChange}
+                      />
+                    </div>
+
+                    <button
+                      disabled={!captchaValue}
+                      onClick={onClickSignIn}
+                      className={`${
+                        !captchaValue ? "bg-gray-400" : "bg-sky-800"
+                      } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
+                    >
+                      Sign In
+                    </button>
+
+                    <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
+                      <p>Don't you have an account?</p>
+                      <button
+                        onClick={onClickBtn}
+                        className="bg-sky-800 px-3 py-1 cursor-pointer  text-white rounded"
+                      >
+                        Register
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

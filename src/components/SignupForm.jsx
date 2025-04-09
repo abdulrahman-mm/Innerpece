@@ -382,12 +382,15 @@ function Signup() {
                   </label>
                   <input
                     type="password"
+                    onFocus={(e) => (e.target.type = "text")}
+                    onBlur={(e) => (e.target.type = "password")}
                     name="password"
                     id="password"
                     autoComplete="off"
                     value={password}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
+
                     placeholder="Create Password"
                   />
                   {userDetailsError.password && (
@@ -406,12 +409,15 @@ function Signup() {
                   </label>
                   <input
                     type="password"
+                    onFocus={(e) => (e.target.type = "text")}
+                    onBlur={(e) => (e.target.type = "password")}
                     name="password_confirmation"
                     id="password_confirmation"
                     autoComplete="off"
                     value={password_confirmation}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
+
                     placeholder="Confirm Password"
                   />
                   {userDetailsError.password && (

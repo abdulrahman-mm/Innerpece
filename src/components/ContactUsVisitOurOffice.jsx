@@ -3,8 +3,8 @@ import React from "react";
 function VisitOurOffice() {
   return (
     <div className="bg-gray-100/70">
-      <div className="flex items-center  flex-col md:flex-row px-5 md:px-20 lg:px-30 xl:px-40 gap-5  md:gap-8 lg:gap-12 xl:gap-16 py-8 mt-8 md:mt-14">
-        <div className="flex flex-col flex-grow basis-[40%] gap-5">
+      <div className="flex items-center  flex-col md:flex-row px-5 md:px-20 lg:px-30 xl:px-40 gap-5  md:gap-8 lg:gap-12 xl:gap-16 py-8 md:py-16 mt-8 md:mt-20">
+        <div className="flex flex-col flex-grow basis-[40%] gap-5 font-dmSans">
           <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
             Visit Our Office
           </p>
@@ -25,6 +25,7 @@ function VisitOurOffice() {
             src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3917.1874887123454!2d79.3470095!3d10.9492057!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baacd9db55ca1f5%3A0xa1dba868ae91b9c8!2sInnerpece!5e0!3m2!1sen!2sin!4v1731920601542!5m2!1sen!2sin"
             // allowfullscreen=""
             loading="lazy"
+            
             // referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>

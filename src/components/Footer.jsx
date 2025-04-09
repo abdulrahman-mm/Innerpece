@@ -47,7 +47,7 @@ function Footer() {
   }
 
   return (
-    <div className="mt-8 md:mt-16 ">
+    <div className="mt-8 md:mt-20 font-raleway">
       <img
         src={footer1}
         alt=""

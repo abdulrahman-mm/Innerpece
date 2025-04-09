@@ -9,7 +9,7 @@ function TwoComponents({
   reviewRef,
 }) {
   return (
-    <div className="flex gap-8 md:gap-12 flex-col justify-between md:flex-row bg-gray-50/10 ms-5 me-5 md:ms-10 md:me-10 lg:ms-20 lg:me-20 items-start">
+    <div className="flex bg-[#FEFEFE] gap-8 md:gap-12 flex-col justify-between md:flex-row bg-gray-50/10 ms-5 me-5 md:ms-10 md:me-10 lg:ms-20 lg:me-20 items-start">
       <TourDetailsMainbar
         informationRef={informationRef}
         TourPlanningRef={TourPlanningRef}

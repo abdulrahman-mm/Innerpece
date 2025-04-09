@@ -3,13 +3,17 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useLocation } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkboxChecked, setCheckBoxChecked] = useState("");
-
   const [loginError, setLoginError] = useState({});
+  const location = useLocation();
+  const from = location.state?.from || "/";
 
   let navigate = useNavigate();
 
@@ -67,7 +71,7 @@ function Login() {
       });
 
       setTimeout(() => {
-        navigate("/");
+        navigate(from);
         window.scrollTo({ top: 0, behavior: "smooth" });
       }, 2000);
     } catch (err) {
@@ -86,11 +90,25 @@ function Login() {
     setCaptchaValue(value);
   };
 
+  const [user, setUser] = useState(null);
+
+  const handleSuccess = (response) => {
+    console.log(response);
+
+    const token = response.credential;
+    const userDetails = jwtDecode(token);
+    setUser(userDetails); // Store user details in state
+    console.log(userDetails);
+  };
+
+  const handleError = () => {
+    console.log("Google Sign-In Failed");
+  };
+
   return (
     <div className="flex items-center justify-center mt-8 md:mt-14">
       <div className="w-full sm:w-[80vw] md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
-        
           <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
           <div className="w-2/5 flex-grow flex-shrink">
@@ -148,6 +166,8 @@ function Login() {
                   </p> */}
                 </div>
                 <input
+                  onFocus={(e) => (e.target.type = "text")}
+                  onBlur={(e) => (e.target.type = "password")}
                   type="password"
                   id="password"
                   name="password"
@@ -199,7 +219,25 @@ function Login() {
             </div>
           </div>
         </div>
-      </div>
+      </div>-
+
+      {/* <GoogleOAuthProvider clientId="921328741345-3pthhre9l7vskb4i0046u4gh87jk7ktj.apps.googleusercontent.com">
+        <div className="flex flex-col items-center justify-center h-screen">
+          {user ? (
+            <div className="text-center">
+              <img
+                src={user.picture}
+                alt="Profile"
+                className="w-20 h-20 rounded-full border-2 border-gray-300"
+              />
+              <h2 className="mt-2 text-lg font-semibold">{user.name}</h2>
+              <p className="text-sm text-gray-600">{user.email}</p>
+            </div>
+          ) : (
+            <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+          )}
+        </div>
+      </GoogleOAuthProvider> */}
     </div>
   );
 }

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { IoCompassSharp } from "react-icons/io5";
 import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useNavigate } from "react-router-dom";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import common_rooms_zostel from "../assets/common-rooms-zostel.jpg";
 
 function Hero() {
   const [homeImage, setHomeImage] = useState([]);
@@ -12,6 +13,17 @@ function Hero() {
   const [loading, setLoading] = useState(true); // Add a loading state
   const [selectedDate, setSelectedDate] = useState("");
   const navigate = useNavigate();
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === homeImage.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [homeImage.length]);
 
   const handleInputChange = (event) => {
     setCityName(event.target.value);
@@ -67,7 +79,7 @@ function Hero() {
 
     getApiData();
   }, []);
-    
+
   return (
     <div className="hero-container relative">
       {loading ? (
@@ -76,50 +88,126 @@ function Hero() {
         </div>
       ) : (
         homeImage.length > 0 && (
-          <Carousel
-            responsive={responsive}
-            pauseOnHover={false}
-            arrows={false}
-            infinite={true}
-            autoPlay={true}
-            autoPlaySpeed={5000}
-            draggable={false}
-            swipeable={true}
-            customTransition="all 0.5s ease-in-out"
-          >
-            {homeImage.map((image) => (
-              <div
-                key={image.id}
-                className="carousel-item relative h-[40vh] md:h-[60vh] w-screen"
-              >
-                {/* Black gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent z-10"></div>
+          // <Carousel
+          //   responsive={responsive}
+          //   pauseOnHover={false}
+          //   arrows={false}
+          //   infinite={true}
+          //   autoPlay={true}
+          //   autoPlaySpeed={5000}
+          //   draggable={false}
+          //   swipeable={true}
+          //   customTransition="all 0.5s ease-in-out"
+          // >
+          //   {homeImage.map((image) => (
+          //     <div
+          //       key={image.id}
+          //       className="carousel-item relative h-[40vh] md:h-[60vh] w-screen"
+          //     >
+          //       {/* Black gradient overlay */}
+          //       <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent z-10"></div>
 
-                {/* Image */}
-                <img
-                  className="absolute inset-0 h-full w-full object-cover  "
-                  src={`https://backoffice.innerpece.com/${image.slider_image}`}
-                  alt={image.slider_name}
-                  loading="lazy"
-                />
+          //       {/* Image */}
+          //       <img
+          //         className="absolute inset-0 h-full w-full object-cover  "
+          //         src={`https://backoffice.innerpece.com/${image.slider_image}`}
+          //         alt={image.slider_name}
+          //         loading="lazy"
+          //       />
 
-                {/* <p className="text-white uppercase [text-shadow:2px_2px_3px_#000000]  z-10  absolute top-5 sm:top-20  left-5 md:left-14 text-lg md:text-5xl ">
-                  {image.slider_name}
-                </p> */}
+          //       <div className="flex w-full px-5 md:px-20 mt-5 md:mt-20 items-center absolute justify-center">
+          //         <p className="text-white flex uppercase font-semibold text-center  z-10   top-5 sm:top-20 text-lg md:text-3xl lg:text-4xl xl:text-5xl ">
+          //           {image.slider_name}
+          //         </p>
+          //       </div>
+          //     </div>
+          //   ))}
+          // </Carousel>
 
-                <div className="flex w-full px-5 md:px-20 mt-5 md:mt-20 items-center absolute justify-center">
-                  <p className="text-white flex uppercase font-semibold text-center  z-10   top-5 sm:top-20 text-lg md:text-3xl lg:text-4xl xl:text-5xl ">
-                    {image.slider_name}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </Carousel>
+          //       <div className="relative overflow-hidden w-full h-[40vh] md:h-[60vh]">
+          //   <div className="relative w-full h-full" ref={emblaRef}>
+          //     <div className="relative w-full h-full">
+          //       {homeImage.map((image, index) => (
+          //         <div
+          //           key={image.id}
+          //           className={`absolute inset-0 transition-opacity duration-1000 ${
+          //             index === selectedIndex ? "opacity-100" : "opacity-0"
+          //           }`}
+          //         >
+          //           {/* Black Gradient Overlay */}
+          //           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent z-10"></div>
+
+          //           {/* Image */}
+          //           <img
+          //             className="absolute inset-0 w-full h-full object-cover"
+          //             src={`https://backoffice.innerpece.com/${image.slider_image}`}
+          //             alt={image.slider_name}
+          //             loading="lazy"
+          //           />
+
+          //           {/* Text Overlay */}
+          //           <div className="absolute inset-0 flex items-center justify-center px-5 md:px-20 mt-5 md:mt-20">
+          //             <p className="text-white uppercase font-semibold text-center z-10 text-lg md:text-3xl lg:text-4xl xl:text-5xl">
+          //               {image.slider_name}
+          //             </p>
+          //           </div>
+          //         </div>
+          //       ))}
+          //     </div>
+          //   </div>
+          // </div>
+          // <div className="relative w-full h-[40vh] md:h-[60vh] overflow-hidden">
+          //   {homeImage.map((image, index) => (
+          //     <div
+          //       key={image.id}
+          //       className={`absolute inset-0 transition-opacity duration-1000 ${
+          //         index === currentIndex ? "opacity-100" : "opacity-0"
+          //       }`}
+          //     >
+          //       {/* <p className="text-white absolute  z-30  text-sm mt-10 sm:mt-20 md:mt-24 lg:mt-32 px-5 md:px-20">
+          //         CHOOSE THE BEST DESTINATION
+          //       </p> */}
+
+          //       {/* Black Gradient Overlay */}
+          //       {/* <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent z-10"></div> */}
+
+          //       {/* Image */}
+          //       <img
+          //         className="absolute inset-0 w-full h-full object-cover"
+          //         src={`https://backoffice.innerpece.com/${image.slider_image}`}
+          //         alt={image.slider_name}
+          //         loading="lazy"
+          //       />
+
+          //       <div className="flex flex-col h-full w-full px-5 md:px-20  justify-center absolute ">
+          //         <p
+          //           style={{ "text-shadow": "4px 4px 3px rgba(0,0,0,0.7)" }}
+          //           className="text-white flex font-jost  md:w-2/3     sm:top-20 text-lg md:text-3xl lg:text-4xl "
+          //         >
+          //           {image.slider_name}
+          //         </p>
+          //       </div>
+          //     </div>
+          //   ))}
+          // </div>
+          <div className="relative w-full h-[40vh] md:h-[70vh] overflow-hidden">
+            <img
+              src={common_rooms_zostel}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 flex items-center justify-center px-5 md:px-20">
+                    <p style={{textShadow:'3px 3px 3px rgba(0, 0, 0, 0.8)'}} className="text-white uppercase font-semibold text-center z-10 text-lg md:text-3xl font-jost lg:text-4xl xl:text-5xl">
+                      More Travel More Peace
+                    </p>
+                  </div>
+          </div>
         )
       )}
-      {homeImage.length > 0 && (
+
+      {/* {homeImage.length > 0 && (
         <div className="w-100%  flex  absolute bottom-1  left-[2%] right-[2%] md:left-[10%] md:right-[10%]   justify-center ">
-          {/* <div className="   justify-center  bg-white flex  flex-shrink flex-row flex-wrap md:flex-nowrap sm:gap-2 gap-1 rounded mx-1 px-2 sm:px-0 sm:ps-1 py-1 sm:py-0   md:rounded-3xl shadow-2xl shadow-white/40">
+         <div className="   justify-center  bg-white flex  flex-shrink flex-row flex-wrap md:flex-nowrap sm:gap-2 gap-1 rounded mx-1 px-2 sm:px-0 sm:ps-1 py-1 sm:py-0   md:rounded-3xl shadow-2xl shadow-white/40">
             <div
               className="flex  flex-grow basis-[5%] lg:basis-[7%]   flex-shrink  items-center gap-3 border-gray-400 border-2 rounded md:rounded-3xl  
          lg:mx-2 my-2  "
@@ -156,9 +244,9 @@ function Hero() {
                 Find Now
               </p>
             </div>
-          </div> */}
+          </div> 
 
-          {/* <div className="flex flex-wrap md:flex-nowrap bg-white shadow-2xl shadow-white/40 rounded-lg md:rounded-3xl  px-2 py-2 sm:px-3 sm:py-2 gap-2 sm:gap-3">
+           {/* <div className="flex flex-wrap md:flex-nowrap bg-white shadow-2xl shadow-white/40 rounded-lg md:rounded-3xl  px-2 py-2 sm:px-3 sm:py-2 gap-2 sm:gap-3">
             
             <div className="flex flex-grow md:flex-grow-0 gap-1">
               <div className="flex basis-full flex-grow items-center gap-3 border-2 border-gray-400 rounded-lg md:rounded-3xl   md:basis-[25%] lg:basis-[20%] px-2 py-1">
@@ -194,9 +282,9 @@ function Hero() {
                 Find Now
               </p>
             </div>
-          </div> */}
-        </div>
-      )}
+          </div>  */}
+      {/* </div> */}
+      {/* )}  */}
     </div>
   );
 }

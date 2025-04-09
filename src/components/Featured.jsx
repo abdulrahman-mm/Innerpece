@@ -17,6 +17,8 @@ import {
 } from "react-share";
 import { MdDateRange } from "react-icons/md";
 import icons8InstagramLogo from "../assets/icons8-instagram-logo.svg";
+import { PiListHeartFill } from "react-icons/pi";
+
 
 function Featured() {
   const location = useLocation();
@@ -128,8 +130,6 @@ function Featured() {
     fetchProgramData();
   }, []);
 
- 
-
   return (
     <div className="mt-20 md:mt-28 ms-5 me-5 md:ms-10 md:me-10  lg:ms-20 lg:me-20">
       <div className="flex flex-wrap flex-col items-start justify-between gap-4">
@@ -168,9 +168,9 @@ function Featured() {
                 quote={metaDescription}
                 hashtag="#innerpece"
               >
-                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                <div className="flex items-center cursor-pointer border-2 hover:bg-[#0965FE]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
                   <FacebookIcon size={22} round={true} />
-                  <p className="text-gray-700">Share</p>
+                  <p>Share</p>
                 </div>
               </FacebookShareButton>
 
@@ -179,9 +179,9 @@ function Featured() {
                 quote={metaDescription}
                 hashtag="#innerpece"
               >
-                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                <div className="flex items-center cursor-pointer border-2 hover:bg-[#0077B5]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
                   <LinkedinIcon size={22} round={true} />
-                  <p className="text-gray-700">Share</p>
+                  <p>Share</p>
                 </div>
               </LinkedinShareButton>
 
@@ -190,42 +190,21 @@ function Featured() {
                 quote={metaDescription}
                 hashtag="#innerpece"
               >
-                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
+                <div className="flex items-center cursor-pointer border-2 hover:bg-[#25D366]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
                   <WhatsappIcon size={22} round={true} />
-                  <p className="text-gray-700">Share</p>
+                  <p>Share</p>
                 </div>
               </WhatsappShareButton>
 
-              {/* <a href="https://www.instagram.com/" target="_blank">
-                <div className="flex items-center cursor-pointer border-2 border-gray-700  rounded-full p-2 gap-2 px-3">
-                  <img
-                    src={icons8InstagramLogo}
-                    alt=""
-                    className="object-cover h-6 w-6"
-                  />
-                  <p className="text-gray-700">Share</p>
-                </div>
-              </a>
-              <a href="https://www.facebook.com/login.php/" target="_blank">
-                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
-                  <FacebookIcon size={22} round={true} />
-                  <p className="text-gray-700">Share</p>
-                </div>
-              </a>
-              <a href="https://www.linkedin.com/feed/" target="_blank">
-                <div className="flex items-center cursor-pointer border-2 border-gray-700 rounded-full p-2 gap-2 px-3">
-                  <LinkedinIcon size={22} round={true} />
-                  <p className="text-gray-700">Share</p>
-                </div>
-              </a> */}
+             
 
               {/* wishlist */}
               <div
-                className="flex items-center cursor-pointer border-2  border-gray-700 rounded-full p-2 gap-2 px-3"
+                className="flex items-center cursor-pointer border-2 hover:bg-red-500  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200  rounded-full p-2 gap-2 px-3"
                 onClick={() => handleWishlistClick(id)}
               >
                 {isWishlisted ? <IoHeartSharp /> : <IoHeartOutline />}
-                <p className="text-gray-700">WishList</p>
+                <p>WishList</p>
               </div>
             </div>
           </div>

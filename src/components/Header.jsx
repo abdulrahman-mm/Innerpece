@@ -28,7 +28,7 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-between items-center  px-5  py-3 md:py-4 bg-black text-white ">
+    <div className="flex justify-between items-center ps-5 pe-5 md:ps-16 md:pe-16  py-1 md:py-5  bg-black text-white ">
       <div onClick={() => navigate("/")} className="cursor-pointer">
         <img src={innerpece_logo2} alt="" />
       </div>
@@ -76,14 +76,14 @@ function Header() {
             <Link
               onClick={onClickLogout}
               to="/login"
-              className="cursor-pointer  font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700  text-center  lg:me-10  md:px-3 lg:px-6 py-2"
+              className="cursor-pointer  font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700  text-center    md:px-3 lg:px-6 py-2"
             >
               Logout
             </Link>
           ) : (
             <Link
               to="/login"
-              className="cursor-pointer font-semibold   border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 text-center  lg:me-10 md:px-3 lg:px-6 py-2"
+              className="cursor-pointer font-semibold   border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 text-center   md:px-3 lg:px-6 py-2"
             >
               Login
             </Link>

@@ -50,10 +50,11 @@ function Destinations() {
   return (
     <div>
       {destinationData.length > 0 && (
-        <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16 md:mt-16">
-          <p className="text-xl md:text-3xl font-semibold">Destinations</p>
+        <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+          <p className="text-xl md:text-3xl font-semibold font-mulish text-[#3E3E3E]">Destinations</p>
 
-          {/* <div className="flex flex-wrap gap-4 justify-start mt-5">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-7 mt-8 md:mt-10">
             {loading ? (
               Array(4)
                 .fill(0)
@@ -63,40 +64,7 @@ function Destinations() {
                 <div
                   onClick={() => handleCardClick(item.id, item.city_name)}
                   key={index}
-                  className="flex items-center gap-5 border-2 border-gray-400/20 p-2 pe-0 w-80 rounded-2xl transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl cursor-pointer"
-                >
-                  <img
-                    src={
-                      item.cities_pic
-                        ? ` https://backoffice.innerpece.com/${item.cities_pic}`
-                        : defaultimg
-                    }
-                    // src={`https://backoffice.innerpece.com/${item.cities_pic}`}
-                    alt={item.city_name}
-                    className="w-14 h-14 object-cover rounded-full"
-                  />
-                  <p className="md:font-semibold text-lg md:text-xl">
-                    {item.city_name}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <div className="flex w-full items-center justify-center my-20">
-                <p className="md:text-3xl">No Destinations Found</p>
-              </div>
-            )}
-          </div> */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-5">
-            {loading ? (
-              Array(4)
-                .fill(0)
-                .map((_, index) => <SkeletonCard key={index} />)
-            ) : destinationData && destinationData.length > 0 ? (
-              destinationData.map((item, index) => (
-                <div
-                  onClick={() => handleCardClick(item.id, item.city_name)}
-                  key={index}
-                  className="flex items-center gap-5 border-2 border-gray-400/20 p-2 pe-0 w-full rounded-2xl transition-all ease-in-out duration-500 hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl cursor-pointer"
+                  className="flex items-center gap-5 border border-gray-400/20 p-2 pe-0 w-full rounded-2xl transition-all ease-in-out duration-500 hover:-translate-y-1  cursor-pointer"
                 >
                   <img
                     src={
@@ -107,7 +75,7 @@ function Destinations() {
                     alt={item.city_name}
                     className="w-14 h-14 object-cover rounded-full"
                   />
-                  <p className="md:font-semibold text-lg md:text-xl">
+                  <p className="md:font-medium text-lg md:text-xl font-mulish">
                     {item.city_name}
                   </p>
                 </div>

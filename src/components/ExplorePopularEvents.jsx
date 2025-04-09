@@ -75,7 +75,7 @@ function ExplorePopularEvents() {
   );
 
   const SkeletonCarousel = () => (
-    <div className="flex gap-5  md:hidden">
+    <div className="flex gap-y-16 gap-x-7 md:hidden">
       {Array(1)
         .fill(0)
         .map((_, index) => (
@@ -98,13 +98,13 @@ function ExplorePopularEvents() {
   return (
     <div>
       {popularEventsData.length > 0 && (
-        <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16  md:mt-16">
-          <p className="text-xl md:text-3xl font-semibold">
-            Explore <span className="text-blue-500">Popular Events</span>
+        <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+          <p className="text-xl md:text-3xl font-semibold font-mulish text-[#3E3E3E]">
+            Explore <span className="text-[#007DD7]">Popular Events</span>
           </p>
 
           {isLoading ? (
-            <div className="flex mt-5">
+            <div className="flex mt-8 md:mt-10">
               <div className="flex-grow">
                 <SkeletonCarousel />
               </div>
@@ -122,7 +122,7 @@ function ExplorePopularEvents() {
               keyBoardControl={true}
               transitionDuration={1000}
               containerClass="carousel-container"
-              itemClass="carousel-item-padding-40-px block md:hidden mt-5"
+              itemClass="carousel-item-padding-40-px block md:hidden mt-8 md:mt-10"
             >
               {popularEventsData.map((items, index) => (
                 <div
@@ -163,7 +163,7 @@ function ExplorePopularEvents() {
           )}
 
           {isLoading ? (
-            <div className="max-md:hidden flex flex-wrap items-center justify-start mt-5 gap-x-5 gap-y-14">
+            <div className="max-md:hidden flex flex-wrap items-center justify-start mt-8 md:mt-10 gap-y-16 gap-x-7">
               {Array(4)
                 .fill(0)
                 .map((_, index) => (
@@ -173,12 +173,12 @@ function ExplorePopularEvents() {
                 ))}
             </div>
           ) : popularEventsData.length > 0 ? (
-            <div className="max-md:hidden grid  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mt-5">
+            <div className="max-md:hidden grid  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-y-16 gap-x-7 mt-8 md:mt-10">
               {popularEventsData.map((items, index) => (
                 <div
                   onClick={() => handleCardClick(items.id, items.title)}
                   key={index}
-                  className="w-full h-64 cursor-pointer transform transition duration-500 ease-in-out hover:-translate-y-1 rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
+                  className="w-full h-60 cursor-pointer transform transition duration-500 ease-in-out hover:-translate-y-1 rounded-lg shadow-lg shadow-black/20 hover:shadow-2xl"
                 >
                   <img
                     src={

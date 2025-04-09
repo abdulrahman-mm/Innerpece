@@ -1,9 +1,9 @@
 import React from "react";
 import telegram from "../assets/telegram.png";
-import customerservice from "../assets/customerservice.png";
-import approve from "../assets/approve.png";
-import insurance from "../assets/insurance.png";
-import pricetag from "../assets/pricetag.png";
+import customerservice from "../assets/customerservice.svg";
+import approve from "../assets/approve.svg";
+import insurance from "../assets/insurance.svg";
+import pricetag from "../assets/pricetag.svg";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -27,6 +27,10 @@ import { MdEmojiPeople } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { FaChildReaching } from "react-icons/fa6";
 import { FaChild } from "react-icons/fa6";
+import { FaBirthdayCake } from "react-icons/fa";
+import { GiLovers } from "react-icons/gi";
+import Swal from "sweetalert2";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Sidebar({ LocationShareRef }) {
   const navigate = useNavigate();
@@ -40,6 +44,8 @@ function Sidebar({ LocationShareRef }) {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [yourResidenceLocation, setYourResidenceLocation] = useState("");
+  const [dob, setDob] = useState("");
+  const [engagementDate, setEngagementDate] = useState("");
   const [howManyDays, setHowManyDays] = useState("");
   const [travelDestination, setTravelDestination] = useState("");
   const [budgetPerHead, setBudgetPerHead] = useState("");
@@ -61,6 +67,7 @@ function Sidebar({ LocationShareRef }) {
   const [reference_id, setReferenceId] = useState("");
   const [childCount, setChildCount] = useState("");
   const [childAge, setChildAge] = useState([]);
+  const [loginCliked, setLoginClicked] = useState(false);
   const [image, setImage] = useState("");
 
   const pathName = window.location.pathname;
@@ -98,6 +105,8 @@ function Sidebar({ LocationShareRef }) {
           payload
         );
         setApiData(response.data.data);
+        setHomeImage(response.data.data.gallery_img);
+        // apiData.gallery_img
         setImage(response.data.data.cover_img);
         // console.log(response.data.data.google_map);
         let modifiedMapHtml = response.data.data.google_map;
@@ -151,7 +160,7 @@ function Sidebar({ LocationShareRef }) {
     setUserDetails(userDetails);
 
     setUserId(localStorage.getItem("loginid"));
-  }, []);
+  }, [loginCliked]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -187,7 +196,8 @@ function Sidebar({ LocationShareRef }) {
           program_title: apiData.title,
           child_count: childCount,
           child_age: childAge,
-          image,
+          engagement_date: engagementDate,
+          birth_date: dob,
         },
         {
           headers: {
@@ -216,8 +226,10 @@ function Sidebar({ LocationShareRef }) {
       setTravelDestination("");
       setMaleCount("");
       setFemaleCount("");
-      setChildCount("")
-      setChildAge([])
+      setChildCount("");
+      setChildAge([]);
+      setDob("");
+      setEngagementDate("");
 
       // Clear success message after 5 seconds
       setTimeout(() => {
@@ -226,7 +238,7 @@ function Sidebar({ LocationShareRef }) {
     } catch (error) {
       // Handle validation errors if any
       setLoadingform("");
-      setFailure("Error try again");
+      setFailure("Please Fill all the fields");
       if (error.response && error.response.data.errors) {
         setErrors(error.response.data.errors);
       }
@@ -237,7 +249,7 @@ function Sidebar({ LocationShareRef }) {
   // this will stop scroll when modal is open
   useEffect(() => {
     // Add or remove the 'overflow-hidden' class on the <body> based on modal state
-    if (show) {
+    if (show || loginCliked) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
@@ -247,14 +259,10 @@ function Sidebar({ LocationShareRef }) {
     return () => {
       document.body.classList.remove("overflow-hidden");
     };
-  }, [show]);
+  }, [show, loginCliked]);
 
   const handleLoginClick = () => {
-    navigate("/login");
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    setLoginClicked(true);
   };
 
   const onChangeChildAge = (e, key, index) => {
@@ -284,18 +292,107 @@ function Sidebar({ LocationShareRef }) {
     }
   }, []);
 
-  
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [loginCheckboxChecked, setLoginCheckBoxChecked] = useState("");
+  const [loginError, setLoginError] = useState({});
+
+  function onClickBtn() {
+    navigate("/signup");
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  }
+
+  function onChangeInput(e) {
+    const { name, value } = e.target;
+
+    if (name === "loginEmail") {
+      setLoginEmail(value);
+    }
+
+    if (name === "loginPassword") {
+      setLoginPassword(value);
+    }
+
+    if (name === "checkbox") {
+      setLoginCheckBoxChecked(loginCheckboxChecked ? "" : "checkbox checked");
+    }
+  }
+
+  async function onClickSignIn() {
+    try {
+      let response = await axios.post(
+        // `https://backoffice.innerpece.com/api/login`,
+        `https://backoffice.innerpece.com/api/v1/login`,
+        {
+          email: loginEmail,
+          password: loginPassword,
+        }
+      );
+
+      const loginid = response.data.token;
+      const loginDetails = response.data.user_details;
+
+      localStorage.setItem("loginid", loginid);
+      localStorage.setItem("loginDetails", JSON.stringify(loginDetails));
+
+      setLoginEmail("");
+      setLoginPassword("");
+      setLoginError("");
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Login successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      setLoginClicked(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+
+      let errors = err.response.data.errors
+        ? err.response.data.errors
+        : err.response.data;
+      setLoginError({ ...errors });
+      console.log(errors);
+    }
+  }
+
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
+
+  const [homeImage, setHomeImage] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === homeImage.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 2500); // Change image every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [homeImage.length]);
 
   return (
     <div
-      className={` w-full md:sticky top-0  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:mt-7 ${
+      className={` w-full md:sticky pb-10 h-screen  overflow-y-auto sidebar bg-[#FEFEFE]   top-5  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:my-7 ${
         show ? "fixed" : ""
       }`}
     >
       {loading ? (
         <div className="h-60 w-full bg-gray-500 animate-pulse"></div>
       ) : (
-        <div className="flex flex-col p-3  shadow-md bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
+        <div className="flex flex-col p-3  shadow-md  bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
           <span className="text-gray-600 ">
             Starting From{" "}
             <del>INR{` ${apiData.actual_price && apiData.actual_price}`}</del>{" "}
@@ -312,20 +409,6 @@ function Sidebar({ LocationShareRef }) {
           </span>
 
           <div className="flex flex-col items-center flex-wrap justify-center ">
-            {/* <div
-              // style={{ backgroundColor: "#EC3B63" }}
-              className="flex flex-wrap  flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
-            >
-              <img src={telegram} alt="" />
-              <button
-                onClick={handleShow}
-                disabled={userDetails ? false : true}
-                className="text-white font-semibold"
-              >
-                Book Now
-              </button>
-            </div> */}
-
             <button
               onClick={handleShow}
               disabled={userDetails ? false : true}
@@ -351,13 +434,13 @@ function Sidebar({ LocationShareRef }) {
         </div>
       )}
 
-      <div className="shadow-md mt-5  shadow-black/10 rounded-lg">
+      <div className="shadow-md mt-5  bg-white py-4  shadow-black/10 rounded-lg">
         <div className="flex gap-4  ms-3 text-2xl">
           <p className="text-sky-800">|</p>
           <p className="font-semibold">Book With Confidence</p>
         </div>
 
-        <div className="flex flex-wrap  items-start  justify-between md:flex-col p-5   gap-y-3 gap-2">
+        <div className="flex flex-wrap  items-start  justify-between md:flex-col  px-5 pt-5   gap-y-3 gap-2">
           <div className="flex gap-4 items-center">
             <img src={customerservice} alt="" />
             <p>Customer care available 24/7</p>
@@ -388,48 +471,185 @@ function Sidebar({ LocationShareRef }) {
           className="mt-2 overflow-hidden"
           dangerouslySetInnerHTML={{ __html: map }}
         />
-
-        <div></div>
       </div>
 
-      {show && (
-        <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto">
-          <div className="bg-white rounded-lg shadow-lg max-w-full w-[90%] sm:w-[80%]  max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-bold text-gray-900">
-                {apiData.title}
-              </h2>
+      {loginCliked && (
+        <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
+          <div className="flex items-center justify-center  bg-white">
+            <div className="w-screen   md:w-[70vw] py-3  lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
               <button
-                onClick={handleClose}
-                className="text-gray-500 font-extrabold text-xl hover:text-gray-700 focus:outline-none"
+                onClick={() => setLoginClicked(false)}
+                className="text-gray-500 w-full pe-5  font-extrabold text-xl hover:text-gray-700 focus:outline-none placeholder:text-gray-600 placeholder:text-sm flex justify-end"
               >
                 ✕
               </button>
-            </div>
+              <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
+                <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
-            {/* Modal Body */}
-            <div className="p-4 md:p-6">
-              <div className="flex flex-col md:flex-row gap-5">
-                {/* Image Section */}
-                <div className="flex flex-col items-center md:basis-1/2">
-                  <img
-                    className="w-full h-auto object-cover rounded-lg"
-                    src={
-                      apiData.gallery_img && apiData.gallery_img[0]
-                        ? `https://backoffice.innerpece.com/${apiData.gallery_img[0]}`
-                        : defaultimg
-                    }
-                    alt="Pink Palace"
-                  />
-                  <h1 className="mt-3 text-lg md:text-xl font-semibold">
+                <div className="w-full md:w-2/5 flex-grow flex-shrink">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-xl md:text-2xl lg:text-3xl font-semibold">
+                      Log In To Get Started
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 items-center">
+                      <p
+                        style={{ backgroundColor: "#EB9009" }}
+                        className="text-white px-2 rounded"
+                      >
+                        20% off
+                      </p>
+                      <p className="text-gray-500">
+                        get 20% off for web signup
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
+                      <div className="flex flex-col flex-grow gap-2">
+                        <label htmlFor="loginEmail" className="font-semibold">
+                          Email
+                        </label>
+                        <input
+                          type="text"
+                          name="loginEmail"
+                          id="loginEmail"
+                          value={loginEmail}
+                          autoComplete="off"
+                          onChange={onChangeInput}
+                          className="border-2 border-gray-300 outline-none p-2 rounded-md"
+                          placeholder="Enter your Email"
+                        />
+                        {loginError.email && (
+                          <p className="text-red-500 text-xs sm:text-sm ">
+                            {loginError.email}
+                          </p>
+                        )}
+
+                        {loginError.error === "Unauthorized User " && (
+                          <p className="text-red-500 text-xs sm:text-sm ">
+                            {loginError.error}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col mt-5 gap-2">
+                      <div className="flex items-center justify-between">
+                        <label htmlFor="password" className="font-semibold">
+                          Your Password
+                        </label>
+                        {/* <p className="text-red-400 cursor-pointer text-xs md:text-sm font-semibold">
+                    Forgot Password?
+                  </p> */}
+                      </div>
+                      <input
+                        onFocus={(e) => (e.target.type = "text")}
+                        onBlur={(e) => (e.target.type = "password")}
+                        type="loginPassword"
+                        id="loginPassword"
+                        name="loginPassword"
+                        value={loginPassword}
+                        onChange={onChangeInput}
+                        autoComplete="off"
+                        placeholder="Enter your Password"
+                        className="border-2  border-gray-300 outline-none p-2 rounded-md"
+                      />
+                      {loginError.password && (
+                        <p className="text-red-500 text-xs sm:text-sm ">
+                          {loginError.password}
+                        </p>
+                      )}
+
+                      {loginError.error === "Incorrect password" && (
+                        <p className="text-red-500 text-xs sm:text-sm ">
+                          {loginError.error}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="recaptacha-login  mt-5 ">
+                      <ReCAPTCHA
+                        sitekey="6LfDSrsqAAAAAI2jP2tOdr2l4VkiztyX2S2H0Fxg"
+                        onChange={handleCaptchaChange}
+                      />
+                    </div>
+
+                    <button
+                      disabled={!captchaValue}
+                      onClick={onClickSignIn}
+                      className={`${
+                        !captchaValue ? "bg-gray-400" : "bg-sky-800"
+                      } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
+                    >
+                      Sign In
+                    </button>
+
+                    <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
+                      <p>Don't you have an account?</p>
+                      <button
+                        onClick={onClickBtn}
+                        className="bg-sky-800 px-3 py-1 cursor-pointer  text-white rounded"
+                      >
+                        Register
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {show && (
+        <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto">
+          <div className="bg-white rounded-lg shadow-lg max-w-full w-[100%] sm:w-[80%] h-screen  sm:max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={handleClose}
+              className="text-gray-500 w-full pe-5 pt-3 font-extrabold text-xl hover:text-gray-700 focus:outline-none placeholder:text-gray-600 placeholder:text-sm flex justify-end"
+            >
+              ✕
+            </button>
+            {/* Modal Header */}
+            <div className="flex  p-6 border-b">
+              {/* Image Section */}
+              <div className="flex flex-col-reverse md:flex-row w-full gap-8  ">
+                {/* <img
+                  className="md:w-1/2 h-40  object-cover rounded-lg"
+                  src={
+                    apiData.gallery_img && apiData.gallery_img[0]
+                      ? `https://backoffice.innerpece.com/${apiData.gallery_img[0]}`
+                      : defaultimg
+                  }
+                  alt=""
+                /> */}
+
+                <div className="relative w-full h-52 md:w-1/2 overflow-hidden">
+                  {homeImage.map((image, index) => (
+                    <div
+                      key={image.id}
+                      className={`absolute inset-0 transition-opacity duration-1000 ${
+                        index === currentIndex ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      
+                      <img
+                        className="absolute inset-0 w-full h-full object-cover object-center rounded-lg"
+                        src={`https://backoffice.innerpece.com/${image}`}
+                        alt={image.slider_name}
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="h-fit flex gap-3 flex-col">
+                  <h1 className=" text-lg md:text-xl font-semibold">
                     {apiData.title}
                   </h1>
-                  <div className="text-center mt-3">
-                    <span className="block text-sm text-gray-500">
-                      Starting From
-                    </span>
-                    <span className="block text-gray-500 line-through">
+                  <div className="  flex items-center gap-3 flex-wrap">
+                    <span className="block  text-gray-500">Starting From</span>
+                    <span className="block text-xs text-gray-500 line-through">
                       INR {apiData.actual_price}
                     </span>
                     <h2 className="text-green-600 text-lg font-semibold">
@@ -437,103 +657,114 @@ function Sidebar({ LocationShareRef }) {
                     </h2>
                   </div>
                 </div>
+              </div>
+            </div>
 
+            {/* Modal Body */}
+            <div className="p-4 md:p-6">
+              <div className="flex flex-col md:flex-row gap-5">
                 {/* Form Section */}
-                <div className="md:basis-1/2">
+                <div className="w-full">
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="flex flex-col gap-4">
-                      {/* Name Input */}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <IoIosContact />
-                          </span>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                          />
+                      {/* name and email */}
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
+                        {/* Name Input */}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <IoIosContact />
+                            </span>
+                            <input
+                              type="text"
+                              id="name"
+                              name="name"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Name"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
+                            />
+                          </div>
+                          {errors.name && (
+                            <p className="text-red-500 text-xs">
+                              {errors.name[0]}
+                            </p>
+                          )}
                         </div>
-                        {errors.name && (
-                          <p className="text-red-500 text-xs">
-                            {errors.name[0]}
-                          </p>
-                        )}
+
+                        {/* Email Input */}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <AiOutlineMail />
+                            </span>
+                            <input
+                              type="email"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Email"
+                              id="email"
+                              name="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                            />
+                          </div>
+                          {errors.email && (
+                            <p className="text-red-500 text-xs ">
+                              {errors.email[0]}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
-                      {/* Email Input */}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <AiOutlineMail />
-                          </span>
-                          <input
-                            type="email"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Email"
-                            id="email"
-                            name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                          />
+                      {/* phone and residence location */}
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
+                        {/* Phone Input */}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <MdOutlinePhone />
+                            </span>
+                            <input
+                              type="text"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Phone"
+                              id="phone"
+                              name="phone"
+                              value={phone}
+                              onChange={(e) => setPhone(e.target.value)}
+                            />
+                          </div>
+                          {errors.phone && (
+                            <p className="text-red-500 text-xs">
+                              {errors.phone[0]}
+                            </p>
+                          )}
                         </div>
-                        {errors.email && (
-                          <p className="text-red-500 text-xs ">
-                            {errors.email[0]}
-                          </p>
-                        )}
-                      </div>
 
-                      {/* Phone Input */}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <MdOutlinePhone />
-                          </span>
-                          <input
-                            type="text"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Phone"
-                            id="phone"
-                            name="phone"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                          />
+                        {/* your residence location */}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaLocationDot />
+                            </span>
+                            <input
+                              type="text"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Your Residence Location"
+                              id="Your Residence Location"
+                              name="Your Residence Location"
+                              value={yourResidenceLocation}
+                              onChange={(e) =>
+                                setYourResidenceLocation(e.target.value)
+                              }
+                            />
+                          </div>
+                          {errors.location && (
+                            <p className="text-red-500 text-xs">
+                              {errors.location[0]}
+                            </p>
+                          )}
                         </div>
-                        {errors.phone && (
-                          <p className="text-red-500 text-xs">
-                            {errors.phone[0]}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* your residence location */}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <FaLocationDot />
-                          </span>
-                          <input
-                            type="text"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Your Residence Location"
-                            id="Your Residence Location"
-                            name="Your Residence Location"
-                            value={yourResidenceLocation}
-                            onChange={(e) =>
-                              setYourResidenceLocation(e.target.value)
-                            }
-                          />
-                        </div>
-                        {errors.location && (
-                          <p className="text-red-500 text-xs">
-                            {errors.location[0]}
-                          </p>
-                        )}
                       </div>
 
                       {/*influencer id*/}
@@ -545,7 +776,7 @@ function Sidebar({ LocationShareRef }) {
                             </span>
                             <input
                               readOnly
-                              className="w-full text-gray-800 p-2 border-l focus:outline-none"
+                              className="w-full text-gray-800 p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
                               id="How Many Days"
                               name="How Many Days"
                               value={reference_id}
@@ -554,173 +785,221 @@ function Sidebar({ LocationShareRef }) {
                         </div>
                       )}
 
-                      {/*travel destination*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <LiaPlaceOfWorshipSolid />
-                          </span>
-                          <input
-                            type="text"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Travel Destination"
-                            id="Travel Destination"
-                            name="Travel Destination"
-                            value={apiData.title}
-                            // onChange={(e) =>
-                            //   setTravelDestination(e.target.value)
-                            // }
-                          />
-                        </div>
-                        {errors.travel_destination && (
-                          <p className="text-red-500 text-xs">
-                            {errors.travel_destination[0]}
-                          </p>
-                        )}
-                      </div>
-
-                      {/*how many days*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <FaCalendarDays />
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Number of days you would like to travel"
-                            id="Number of days you would like to travel"
-                            name="Number of days you would like to travel"
-                            value={howManyDays}
-                            onChange={(e) => setHowManyDays(e.target.value)}
-                          />
-                        </div>
-                        {errors.days && (
-                          <p className="text-red-500 text-xs">
-                            {errors.days[0]}
-                          </p>
-                        )}
-                      </div>
-
-                      {/*Budget Per Head */}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <RiMoneyRupeeCircleFill />
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Budget Per Head"
-                            id="Budget Per Head"
-                            name="Budget Per Head"
-                            value={budgetPerHead}
-                            onChange={(e) => setBudgetPerHead(e.target.value)}
-                          />
-                        </div>
-                        <p className="text-gray-500 text-xs">
-                          Note : Excluding flight/train cost
-                        </p>
-                        {errors.budget_per_head && (
-                          <p className="text-red-500 text-xs">
-                            {errors.budget_per_head[0]}
-                          </p>
-                        )}
-                      </div>
-
-                      {/*total count*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <FaPeopleLine />
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Total Count"
-                            id="Total Count"
-                            name="Total Count"
-                            value={totalCount}
-                            onChange={(e) => setTotalCount(e.target.value)}
-                          />
-                        </div>
-                        {errors.total_count && (
-                          <p className="text-red-500 text-xs">
-                            {errors.total_count[0]}
-                          </p>
-                        )}
-                      </div>
-
-                      {/*male &  count*/}
-                      <div className="flex flex-col">
-                        <div className="flex gap-5">
-                          <div className="flex flex-col">
-                            <div className="flex items-center border rounded-md">
-                              <span className="p-2">
-                                <FaMale />
-                              </span>
-                              <input
-                                type="number"
-                                className="w-full p-2 border-l focus:outline-none"
-                                placeholder="Male Count"
-                                id="Male Count"
-                                name="Male Count"
-                                value={maleCount}
-                                onChange={(e) => setMaleCount(e.target.value)}
-                              />
-                            </div>
-                            {errors.male_count && (
-                              <p className="text-red-500 text-xs">
-                                {errors.male_count[0]}
-                              </p>
-                            )}
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
+                        {/*travel destination*/}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <LiaPlaceOfWorshipSolid />
+                            </span>
+                            <input
+                              type="text"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Travel Destination"
+                              id="Travel Destination"
+                              name="Travel Destination"
+                              value={apiData.title}
+                            />
                           </div>
+                          {errors.travel_destination && (
+                            <p className="text-red-500 text-xs">
+                              {errors.travel_destination[0]}
+                            </p>
+                          )}
+                        </div>
 
-                          <div className="flex flex-col ">
-                            <div className="flex items-center border rounded-md">
-                              <span className="p-2">
-                                <FaFemale />
-                              </span>
-                              <input
-                                type="number"
-                                className="w-full p-2 border-l focus:outline-none"
-                                placeholder="Female Count"
-                                id="Female Count"
-                                name="Female Count"
-                                value={femaleCount}
-                                onChange={(e) => setFemaleCount(e.target.value)}
-                              />
-                            </div>
-                            {errors.female_count && (
-                              <p className="text-red-500 text-xs">
-                                {errors.female_count[0]}
-                              </p>
-                            )}
+                        {/* DOB Input */}
+                        <div className="flex flex-col sm:w-1/2 ">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaBirthdayCake />
+                            </span>
+                            <input
+                              autoComplete="on"
+                              type="text"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Select DOB"
+                              id="dob"
+                              name="dob"
+                              value={dob}
+                              onFocus={(e) => (e.target.type = "date")}
+                              onBlur={(e) => (e.target.type = "text")}
+                              onChange={(e) => setDob(e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
 
-                      {/*Child count*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <FaChildReaching />
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="Child Count"
-                            id="Child Count"
-                            name="Child Count"
-                            value={childCount}
-                            onChange={(e) => setChildCount(e.target.value)}
-                          />
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
+                        {/* engagement date */}
+                        <div className="flex flex-col sm:w-1/2 ">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <GiLovers />
+                            </span>
+                            <input
+                              type="text"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Select Engagement Date"
+                              id="engagement date"
+                              name="engagement date"
+                              onFocus={(e) => (e.target.type = "date")}
+                              onBlur={(e) => (e.target.type = "text")}
+                              value={engagementDate}
+                              onChange={(e) =>
+                                setEngagementDate(e.target.value)
+                              }
+                            />
+                          </div>
                         </div>
-                        {errors.child_count && (
-                          <p className="text-red-500 text-xs">
-                            {errors.child_count[0]}
+
+                        {/*how many days*/}
+                        <div className="flex flex-col sm:w-1/2 ">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaCalendarDays />
+                            </span>
+                            <input
+                              type="number"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Number of days you would like to travel"
+                              id="Number of days you would like to travel"
+                              name="Number of days you would like to travel"
+                              value={howManyDays}
+                              onChange={(e) => setHowManyDays(e.target.value)}
+                            />
+                          </div>
+                          {errors.days && (
+                            <p className="text-red-500 text-xs">
+                              {errors.days[0]}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
+                        {/*Budget Per Head */}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <RiMoneyRupeeCircleFill />
+                            </span>
+                            <input
+                              type="number"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Budget Per Head"
+                              id="Budget Per Head"
+                              name="Budget Per Head"
+                              value={budgetPerHead}
+                              onChange={(e) => setBudgetPerHead(e.target.value)}
+                            />
+                          </div>
+                          <p className="text-gray-500 text-xs">
+                            Note : Excluding flight/train cost
                           </p>
-                        )}
+                          {errors.budget_per_head && (
+                            <p className="text-red-500 text-xs">
+                              {errors.budget_per_head[0]}
+                            </p>
+                          )}
+                        </div>
+
+                        {/*total count*/}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaPeopleLine />
+                            </span>
+                            <input
+                              type="number"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Total Count"
+                              id="Total Count"
+                              name="Total Count"
+                              value={totalCount}
+                              onChange={(e) => setTotalCount(e.target.value)}
+                            />
+                          </div>
+                          {errors.total_count && (
+                            <p className="text-red-500 text-xs">
+                              {errors.total_count[0]}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 w-full flex-col  sm:flex-row">
+                        {/*male &  count*/}
+                        {/* <div className="flex flex-col "> */}
+                        {/* <div className="flex gap-5"> */}
+                        <div className="flex flex-col sm:w-1/3">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaMale />
+                            </span>
+                            <input
+                              type="number"
+                              className="w-full p-2 border-l focus:outline-none me-2 placeholder:text-gray-600 placeholder:text-sm "
+                              placeholder="Male Count"
+                              id="Male Count"
+                              name="Male Count"
+                              value={maleCount}
+                              onChange={(e) => setMaleCount(e.target.value)}
+                            />
+                          </div>
+                          {errors.male_count && (
+                            <p className="text-red-500 text-xs">
+                              {errors.male_count[0]}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="flex flex-col sm:w-1/3 ">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaFemale />
+                            </span>
+                            <input
+                              type="number"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Female Count"
+                              id="Female Count"
+                              name="Female Count"
+                              value={femaleCount}
+                              onChange={(e) => setFemaleCount(e.target.value)}
+                            />
+                          </div>
+                          {errors.female_count && (
+                            <p className="text-red-500 text-xs">
+                              {errors.female_count[0]}
+                            </p>
+                          )}
+                        </div>
+
+                        {/*Child count*/}
+                        <div className="flex flex-col sm:w-1/3">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaChildReaching />
+                            </span>
+                            <input
+                              type="number"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="Child Count"
+                              id="Child Count"
+                              name="Child Count"
+                              value={childCount}
+                              onChange={(e) => setChildCount(e.target.value)}
+                            />
+                          </div>
+                          {errors.child_count && (
+                            <p className="text-red-500 text-xs">
+                              {errors.child_count[0]}
+                            </p>
+                          )}
+                        </div>
+                        {/* </div> */}
+                        {/* </div> */}
                       </div>
 
                       {/* child age based on child count */}
@@ -729,24 +1008,26 @@ function Sidebar({ LocationShareRef }) {
                           {Array(Number(childCount))
                             .fill(null)
                             .map((item, index) => (
-                              <div className="flex items-center w-full border rounded-md">
-                                <span className="p-2">
-                                  <FaChild />
-                                </span>
-                                <input
-                                id="number"
-                                name="number"
-                                  type="number"
-                                  placeholder={` ${index + 1}st Child Age`}
-                                  className="w-full p-2 border focus:outline-none"
-                                  onChange={(e) =>
-                                    onChangeChildAge(
-                                      e,
-                                      ` ${index + 1}st_Child_Age`,
-                                      index
-                                    )
-                                  }
-                                />
+                              <div className="grid grid-row-1 md:grid-row-3 ">
+                                <div className="flex items-center w-full border rounded-xl">
+                                  <span className="p-2">
+                                    <FaChild />
+                                  </span>
+                                  <input
+                                    id="number"
+                                    name="number"
+                                    type="number"
+                                    placeholder={` ${index + 1}st Child Age`}
+                                    className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                                    onChange={(e) =>
+                                      onChangeChildAge(
+                                        e,
+                                        ` ${index + 1}st_Child_Age`,
+                                        index
+                                      )
+                                    }
+                                  />
+                                </div>
                               </div>
                             ))}
                         </div>
@@ -757,116 +1038,124 @@ function Sidebar({ LocationShareRef }) {
                         </p>
                       )}
 
-                      {/*travel date*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <MdOutlineCalendarMonth />
-                          </span>
-                          <input
-                            type="date"
-                            className="w-full p-2 border-l text-gray-400 focus:outline-none"
-                            placeholder="Travel Date"
-                            id="Travel Date"
-                            name="Travel Date"
-                            value={travelDate}
-                            onChange={(e) => setTravelDate(e.target.value)}
-                          />
-                        </div>
-                        {errors.travel_date && (
-                          <p className="text-red-500 text-xs">
-                            {errors.travel_date[0]}
-                          </p>
-                        )}
-                      </div>
-
-                      {/*how many rooms you need*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <FaHouse />
-                          </span>
-                          <input
-                            type="number"
-                            className="w-full p-2 border-l focus:outline-none"
-                            placeholder="No of rooms required"
-                            id="No of rooms required"
-                            name="No of rooms required"
-                            value={howManyRoomsYouNeed}
-                            onChange={(e) =>
-                              setHowManyRoomsYouNeed(e.target.value)
-                            }
-                          />
-                        </div>
-                        {errors.rooms_count && (
-                          <p className="text-red-500 text-xs">
-                            {errors.rooms_count[0]}
-                          </p>
-                        )}
-                      </div>
-
-                      {/*Cab Need*/}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2 border-r">
-                            <FaCar />
-                          </span>
-                          <label className="ms-2 text-gray-400">
-                            Cab Needed
-                          </label>
-
-                          <div className="flex gap-1 p-2 ms-3">
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
+                        {/*travel date*/}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <MdOutlineCalendarMonth />
+                            </span>
                             <input
-                              type="radio"
-                              name="cab_need"
-                              id="yes"
-                              value="yes"
-                              checked={isCabNeed === "yes"}
-                              onChange={(e) => setIsCabNeed(e.target.value)}
+                              type="text"
+                              className="w-full p-2 border-l  focus:outline-none placeholder:text-gray-600 text-black placeholder:text-sm me-2"
+                              id="Travel Date"
+                              name="Travel Date"
+                              value={travelDate}
+                              onFocus={(e) => (e.target.type = "date")}
+                              onBlur={(e) => (e.target.type = "text")}
+                              placeholder="Select travel date"
+                              onChange={(e) => setTravelDate(e.target.value)}
                             />
-                            <label htmlFor="yes">Yes</label>
                           </div>
-                          <div className="flex gap-1 p-2">
-                            <input
-                              type="radio"
-                              name="cab_need"
-                              id="no"
-                              value="no"
-                              checked={isCabNeed === "no"}
-                              onChange={(e) => setIsCabNeed(e.target.value)}
-                            />
-                            <label htmlFor="no">No</label>
-                          </div>
+                          {errors.travel_date && (
+                            <p className="text-red-500 text-xs">
+                              {errors.travel_date[0]}
+                            </p>
+                          )}
                         </div>
-                        {errors?.cab_need && (
-                          <p className="text-red-500 text-xs">
-                            {errors.cab_need[0]}
-                          </p>
-                        )}
+
+                        {/*how many rooms you need*/}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaHouse />
+                            </span>
+                            <input
+                              type="number"
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              placeholder="No of rooms required"
+                              id="No of rooms required"
+                              name="No of rooms required"
+                              value={howManyRoomsYouNeed}
+                              onChange={(e) =>
+                                setHowManyRoomsYouNeed(e.target.value)
+                              }
+                            />
+                          </div>
+                          {errors.rooms_count && (
+                            <p className="text-red-500 text-xs">
+                              {errors.rooms_count[0]}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
-                      {/* Comments Input */}
-                      <div className="flex flex-col">
-                        <div className="flex items-center border rounded-md">
-                          <span className="p-2">
-                            <BiMessageRoundedDots />
-                          </span>
-                          <textarea
-                            className="w-full p-2 border-l focus:outline-none"
-                            id="message"
-                            name="message"
-                            placeholder="Comments"
-                            value={comments}
-                            onChange={(e) => setCommends(e.target.value)}
-                          ></textarea>
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
+                        {/*Cab Need*/}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2 border-r">
+                              <FaCar />
+                            </span>
+                            <label className="ms-2 text-black">
+                              Cab Needed
+                            </label>
+
+                            <div className="flex gap-1 p-2 ms-3">
+                              <input
+                                type="radio"
+                                name="cab_need"
+                                id="yes"
+                                value="yes"
+                                checked={isCabNeed === "yes"}
+                                onChange={(e) => setIsCabNeed(e.target.value)}
+                              />
+                              <label htmlFor="yes">Yes</label>
+                            </div>
+                            <div className="flex gap-1 p-2">
+                              <input
+                                type="radio"
+                                name="cab_need"
+                                id="no"
+                                value="no"
+                                checked={isCabNeed === "no"}
+                                onChange={(e) => setIsCabNeed(e.target.value)}
+                              />
+                              <label htmlFor="no">No</label>
+                            </div>
+                          </div>
+                          {errors?.cab_need && (
+                            <p className="text-red-500 text-xs">
+                              {errors.cab_need[0]}
+                            </p>
+                          )}
                         </div>
-                        {errors.comments && (
-                          <p className="text-red-500 text-xs ">
-                            {errors.comments[0]}
-                          </p>
-                        )}
+
+                        {/* Comments Input */}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <BiMessageRoundedDots />
+                            </span>
+                            <textarea
+                              className="w-full p-2 me-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                              id="message"
+                              name="message"
+                              placeholder="Comments"
+                              value={comments}
+                              rows={1}
+                              onChange={(e) => setCommends(e.target.value)}
+                            ></textarea>
+                          </div>
+                          {errors.comments && (
+                            <p className="text-red-500 text-xs ">
+                              {errors.comments[0]}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
+
                     {success && (
                       <div className="bg-green-100 text-green-700 p-2 rounded mb-4">
                         {success}

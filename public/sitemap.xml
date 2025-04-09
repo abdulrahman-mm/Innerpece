@@ -36,6 +36,21 @@
     <priority>0.50</priority>
   </url>
 
+   <!-- user wishlist page -->
+  <url>
+    <loc>https://innerpece.com/wishlist</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+
+   <!-- user enquiries page -->
+  <url>
+    <loc>https://innerpece.com/enquiries</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
   <!-- Terms of service page-->
   <url>
     <loc>https://innerpece.com/termsofservice</loc>
@@ -52,7 +67,7 @@
 
 <!-- Faq page -->
   <url>
-    <loc>http://localhost:5173/faq</loc>
+    <loc>https://innerpece.com/faq</loc>
     <lastmod>2025-01-27</lastmod>
     <priority>0.50</priority>
   </url>

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import Header from "../components/Header";
+import { lazy,Suspense } from "react";
+let Header=lazy(()=>import("../components/Header"))
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MyProfile_Sidebar from "../components/MyProfile_Sidebar";
+let MyProfile_Sidebar=lazy(()=>import("../components/MyProfile_Sidebar"))
 import axios from "axios";
-import Footer from "../components/Footer";
+let Footer=lazy(()=>import("../components/Footer"))
+import whatsapp from "../assets/whatsapp.svg";
+
+
 
 const User_Profile = () => {
   const navigate = useNavigate();
@@ -21,16 +25,16 @@ const User_Profile = () => {
   const [zipCode, setZipCode] = useState("");
   const [country, setCountry] = useState("");
   const[changesHappen,setChangesHappen]=useState(false)
-        const [isLoading, setIsLoading] = useState(true); // Loading state
+        // const [isLoading, setIsLoading] = useState(true); // Loading state
   
 
   useEffect(() => {
     document.title = "Profile - Innerpece";
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 200); // Adjust time as needed
+    // const timer = setTimeout(() => {
+    //   setIsLoading(false);
+    // }, 200); // Adjust time as needed
 
-    return () => clearTimeout(timer); // Cleanup timeout
+    // return () => clearTimeout(timer); // Cleanup timeout
   }, []);
 
   useEffect(() => {
@@ -144,19 +148,38 @@ const User_Profile = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
-        <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
+  //       <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      <Header />
 
-      <div className="flex flex-col md:flex-row pt-10 pb-4 px-5 md:px-10 gap-5">
+<div
+        onClick={() => window.open("https://wa.me/6384131642")}
+        className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
+      >
+        <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
+          <p>Whatsapp Enquiry</p>
+        </div>
+        <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
+      </div>
+
+
+      <Suspense
+        fallback={
+          <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
+            <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+          </div>
+        }
+      >
+        <Header />
+        <div className="flex flex-col md:flex-row pt-10 pb-4 px-5 md:px-10 gap-5">
+
         {/* Sidebar */}
         <div className="basis-1/12">
           <MyProfile_Sidebar />
@@ -384,6 +407,7 @@ const User_Profile = () => {
       </div>
 
       <Footer />
+      </Suspense>
     </div>
   );
 };

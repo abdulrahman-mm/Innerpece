@@ -91,13 +91,13 @@ function UpcomingEvents() {
   return (
     <div>
       {upcomingEventsData.length > 0 && (
-        <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16 md:mt-16 ">
-          <p className="text-xl md:text-3xl font-semibold">
-            Explore <span className="text-blue-500">Upcoming Events</span>
+        <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16 ">
+          <p className="text-xl text-[#3E3E3E] md:text-3xl font-semibold font-mulish ">
+            Explore <span className="text-[#007DD7]">Upcoming Events</span>
           </p>
 
           {loading ? (
-            <div className="mt-5 flex">
+            <div className="mt-8 md:mt-10 flex">
               <div className="flex-grow">
                 <SkeletonCarousel />
               </div>
@@ -115,7 +115,7 @@ function UpcomingEvents() {
                 arrows={true}
                 keyBoardControl={true}
                 containerClass="carousel-container"
-                itemClass="carousel-item-padding-40-px block md:hidden shadow-lg shadow-black/10 mt-5"
+                itemClass="carousel-item-padding-40-px block md:hidden shadow-lg shadow-black/10 mt-8 md:mt-10"
               >
                 {upcomingEventsData.map((items, index) => (
                   <div
@@ -153,7 +153,7 @@ function UpcomingEvents() {
           )}
 
           {loading ? (
-            <div className="max-md:hidden flex flex-wrap items-center justify-start mt-5 gap-x-5 gap-y-14">
+            <div className="max-md:hidden flex flex-wrap items-center justify-start mt-8 md:mt-10 gap-y-16 gap-x-7">
               {Array(4)
                 .fill(0)
                 .map((_, index) => (
@@ -163,7 +163,7 @@ function UpcomingEvents() {
                 ))}
             </div>
           ) : upcomingEventsData.length > 0 ? (
-            <div className="max-md:hidden flex flex-wrap items-center gap-x-5 gap-y-14 justify-start mt-5">
+            <div className="max-md:hidden flex flex-wrap items-center gap-y-16 gap-x-7 justify-start mt-8 md:mt-10">
               {upcomingEventsData.map((items, index) => (
                 <div
                   key={index}
