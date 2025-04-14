@@ -16,7 +16,9 @@ import whatsapp from "../assets/whatsapp.svg";
 import { Container, Button, Link } from "react-floating-action-button";
 import axios from "axios";
 import Swal from "sweetalert2";
-
+let Perfecttraveltype = lazy(() => import("../components/Perfecttraveltype"));
+// import Perfecttraveltype from "";
+import TripCategories from "../components/TripCategories";
 
 function Home() {
   // const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -56,10 +58,10 @@ function Home() {
         }
       );
 
-      setName("")
+      setName("");
       setEmail("");
       setphone("");
-      setComments("")
+      setComments("");
       setLoginError("");
 
       Swal.fire({
@@ -71,12 +73,8 @@ function Home() {
       });
 
       setTimeout(() => {
-        setAssiatanceFormClicked(false)
-
+        setAssiatanceFormClicked(false);
       }, 1700);
-
-
-      
     } catch (err) {
       console.log(err);
       let errors = err.response.data.errors
@@ -183,10 +181,10 @@ function Home() {
                       placeholder="Enter your name"
                     />
                     {loginError.name && (
-                  <p className="text-red-500 text-xs sm:text-sm ">
-                    {loginError.name}
-                  </p>
-                )}
+                      <p className="text-red-500 text-xs sm:text-sm ">
+                        {loginError.name}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -205,10 +203,10 @@ function Home() {
                       placeholder="Enter your email"
                     />
                     {loginError.email && (
-                  <p className="text-red-500 text-xs sm:text-sm ">
-                    {loginError.email}
-                  </p>
-                )}
+                      <p className="text-red-500 text-xs sm:text-sm ">
+                        {loginError.email}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -227,10 +225,10 @@ function Home() {
                       placeholder="Enter your phone no"
                     />
                     {loginError.phone && (
-                  <p className="text-red-500 text-xs sm:text-sm ">
-                    {loginError.phone}
-                  </p>
-                )}
+                      <p className="text-red-500 text-xs sm:text-sm ">
+                        {loginError.phone}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2 md:col-span-2">
@@ -249,10 +247,10 @@ function Home() {
                       placeholder="Enter your message here..."
                     />
                     {loginError.comments && (
-                  <p className="text-red-500 text-xs sm:text-sm ">
-                    {loginError.comments}
-                  </p>
-                )}
+                      <p className="text-red-500 text-xs sm:text-sm ">
+                        {loginError.comments}
+                      </p>
+                    )}
                   </div>
 
                   <div className="md:col-span-2">
@@ -281,10 +279,12 @@ function Home() {
         <Header />
         <Hero />
         <HomePrograms />
+        <Perfecttraveltype />
         <HomeDestinations />
-        <UpcomingEvents />
-        <ExploreMore />
-        <ExplorePopularEvents />
+        {/* <UpcomingEvents /> */}
+        {/* <ExploreMore /> */}
+        {/* <ExplorePopularEvents /> */}
+        {/* <TripCategories /> */}
         <LetsGetStarted />
         <Footer />
       </Suspense>

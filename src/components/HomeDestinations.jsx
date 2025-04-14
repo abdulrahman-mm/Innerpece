@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import defaultimg from "../assets/defaultimg.png";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 function Destinations() {
   let navigate = useNavigate();
@@ -47,45 +50,114 @@ function Destinations() {
     </div>
   );
 
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 1280 },
+      items: 4,
+    },
+    desktop: {
+      breakpoint: { max: 1280, min: 1024 },
+      items: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 640 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 640, min: 0 },
+      items: 1,
+    },
+  };
+  const CustomLeftArrow = ({ onClick }) => {
+    return (
+      <button
+        onClick={onClick}
+        className="absolute left-0 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-200"
+        style={{ top: "50%", transform: "translateY(-50%)" }}
+      >
+        {/* <img src="/left-arrow.png" alt="Left" className="w-6 h-6" />
+         */}
+        <ChevronLeft size={24} />
+      </button>
+    );
+  };
+
+  const CustomRightArrow = ({ onClick }) => {
+    return (
+      <button
+        onClick={onClick}
+        className="absolute right-0 z-10 bg-white p-2 rounded-full shadow-md hover:bg-gray-200"
+        style={{ top: "50%", transform: "translateY(-50%)" }}
+      >
+        {/* <img src="/right-arrow.png" alt="Right" className="w-6 h-6" /> */}
+        <ChevronRight size={24} />
+      </button>
+    );
+  };
+
   return (
     <div>
       {destinationData.length > 0 && (
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-          <p className="text-xl md:text-3xl font-semibold font-mulish text-[#3E3E3E]">Destinations</p>
-
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-7 mt-8 md:mt-10">
-            {loading ? (
-              Array(4)
+          <p className="text-xl md:text-4xl leading-loose text-[#141414]">
+            <span className="font-jost font-medium">Popular </span>
+            <span className="font-jost font-bold">Destinations</span>
+          </p>
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-7 mt-8 md:mt-10">
+              {Array(4)
                 .fill(0)
-                .map((_, index) => <SkeletonCard key={index} />)
-            ) : destinationData && destinationData.length > 0 ? (
-              destinationData.map((item, index) => (
-                <div
-                  onClick={() => handleCardClick(item.id, item.city_name)}
-                  key={index}
-                  className="flex items-center gap-5 border border-gray-400/20 p-2 pe-0 w-full rounded-2xl transition-all ease-in-out duration-500 hover:-translate-y-1  cursor-pointer"
-                >
-                  <img
-                    src={
-                      item.cities_pic
-                        ? `https://backoffice.innerpece.com/${item.cities_pic}`
-                        : defaultimg
-                    }
-                    alt={item.city_name}
-                    className="w-14 h-14 object-cover rounded-full"
-                  />
-                  <p className="md:font-medium text-lg md:text-xl font-mulish">
-                    {item.city_name}
-                  </p>
-                </div>
-              ))
-            ) : (
-              <div className="flex w-full items-center justify-center my-20">
-                <p className="md:text-3xl">No Destinations Found</p>
-              </div>
-            )}
-          </div>
+                .map((_, index) => (
+                  <SkeletonCard key={index} />
+                ))}
+            </div>
+          ) : destinationData && destinationData.length > 0 ? (
+            <div className="mt-8 md:mt-10">
+              <Carousel
+                responsive={responsive}
+                infinite={true}
+                autoPlay={false}
+                swipeable={true}
+                draggable={true}
+                showDots={false}
+                keyBoardControl={true}
+                containerClass="carousel-container"
+                itemClass="px-2"
+                customLeftArrow={<CustomLeftArrow />}
+                customRightArrow={<CustomRightArrow />}
+              >
+                {destinationData.map((item, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleCardClick(item.id, item.city_name)}
+                    className="relative overflow-hidden rounded-2xl"
+                  >
+                    <div className="relative h-80 md:h-96  shrink-0 rounded-2xl overflow-hidden  group  cursor-pointer">
+                      <img
+                        src={
+                          item.cities_pic
+                            ? `https://backoffice.innerpece.com/${item.cities_pic}`
+                            : defaultimg
+                        }
+                        alt={`trip-${index}`}
+                        className="h-full w-full -z-30 absolute object-cover transform transition-transform duration-500 group-hover:scale-125"
+                      />
+                      <div className="absolute -z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                      <div className="absolute bottom-5 z-20 left-0 w-full text-white text-center py-2 px-3">
+                        <p className="md:text-base font-rancho text-lg xl:text-4xl">
+                          {item.city_name}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </Carousel>
+            </div>
+          ) : (
+            <div className="flex w-full items-center justify-center my-20">
+              <p className="md:text-3xl">No Destinations Found</p>
+            </div>
+          )}
         </div>
       )}
     </div>

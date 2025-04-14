@@ -31,6 +31,7 @@ import { FaBirthdayCake } from "react-icons/fa";
 import { GiLovers } from "react-icons/gi";
 import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
+import { PiMoneyWavyFill } from "react-icons/pi";
 
 function Sidebar({ LocationShareRef }) {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ function Sidebar({ LocationShareRef }) {
   const [childAge, setChildAge] = useState([]);
   const [loginCliked, setLoginClicked] = useState(false);
   const [image, setImage] = useState("");
+  const [priceSelected, setPriceSelected] = useState("");
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.slice(1, 3);
@@ -109,12 +111,22 @@ function Sidebar({ LocationShareRef }) {
         // apiData.gallery_img
         setImage(response.data.data.cover_img);
         // console.log(response.data.data.google_map);
+
         let modifiedMapHtml = response.data.data.google_map;
 
         // Remove width and height attributes from the iframe
-        modifiedMapHtml = modifiedMapHtml.replace(/width="[^"]*"/g, "");
-        modifiedMapHtml = modifiedMapHtml.replace(/height="[^"]*"/g, "");
-        modifiedMapHtml = modifiedMapHtml.replace(/style="[^"]*"/g, "");
+        // modifiedMapHtml = modifiedMapHtml.replace(/width="[^"]*"/g, "");
+        // modifiedMapHtml = modifiedMapHtml.replace(/height="[^"]*"/g, "");
+        // modifiedMapHtml = modifiedMapHtml.replace(/style="[^"]*"/g, "");
+
+        modifiedMapHtml = modifiedMapHtml
+          .replace(/width="[^"]*"/g, "")
+          .replace(/height="[^"]*"/g, "")
+          .replace(/style="[^"]*"/g, "")
+          .replace(
+            /<iframe /,
+            '<iframe style="border-radius: 1rem; width: 100%; height: 100%; border:0;" '
+          );
 
         setMap(modifiedMapHtml);
         // setIsWishlisted(response.data.data.wishlists);
@@ -198,6 +210,7 @@ function Sidebar({ LocationShareRef }) {
           child_age: childAge,
           engagement_date: engagementDate,
           birth_date: dob,
+          pricing: priceSelected,
         },
         {
           headers: {
@@ -230,6 +243,7 @@ function Sidebar({ LocationShareRef }) {
       setChildAge([]);
       setDob("");
       setEngagementDate("");
+      setPriceSelected("");
 
       // Clear success message after 5 seconds
       setTimeout(() => {
@@ -241,6 +255,7 @@ function Sidebar({ LocationShareRef }) {
       setFailure("Please Fill all the fields");
       if (error.response && error.response.data.errors) {
         setErrors(error.response.data.errors);
+        console.log("error", error.response.data.errors);
       }
       console.error("Error:", error.response?.data || error.message);
     }
@@ -383,9 +398,14 @@ function Sidebar({ LocationShareRef }) {
     return () => clearInterval(interval);
   }, [homeImage.length]);
 
+  
+  console.log("apidata",apiData);
+  
+  
+
   return (
     <div
-      className={` w-full md:sticky pb-10 h-screen  overflow-y-auto sidebar bg-[#FEFEFE]   top-5  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:my-7 ${
+      className={` w-full lg:sticky pb-10   overflow-y-auto sidebar bg-[#FEFEFE]   top-5  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:my-7 ${
         show ? "fixed" : ""
       }`}
     >
@@ -393,14 +413,18 @@ function Sidebar({ LocationShareRef }) {
         <div className="h-60 w-full bg-gray-500 animate-pulse"></div>
       ) : (
         <div className="flex flex-col p-3  shadow-md  bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
-          <span className="text-gray-600 ">
+          <span className="text-gray-600 pb-2 ">
             Starting From{" "}
-            <del>INR{` ${apiData.actual_price && apiData.actual_price}`}</del>{" "}
+            <span className="text-green-800 font-semibold text-xl ms-1">
+              ₹{`${apiData.price_amount && apiData.price_amount[0]}`}
+            </span>
+            {/* <del className="font-semibold">
+              ₹{`${apiData.actual_price && apiData.actual_price}`}
+            </del>{" "} */}
           </span>
-          <p className="text-green-800 font-semibold text-2xl">
-            INR
-            {` ${apiData.discount_price && apiData.discount_price}`}
-          </p>
+          {/* <p className="text-green-800 font-semibold text-2xl">
+            ₹{`${apiData.discount_price && apiData.discount_price}`}
+          </p> */}
 
           <div className="border-t-2 border-dotted w-full border-sky-800"></div>
 
@@ -435,7 +459,7 @@ function Sidebar({ LocationShareRef }) {
       )}
 
       <div className="shadow-md mt-5  bg-white py-4  shadow-black/10 rounded-lg">
-        <div className="flex gap-4  ms-3 text-2xl">
+        <div className="flex gap-4  ms-3 text-lg">
           <p className="text-sky-800">|</p>
           <p className="font-semibold">Book With Confidence</p>
         </div>
@@ -451,10 +475,10 @@ function Sidebar({ LocationShareRef }) {
             <p>Hand-picked Tours & Activities</p>
           </div>
 
-          <div className="flex gap-4 items-center">
+          {/* <div className="flex gap-4 items-center">
             <img src={insurance} alt="" />
             <p>Free Travel Insurance</p>
-          </div>
+          </div> */}
 
           <div className="flex gap-4 items-center">
             <img src={pricetag} alt="" />
@@ -466,12 +490,11 @@ function Sidebar({ LocationShareRef }) {
       <p ref={LocationShareRef} className="font-semibold mt-5">
         Where you'll be
       </p>
-      <div>
-        <div
-          className="mt-2 overflow-hidden"
-          dangerouslySetInnerHTML={{ __html: map }}
-        />
-      </div>
+
+      <div
+        className="mt-2 overflow-hidden w-full object-cover  "
+        dangerouslySetInnerHTML={{ __html: map }}
+      />
 
       {loginCliked && (
         <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
@@ -632,7 +655,6 @@ function Sidebar({ LocationShareRef }) {
                         index === currentIndex ? "opacity-100" : "opacity-0"
                       }`}
                     >
-                      
                       <img
                         className="absolute inset-0 w-full h-full object-cover object-center rounded-lg"
                         src={`https://backoffice.innerpece.com/${image}`}
@@ -1154,6 +1176,42 @@ function Sidebar({ LocationShareRef }) {
                           )}
                         </div>
                       </div>
+
+                      {apiData.price_amount.length>0 && (
+                        <div className="flex flex-col w-full">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2 border-r">
+                              <PiMoneyWavyFill />
+                            </span>
+                            <p className="ms-2 me-3">Price amount </p>
+                            <div className="flex gap-2 flex-wrap">
+                              {apiData.price_amount.map(
+                                (item, index) =>
+                                  item && (
+                                    <div className="flex gap-2 p-2">
+                                      <input
+                                        type="radio"
+                                        name=""
+                                        id={item}
+                                        value={item}
+                                        checked={priceSelected === item}
+                                        onChange={() => setPriceSelected(item)}
+                                      />
+                                      <label htmlFor={item}>
+                                        {apiData.price_title[index]} : ₹{item}
+                                      </label>
+                                    </div>
+                                  )
+                              )}
+                            </div>
+                          </div>
+                          {errors.pricing && (
+                            <p className="text-red-500 text-xs ">
+                              {errors.pricing[0]}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {success && (

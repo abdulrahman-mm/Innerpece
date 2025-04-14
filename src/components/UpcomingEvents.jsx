@@ -92,8 +92,13 @@ function UpcomingEvents() {
     <div>
       {upcomingEventsData.length > 0 && (
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16 ">
-          <p className="text-xl text-[#3E3E3E] md:text-3xl font-semibold font-mulish ">
+          {/* <p className="text-xl text-[#3E3E3E] md:text-3xl font-semibold font-mulish ">
             Explore <span className="text-[#007DD7]">Upcoming Events</span>
+          </p> */}
+
+          <p className="text-xl md:text-3xl leading-loose">
+            <span className="font-jost font-medium ">Explore </span>{" "}
+            <span className="font-jost font-bold">Upcoming Events</span>
           </p>
 
           {loading ? (

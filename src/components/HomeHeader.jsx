@@ -28,9 +28,9 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-between items-center ms-5 me-5 md:ms-16 md:me-16  py-1 md:py-4">
+    <div className="flex justify-between  items-center  me-5 ms-5 lg:ms-10 lg:me-10 py-0  sm:py-2">
       <div onClick={() => navigate("/")} className="cursor-pointer">
-        <img src={innerpece_logo} alt="" />
+        <img src={innerpece_logo} alt="" className="w-40 h-14 object-contain "/>
       </div>
 
       <div className="max-md:hidden">
@@ -143,7 +143,7 @@ function Header() {
                 setIsOpen(false);
                 onClickLogout();
               }}
-              className="px-6 py-2 mx-auto cursor-pointer font-semibold border border-[#005FC4] rounded-2xl text-white bg-[#005FC4]"
+              className="px-6 py-2 text-center cursor-pointer font-semibold border border-[#005FC4] rounded-2xl text-white bg-[#005FC4]"
             >
               Logout
             </Link>
@@ -151,7 +151,7 @@ function Header() {
             <Link
               to="/login"
               onClick={() => setIsOpen(false)}
-              className="px-6 py-2 mx-auto cursor-pointer font-semibold border border-[#005FC4] rounded-2xl text-white bg-[#005FC4]"
+              className="px-6 py-2 text-center cursor-pointer font-semibold border border-[#005FC4] rounded-2xl text-white bg-[#005FC4]"
             >
               Login
             </Link>

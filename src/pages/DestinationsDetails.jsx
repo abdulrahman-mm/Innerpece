@@ -13,6 +13,11 @@ import { FaStar } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa6";
 import defaultimage from "../assets/defaultimg.png";
 import whatsapp from "../assets/whatsapp.svg";
+import sendEnquiry from "../assets/sendenquiry.svg";
+import customerservice from "../assets/customerservice.svg";
+import approve from "../assets/approve.svg";
+import insurance from "../assets/insurance.svg";
+import pricetag from "../assets/pricetag.svg";
 
 function DestinationsDetails() {
   // const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -244,6 +249,8 @@ function DestinationsDetails() {
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
 
+  console.log("apidata", apiData);
+
   const SkeletonLoader = () => {
     return (
       <div className="animate-pulse flex flex-col  gap-4 px-3 md:px-10 w-full md:w-[77vw]">
@@ -282,7 +289,7 @@ function DestinationsDetails() {
       </div>
     );
   };
-  
+
   // if (isLoading) {
   //   return (
   //     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
@@ -291,17 +298,37 @@ function DestinationsDetails() {
   //   );
   // }
 
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const hero = document.getElementById("hero");
+  //     const scrollY = window.scrollY;
+  //     if (hero) {
+  //       hero.style.backgroundPosition = `center ${scrollY * 0.4}px`;
+  //     }
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
+
+  console.log("current items", currentItems);
+
   return (
     <div>
-      <div
-        onClick={() => window.open("https://wa.me/6384131642")}
-        className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
-      >
-        <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
-          <p>Whatsapp Enquiry</p>
+      {!filterButtonClicked && (
+        <div
+          onClick={() => window.open("https://wa.me/6384131642")}
+          className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
+        >
+          <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
+            <p>Whatsapp Enquiry</p>
+          </div>
+          <img
+            src={whatsapp}
+            className="h-10 w-10  transition-all duration-500"
+          />
         </div>
-        <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
-      </div>
+      )}
 
       <Suspense
         fallback={
@@ -314,31 +341,20 @@ function DestinationsDetails() {
 
         {/* Hero Section */}
 
-        <div className="ms-5 me-5 mt-8 md:ms-16 md:me-16 ">
-          <div className="gap-3  items-center justify-between inline-flex bg-sky-100/80 font-semibold text-sky-800 p-2 rounded-lg">
-            <p onClick={() => navigate("/")} className="cursor-pointer">
-              Home
-            </p>
-            <b>{">"}</b>
-
-            <p className="">{`Explore ${
-              apiData.length > 0 ? apiData[0].destination : city_name
-            }`}</p>
-          </div>
-
-          <div
-            id="hero"
-            className="h-64 md:h-80 lg:h-[380px] rounded-lg md:rounded-2xl mt-8   md:mt-16
- relative bg-[url('././assets/explorepopularpackagehero.jpg')] bg-cover bg-center"
-          >
+        <div
+          id="hero"
+          className="h-64 md:h-80 lg:h-[420px]  
+ relative bg-[url('././assets/dummy5.jpeg')] bg-cover bg-center bg-no-repeat bg-fixed"
+        >
+          <div className="absolute flex w-full h-full items-center justify-center">
             <div
               id="blur"
-              className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 left-6 md:left-10 lg:left-16 px-3 py-1 md:px-8  md:py-3 bg-[url('././assets/blurbg.png')] bg-cover bg-center"
+              className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
             >
-              <h1 className="text-white text-lg md:text-2xl lg:text-4xl font-semibold">{`Explore ${
+              <h1 className="text-white text-lg md:text-2xl font-nunito text-center lg:text-4xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">{`Explore ${
                 apiData.length > 0 ? apiData[0].destination : city_name
               }`}</h1>
-              <p className="text-white text-sm md:text-base mt-2 ">
+              <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
                 Find your perfect tour with personalized themes and destinations
                 to match your preferences
               </p>
@@ -348,147 +364,58 @@ function DestinationsDetails() {
 
         {/* main section */}
 
-        <div className="flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5  ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10  ">
-          {/* main section > sideBar */}
-          <div className=" mt-20 py-5 px-5 sticky top-5 h-fit flex flex-col gap-4 md:rounded-lg  max-md:hidden border-2 basis-[10%]  ">
-            <p className="text-xl">Search By Filter</p>
+        {/* <div className="bg-[url('././assets/trip1.png')] bg-no-repeat bg-cover bg-fixed bg-opacity-95 flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5  ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10  "> */}
 
-            <label htmlFor="fromDate">From Date</label>
-            <input
-              type="date"
-              id="fromDate"
-              value={startDate}
-              onChange={handleDateChange}
-              className="border-2 p-2 rounded"
-            />
+        <div className="relative">
+          <div className="bg-image-behind"></div>
 
-            <label htmlFor="toDate">To Date</label>
-            <input
-              type="date"
-              value={toDate}
-              id="toDate"
-              onChange={handleToChange}
-              className="border-2 p-2 rounded"
-            />
+          <div className="absolute w-full h-full bg-gradient-to-b from-white  via-transparent to-white -z-10"></div>
+          <div className="flex flex-col md:flex-row gap-2 md:gap-5 lg:gap-7 xl:gap-10  ps-4 pe-4 pd:ps-7 pd:pe-7 lg:ps-10 lg:pe-10">
+            {/* main section > sideBar */}
+            {/* {currentItems.length > 0 && (
+              <div className=" mt-20 py-5 px-5 sticky bg-white top-5 h-fit flex flex-col gap-4 md:rounded-lg  max-md:hidden border-2 basis-[10%]  ">
+                <p className="text-xl">Search By Filter</p>
 
-            <button
-              value="FILTER"
-              onClick={handleFilterClick}
-              className="bg-sky-800 hover:bg-sky-900 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
-            >
-              Filter
-            </button>
+                <label htmlFor="fromDate">From Date</label>
+                <input
+                  type="date"
+                  id="fromDate"
+                  value={startDate}
+                  onChange={handleDateChange}
+                  className="border-2 p-2 rounded-md"
+                />
 
-            <button
-              className="bg-red-600 hover:bg-red-700 active:bg-gray-600 px-8 rounded text-center py-2 text-white place-items-end w-full"
-              value="FILTER"
-              onClick={handleClearFilterClicked}
-            >
-              Clear Filter
-            </button>
+                <label htmlFor="toDate">To Date</label>
+                <input
+                  type="date"
+                  value={toDate}
+                  id="toDate"
+                  onChange={handleToChange}
+                  className="border-2 p-2 rounded-md"
+                />
 
-            <p className="">Sort By</p>
+                <button
+                  value="FILTER"
+                  onClick={handleFilterClick}
+                  className="bg-sky-800 hover:bg-sky-900 active:bg-gray-600 px-8 rounded-md text-center py-2 text-white place-items-end w-full"
+                >
+                  Filter
+                </button>
 
-            <select
-              name="select"
-              id="select"
-              className="border-2 p-2 outline-none"
-              onChange={handleSortChange}
-              value={sortBy}
-            >
-              <option value="" disabled>
-                Select Sort Option
-              </option>
-              <option value="low">Low Price</option>
-              <option value="high">High Price</option>
-            </select>
-          </div>
+                <button
+                  className="bg-white  px-8 rounded-md text-center py-2 text-sky-800 border-sky-800 border place-items-end w-full"
+                  value="FILTER"
+                  onClick={handleClearFilterClicked}
+                >
+                  Clear Filter
+                </button>
 
-          {/* main section > mainBar */}
-
-          <div className="  w-full mt-10">
-            {/* this will show only in smaller screens */}
-            <p
-              onClick={() => setFilterButtonClicked(!filterButtonClicked)}
-              className={`mt-10 w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${
-                filterButtonClicked ? "bg-red-600 text-white" : "bg-gray-300"
-              } }`}
-            >
-              {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
-            </p>
-
-            <div
-              className={`fixed bottom-0 left-0 right-0 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
-                filterButtonClicked
-                  ? "translate-y-0 opacity-100"
-                  : "translate-y-full opacity-0"
-              }`}
-            >
-              {/* this will show only in smaller screens */}
-              <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
-                {/* Filter Header with X button */}
-                <div className="flex justify-between items-center">
-                  <p className="text-lg">Search By Filter</p>
-                  <button
-                    onClick={() => setFilterButtonClicked(false)}
-                    className="text-gray-600 text-xl font-bold transition-transform duration-300 transform hover:scale-110"
-                  >
-                    &times;
-                  </button>
-                </div>
-
-                <div className="flex flex-wrap gap-5">
-                  <div className="flex gap-2 items-center">
-                    <label htmlFor="frmDate" className="w-20">
-                      From Date
-                    </label>
-                    <input
-                      id="frmDate"
-                      type="date"
-                      value={startDate}
-                      onChange={handleDateChange}
-                      className="border-2 p-2 rounded"
-                    />
-                  </div>
-
-                  <div className="flex gap-2 items-center">
-                    <label htmlFor="tDate" className="w-20">
-                      To Date
-                    </label>
-                    <input
-                      type="date"
-                      id="tDate"
-                      value={toDate}
-                      onChange={handleToChange}
-                      className="border-2 p-2 rounded"
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <button
-                      className="bg-sky-600 hover:bg-sky-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                      value="FILTER"
-                      onClick={handleFilterClick}
-                    >
-                      Filter
-                    </button>
-
-                    <button
-                      className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                      value="FILTER"
-                      onClick={handleClearFilterClicked}
-                    >
-                      Clear Filter
-                    </button>
-                  </div>
-                </div>
-
-                <p className="text-lg">Sort By</p>
+                <p className="">Sort By</p>
 
                 <select
-                  name="selectsmaller"
-                  id="selectsmaller"
-                  className="border-2 p-2 outline-none"
+                  name="select"
+                  id="select"
+                  className="border-2 p-2 outline-none rounded-md"
                   onChange={handleSortChange}
                   value={sortBy}
                 >
@@ -499,157 +426,387 @@ function DestinationsDetails() {
                   <option value="high">High Price</option>
                 </select>
               </div>
-            </div>
+            )} */}
 
-            {loading ? (
-              <SkeletonLoader />
-            ) : currentItems.length > 0 ? (
-              currentItems.map((item, index) => (
-                <div
-                  id="destinations"
-                  key={index}
-                  className="flex flex-col mt-10 overflow-hidden"
+            {/* main section > mainBar */}
+            <div className="  w-full mt-10">
+              {/* this will show only in smaller screens */}
+              {/* {currentItems.length > 0 && (
+                <p
+                  onClick={() => setFilterButtonClicked(!filterButtonClicked)}
+                  className={`mt-10 w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${
+                    filterButtonClicked
+                      ? "bg-red-600 text-white"
+                      : "bg-gray-300"
+                  } }`}
                 >
-                  <div
-                    key={index}
-                    className="flex flex-col lg:flex-row overflow-hidden   "
+                  {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
+                </p>
+              )} */}
+
+              {/* <div
+                className={`fixed bottom-0 z-10 left-0 right-0 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
+                  filterButtonClicked
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-full opacity-0"
+                }`}
+              >
+                <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
+                  <div className="flex justify-between items-center">
+                    <p className="text-lg">Search By Filter</p>
+                    <button
+                      onClick={() => setFilterButtonClicked(false)}
+                      className="text-gray-600 text-xl font-bold transition-transform duration-300 transform hover:scale-110"
+                    >
+                      &times;
+                    </button>
+                  </div>
+
+                  <div className="flex flex-wrap gap-5">
+                    <div className="flex gap-2 items-center">
+                      <label htmlFor="frmDate" className="w-20">
+                        From Date
+                      </label>
+                      <input
+                        id="frmDate"
+                        type="date"
+                        value={startDate}
+                        onChange={handleDateChange}
+                        className="border-2 p-2 rounded"
+                      />
+                    </div>
+
+                    <div className="flex gap-2 items-center">
+                      <label htmlFor="tDate" className="w-20">
+                        To Date
+                      </label>
+                      <input
+                        type="date"
+                        id="tDate"
+                        value={toDate}
+                        onChange={handleToChange}
+                        className="border-2 p-2 rounded"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <button
+                        className="bg-sky-600 hover:bg-sky-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
+                        value="FILTER"
+                        onClick={handleFilterClick}
+                      >
+                        Filter
+                      </button>
+
+                      <button
+                        className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
+                        value="FILTER"
+                        onClick={handleClearFilterClicked}
+                      >
+                        Clear Filter
+                      </button>
+                    </div>
+                  </div>
+
+                  <p className="text-lg">Sort By</p>
+
+                  <select
+                    name="selectsmaller"
+                    id="selectsmaller"
+                    className="border-2 p-2 outline-none"
+                    onChange={handleSortChange}
+                    value={sortBy}
                   >
-                    <img
-                      src={
-                        item.cover_img
-                          ? `https://backoffice.innerpece.com/${item.cover_img}`
-                          : defaultimage
-                      }
-                      alt={item.title}
-                      className="object-cover object-center transition-transform duration-500 ease-in-out hover:brightness-110 overflow-hidden w-full rounded-t-xl lg:rounded-s-xl lg:rounded-r-none  lg:w-1/4 "
-                    />
+                    <option value="" disabled>
+                      Select Sort Option
+                    </option>
+                    <option value="low">Low Price</option>
+                    <option value="high">High Price</option>
+                  </select>
+                </div>
+              </div> */}
 
-                    <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border-2 lg:border-l-0  border-gray-300 py-2 px-3">
-                      <p className="font-semibold flex-wrap text-2xl md:text-3xl">
-                        {item.title}
-                      </p>
+              {loading ? (
+                <SkeletonLoader />
+              ) : currentItems.length > 0 ? (
+                currentItems.map((item, index) => (
+                  <div
+                    id="destinations"
+                    key={index}
+                    className="flex flex-col  mt-10 overflow-hidden"
+                  >
+                    {/* <div
+                      key={index}
+                      className="flex flex-col lg:flex-row overflow-hidden"
+                    >
+                      <div
+                        onClick={() => handleCardClick(item.id, item.title)}
+                        className="relative overflow-hidden w-full lg:w-1/3 rounded-t-xl lg:rounded-s-xl lg:rounded-r-none"
+                      >
+                      
+                        <img
+                          src={
+                            item.cover_img
+                              ? `https://backoffice.innerpece.com/${item.cover_img}`
+                              : defaultimage
+                          }
+                          alt={item.title}
+                          className="w-full h-44 sm:h-52 md:h-60  object-cover object-center transform transition-transform duration-500 group-hover:scale-105  cursor-pointer"
+                        />
+                      </div>
 
-                      <div className="flex  items-center justify-between gap-2 flex-wrap">
-                        {item.current_location && (
+                      <div className="flex group flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white   border-[#BABABA] py-2 px-3">
+                        <p className="font-semibold flex-wrap text-xl md:text-3xl font-jost">
+                          {item.title}
+                        </p> */}
+                    <div
+                      key={index}
+                      className="group flex flex-col lg:flex-row overflow-hidden"
+                    >
+                      <div
+                        onClick={() => handleCardClick(item.id, item.title)}
+                        className="relative overflow-hidden w-full lg:w-1/3 rounded-t-xl lg:rounded-s-xl lg:rounded-r-none"
+                      >
+                        <img
+                          src={
+                            item.cover_img
+                              ? `https://backoffice.innerpece.com/${item.cover_img}`
+                              : defaultimage
+                          }
+                          alt={item.title}
+                          className="w-full h-44 sm:h-52 md:h-60 object-cover object-center transform transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+                        />
+                      </div>
+
+                      <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4 flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white border-[#BABABA] py-2 px-3">
+                        <p className="font-semibold flex-wrap text-xl md:text-3xl font-jost">
+                          {item.title}
+                        </p>
+
+                        <div className="flex  items-center justify-between gap-2 flex-wrap">
                           <div className="flex items-center gap-2">
                             <FaLocationDot className="text-sky-800" />
-                            <p>{item.current_location}</p>
+                            <p className="text-sm sm:text-base">
+                              {item.current_location}
+                            </p>
                           </div>
-                        )}
 
-                        <div className="flex items-center gap-1">
-                          <FaStar className="text-yellow-500" />
-                          <p>
-                            <b className="me-1">{item.average_rating}</b>of 5
-                          </p>
+                          <div className="flex items-center gap-1">
+                            <FaStar className="text-yellow-500" />
+                            <p>
+                              <b className="me-1">{item.average_rating}</b>of 5
+                            </p>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className="flex items-center flex-wrap gap-2">
-                        <p>Upto {item.member_capacity} guests</p>
+                        <div className="flex items-center flex-wrap gap-2">
+                          {item.member_capacity && (
+                            <p>Upto {item.member_capacity} guests</p>
+                          )}
+                          {item.bed_room && (
+                            <div className="flex items-center gap-3">
+                              <PiStarFourFill className="text-gray-400" />
+                              <p>{item.bed_room}</p>
+                              {item.bed_room > "1" ? "bed rooms" : "bed room"}
+                            </div>
+                          )}
 
-                        {item.bed_room && (
-                          <div className="flex items-center gap-3">
-                            <PiStarFourFill className="text-gray-400" />
-                            <p>{item.bed_room}</p>
-                            {item.bed_room > "1" ? "bed rooms" : "bed room"}
-                          </div>
-                        )}
+                          {item.bath_room && (
+                            <div className="flex items-center gap-3">
+                              <PiStarFourFill className="text-gray-400" />
+                              <p>{item.bath_room}</p>
+                              {item.bath_room > "1"
+                                ? "bath rooms"
+                                : "bath room"}
+                            </div>
+                          )}
+                        </div>
 
-                        {item.bath_room && (
-                          <div className="flex items-center gap-3">
-                            <PiStarFourFill className="text-gray-400" />
-                            <p>{item.bath_room}</p>
-                            {item.bath_room > "1" ? "bath rooms" : "bath room"}
-                          </div>
-                        )}
-                      </div>
+                        {item.amenities && item.amenities.length > 0 && (
+                          <div>
+                            <div className="border-b border-[#BABABA]"></div>
 
-                      {item.amenities && item.amenities.length > 0 && (
-                        <div>
-                          <div className="border-b border-gray-400"></div>
+                            <div className="flex justify-start mt-3 gap-3 flex-wrap items-start">
+                              {item.amenities
+                                .slice(0, 3)
+                                .map((amenity, index) => (
+                                  <div
+                                    key={index}
+                                    className="flex flex-col w-20 flex-wrap"
+                                  >
+                                    <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
+                                      <img
+                                        src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
+                                        alt=""
+                                      />
+                                    </span>
+                                    <p className="text-gray-500 flex-wrap text-xs">
+                                      {amenity.amenity_name}
+                                    </p>
+                                  </div>
+                                ))}
 
-                          <div className="flex justify-start mt-3 gap-3 flex-wrap items-start">
-                            {item.amenities
-                              .slice(0, 3)
-                              .map((amenity, index) => (
+                              {item.amenities.length > 3 && (
+                                //  <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
+
+                                // <p className="text-gray-500 text-xs mx-auto">
+                                //   +{item.amenities.length - 3}
+                                // </p>
+                                // </span>
                                 <div
                                   key={index}
                                   className="flex flex-col w-20 flex-wrap"
                                 >
-                                  <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
-                                    <img
-                                      src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
-                                      alt=""
-                                    />
+                                  <span className=" bg-sky-700 p-2 w-9 h-9  rounded-full">
+                                    <p className="text-white text-xs mx-auto">
+                                      +{item.amenities.length - 3}
+                                    </p>
                                   </span>
-                                  <p className="text-gray-500 flex-wrap text-xs">
-                                    {amenity.amenity_name}
+                                  <p className="text-white flex-wrap text-xs">
+                                    More
                                   </p>
                                 </div>
-                              ))}
-
-                            {item.amenities.length > 3 && (
-                              <p className="text-gray-500">
-                                {item.amenities.length - 3}+
-                              </p>
-                            )}
+                              )}
+                            </div>
                           </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap bg-white flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]  px-3 py-2 ">
+                        <div className="flex flex-row lg:flex-col gap-3 items-center sm:items-start">
+                          <p className="text-[#001031] text-sm sm:text-base">
+                            Starting From{" "}
+                          </p>
+                          <p className="font-bold text-[#000000] text-xl">
+                            ₹{item.pricing[0]}
+                          </p>
                         </div>
-                      )}
-                    </div>
 
-                    <div className="flex flex-wrap  flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t-2 rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border-2 border-gray-300  px-3 py-2 ">
-                      <p className="text-gray-600">
-                        Starting From <del>{item.price}</del>
-                      </p>
-
-                      <p className="font-bold text-xl md:text-2xl">
-                        {item.actual_price}
-                      </p>
-
-                      <div
-                        onClick={() => handleCardClick(item.id, item.title)}
-                        className="flex  items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1 lg:px-8 lg:py-2 rounded-lg "
-                      >
-                        <p className="text-white cursor-pointer  md:text-xl font-semibold ">
-                          View
-                        </p>
-                        <FaArrowRight className="text-white h-full" />
+                        <div
+                          onClick={() => handleCardClick(item.id, item.title)}
+                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1  lg:py-2 rounded-lg "
+                        >
+                          <p className="text-white cursor-pointer  font-medium md:text-xl text-center ">
+                            View Detail
+                          </p>
+                          {/* <FaArrowRight className="text-white h-full " /> */}
+                        </div>
                       </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="flex my-20  justify-center w-full h-full">
+                  <p className="text-xl md:text-3xl font-jost">
+                    No programs available.
+                  </p>
                 </div>
-              ))
-            ) : (
-              <div className="flex my-20  justify-center w-full h-full">
-                <p className="text-xl md:text-3xl">No programs available.</p>
+              )}
+
+              <nav>
+                <div className="flex justify-center items-center mt-5">
+                  <ul className="flex space-x-2">
+                    {Array.from(
+                      { length: Math.ceil(apiData.length / itemsPerPage) },
+                      (_, i) => (
+                        <li key={i + 1} className="relative">
+                          <button
+                            onClick={() => paginate(i + 1)}
+                            className={`px-4 py-2 border-2 rounded-full text-black ${
+                              currentPage === i + 1
+                                ? "bg-sky-700 border-sky-700 text-white"
+                                : "hover:bg-sky-600 hover:border-sky-600"
+                            }`}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              </nav>
+            </div>
+
+            {/* Main Section > Sidebar */}
+            {currentItems.length > 0 && (
+              <div className="mt-20  sticky top-5 h-fit flex flex-col gap-4  max-lg:hidden  basis-[24%] ">
+                <div className="flex flex-col gap-3 items-center  py-5 px-5 shadow-md shadow-black/10 rounded-xl">
+                  <p className="font-bold text-xl font-mulish">
+                    Any Questions ?
+                  </p>
+                  <p className="text-[#646464] font-medium font-mulish text-center">
+                    let our expert suggest the best for you!
+                  </p>
+
+                  <div class="h-[1.5px] w-full bg-gradient-to-r from-gray-300 via-gray-500 to-gray-300 rounded-full"></div>
+
+                  <div
+                    onClick={() => window.open("https://wa.me/6384131642")}
+                    className="cursor-pointer border-2 rounded-xl border-[#00A64D] flex gap-2 items-center px-5 py-1 w-48"
+                  >
+                    <img
+                      src={whatsapp}
+                      className="h-10 w-10  transition-all duration-500"
+                    />
+                    <p className="text-[#2D2D2D] font-bold font-mulish">
+                      Whatsapp
+                    </p>
+                  </div>
+
+                  <div
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                      navigate("/sendenquiry");
+                    }}
+                    className="cursor-pointer border-2 rounded-xl border-[#EC3B63] flex items-center gap-4 px-5 py-2 w-48"
+                  >
+                    <img
+                      src={sendEnquiry}
+                      className="h-8 w-7  transition-all duration-500"
+                    />
+                    <p className="text-[#2D2D2D] font-bold font-mulish">
+                      Send Enquiry
+                    </p>
+                  </div>
+                </div>
+
+                <div className="shadow-md mt-5  bg-white py-4  shadow-black/10 rounded-xl">
+                  <div className="flex gap-4  ms-3 text-lg">
+                    <p className="text-sky-800">|</p>
+                    <p className="font-semibold">Book With Confidence</p>
+                  </div>
+
+                  <div className="flex flex-wrap  items-start  justify-between md:flex-col  px-5 pt-5   gap-y-4 gap-2">
+                    <div className="flex gap-4 items-center">
+                      <img src={customerservice} alt="" />
+                      <p className="text-sm font-medium text-[#44454F]">
+                        Customer care available 24/7
+                      </p>
+                    </div>
+
+                    <div className="flex gap-4 items-center">
+                      <img src={approve} alt="" />
+                      <p className="text-sm font-medium text-[#44454F]">
+                        Hand-picked Tours & Activities
+                      </p>
+                    </div>
+
+                    {/* <div className="flex gap-4 items-center">
+                                      <img src={insurance} alt="" />
+                                      <p>Free Travel Insurance</p>
+                                    </div> */}
+
+                    <div className="flex gap-4 items-center">
+                      <img src={pricetag} alt="" />
+                      <p className="text-sm font-medium text-[#44454F]">
+                        No-hassle best price guarantee
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
-
-            <nav>
-              <div className="flex justify-center items-center mt-5">
-                <ul className="flex space-x-2">
-                  {Array.from(
-                    { length: Math.ceil(apiData.length / itemsPerPage) },
-                    (_, i) => (
-                      <li key={i + 1} className="relative">
-                        <button
-                          onClick={() => paginate(i + 1)}
-                          className={`px-4 py-2 border-2 rounded-full text-black ${
-                            currentPage === i + 1
-                              ? "bg-blue-700 border-blue-700 text-white"
-                              : "hover:bg-blue-600 hover:border-blue-600"
-                          }`}
-                        >
-                          {i + 1}
-                        </button>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </nav>
           </div>
         </div>
 

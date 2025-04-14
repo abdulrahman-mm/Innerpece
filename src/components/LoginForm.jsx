@@ -117,7 +117,7 @@ function Login() {
                 Log In To Get Started
               </p>
 
-              <div className="flex flex-wrap gap-2 items-center">
+              {/* <div className="flex flex-wrap gap-2 items-center">
                 <p
                   style={{ backgroundColor: "#EB9009" }}
                   className="text-white px-2 rounded"
@@ -125,7 +125,7 @@ function Login() {
                   20% off
                 </p>
                 <p className="text-gray-500">get 20% off for web signup</p>
-              </div>
+              </div> */}
 
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col flex-grow gap-2">

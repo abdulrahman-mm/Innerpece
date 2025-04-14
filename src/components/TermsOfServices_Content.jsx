@@ -26,7 +26,7 @@ function TermsOfServices_Content() {
       <p className="mt-1 md:text-lg">
         To confirm your booking, a minimum deposit is required. The amount
         varies by tour package. For any questions or clarifications about your
-        booking, please contact us at jay@innerpeace.com. Our team is ready to
+        booking, please contact us at jay@innerpece.com. Our team is ready to
         assist you with all your tour-related needs.
       </p>
 
@@ -82,7 +82,7 @@ function TermsOfServices_Content() {
         We strive to ensure that all information on our website, brochures, and
         advertisements is accurate and up-to-date. However, changes and errors
         may occur. We recommend reviewing our terms before booking. For any
-        questions or clarifications, contact us at jay@innerpeace.com.
+        questions or clarifications, contact us at jay@innerpece.com.
       </p>
     </div>
   );

@@ -13,6 +13,7 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [password_confirmation, setPasswordConfirmation] = useState("");
   const [dob, setDob] = useState("");
+  const [anniversaryDate, setAnniversaryDate] = useState("");
   const [phone, setPhone] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
@@ -79,6 +80,9 @@ function Signup() {
     }
     if (name === "dob") {
       setDob(value);
+    }
+    if(name==="AnniversaryDate"){
+      setAnniversaryDate(value);
     }
     if (name === "phone") {
       setPhone(value.slice(0, 10));
@@ -212,6 +216,9 @@ function Signup() {
     }
   };
 
+  console.log(anniversaryDate);
+  
+
   return (
     <div className="flex items-center justify-center mt-8 md:px-1 md:mt-14">
       <div className="w-[95vw] md:w-[80vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
@@ -224,7 +231,7 @@ function Signup() {
                 Create An Account To Get Started
               </p>
 
-              <div className="flex flex-wrap gap-2 items-center">
+              {/* <div className="flex flex-wrap gap-2 items-center">
                 <p
                   style={{ backgroundColor: "#EB9009" }}
                   className="text-white px-2 rounded"
@@ -232,7 +239,7 @@ function Signup() {
                   20% off
                 </p>
                 <p className="text-gray-500">get 20% off for web signup</p>
-              </div>
+              </div> */}
 
               {/* Display Selected Image */}
               {selectedImage && (
@@ -390,7 +397,6 @@ function Signup() {
                     value={password}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
-
                     placeholder="Create Password"
                   />
                   {userDetailsError.password && (
@@ -417,7 +423,6 @@ function Signup() {
                     value={password_confirmation}
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
-
                     placeholder="Confirm Password"
                   />
                   {userDetailsError.password && (
@@ -451,24 +456,20 @@ function Signup() {
                 </div>
 
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
-                  <label htmlFor="street" className="font-semibold">
-                    Street *
+                  <label htmlFor="AnniversaryDate" className="font-semibold">
+                  Anniversary Date
                   </label>
                   <input
-                    type="text"
-                    name="street"
-                    id="street"
-                    value={street}
+                    type='date'
+                    name="AnniversaryDate"
+                    id="AnniversaryDate"
+                    value={anniversaryDate}
                     autoComplete="off"
                     onChange={handleInputChanges}
-                    className="border-2 border-gray-300 outline-none p-2 rounded-md"
-                    placeholder="Street"
+                    className="border-2 border-gray-300 outline-none p-2 rounded-md placeholder-gray-300"
+                    placeholder="Anniversary Date"
                   />
-                  {userDetailsError.street && (
-                    <p className="text-red-500 text-xs sm:text-sm ">
-                      {userDetailsError.street}
-                    </p>
-                  )}
+                  
                 </div>
               </div>
 
@@ -529,7 +530,7 @@ function Signup() {
                     autoComplete="off"
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
-                    placeholder="zip/postal code"
+                    placeholder="Zip/postal code"
                   />
                   {userDetailsError.zip_province_code && (
                     <p className="text-red-500 text-xs sm:text-sm ">
@@ -581,6 +582,28 @@ function Signup() {
                     </p>
                   )}
                 </div>
+                <div className="flex flex-col basis-[25%] flex-grow gap-1">
+                  <label htmlFor="street" className="font-semibold">
+                    Street *
+                  </label>
+                  <input
+                    type="text"
+                    name="street"
+                    id="street"
+                    value={street}
+                    autoComplete="off"
+                    onChange={handleInputChanges}
+                    className="border-2 border-gray-300 outline-none p-2 rounded-md"
+                    placeholder="Street"
+                  />
+                  {userDetailsError.street && (
+                    <p className="text-red-500 text-xs sm:text-sm ">
+                      {userDetailsError.street}
+                    </p>
+                  )}
+                </div>
+
+                
               </div>
 
               <div className="flex flex-col gap-1">
@@ -611,8 +634,6 @@ function Signup() {
                   )}
                 </div>
               </div>
-
-             
 
               <div className="flex flex-col gap-1">
                 <div className="flex items-center justify-start gap-2">
@@ -648,7 +669,6 @@ function Signup() {
                   )}
                 </div>
               </div>
-              
 
               <button
                 onClick={handleSignup}

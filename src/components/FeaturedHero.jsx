@@ -119,7 +119,7 @@ function Hero({
         {" "}
         <div
           onClick={handleInformationScroll}
-          className="flex flex-grow cursor-pointer  gap-2 md:gap-3   py-1  items-center"
+          className="flex flex-grow cursor-pointer  gap-2 md:gap-3   py-1  items-center  md:justify-center"
         >
           <img
             src={vector1}
@@ -130,14 +130,14 @@ function Hero({
         </div>
         <div
           onClick={handleTourPlanningScroll}
-          className="flex flex-grow cursor-pointer   py-1  gap-2 md:gap-3 items-center"
+          className="flex flex-grow cursor-pointer   py-1  gap-2 md:gap-3 items-center  md:justify-center"
         >
           <img src={vector2} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base  font-semibold">Tour Planning</p>
         </div>
         <div
           onClick={handleLocationShareScroll}
-          className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center"
+          className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
         >
           <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base  font-semibold">Location Share</p>
@@ -145,12 +145,12 @@ function Hero({
         {apiData.review_count > 0 && (
           <div
             onClick={reviewRefScroll}
-            className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center"
+            className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
           >
             <img src={vector4} alt="" className="object-contain h-6 md:h-8" />
-            <p className="text-sm md:text-base lg:text-lg font-semibold">
-              <span className="text-sky-800">{apiData.review_count}</span>{" "}
-              Reviews
+            <p className="text-sm md:text-base  font-semibold">
+              <span>{apiData.review_count}</span>{" "}
+              {apiData.review_count > 1 ? "Reviews" : "Review"}
             </p>
           </div>
         )}

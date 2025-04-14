@@ -99,8 +99,12 @@ function ExplorePopularEvents() {
     <div>
       {popularEventsData.length > 0 && (
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-          <p className="text-xl md:text-3xl font-semibold font-mulish text-[#3E3E3E]">
+          {/* <p className="text-xl md:text-3xl font-semibold font-mulish text-[#3E3E3E]">
             Explore <span className="text-[#007DD7]">Popular Events</span>
+          </p> */}
+          <p className="text-xl md:text-3xl leading-loose">
+            <span className="font-jost font-medium ">Explore </span>{" "}
+            <span className="font-jost font-bold">Popular Events</span>
           </p>
 
           {isLoading ? (

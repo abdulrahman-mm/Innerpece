@@ -154,12 +154,12 @@ function Featured() {
             </div>
           )}
 
-          {apiData.start_date && apiData.end_date && (
+          {/* {apiData.start_date && apiData.end_date && (
             <div className="flex items-center flex-wrap gap-1">
               <MdDateRange className="inline-block  text-red-600 text-lg md:text-xl" />
               {apiData.start_date} - {apiData.end_date}
             </div>
-          )}
+          )} */}
 
           <div className="flex flex-row  flex-wrap md:flex-col gap-5 ">
             <div className="flex flex-wrap items-center gap-2 md:gap-5">

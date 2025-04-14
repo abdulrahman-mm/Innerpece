@@ -5,13 +5,24 @@ export default {
     extend: {
       fontFamily: {
         Oswald: ["Oswald"],
-        Poppins: ["Poppins"], // Add your custom font
-        mulish: ["Mulish", "sans-serif"], // ✅ Add Mulish here
+        Poppins: ["Poppins"],
+        mulish: ["Mulish", "sans-serif"],
         raleway: ["Raleway", "sans-serif"],
         dmSans: ["'DM Sans'", "sans-serif"],
         jost: ["Jost", "sans-serif"],
-
-
+        rancho: ['Rancho', 'cursive'],
+        nunito: ['"Nunito Sans"', 'sans-serif'],
+      },
+      extend: {
+        animation: {
+          fadeIn: 'fadeIn 1s ease-in-out forwards',
+        },
+        keyframes: {
+          fadeIn: {
+            '0%': { opacity: 0 },
+            '100%': { opacity: 1 },
+          },
+        },
       },
     },
   },
