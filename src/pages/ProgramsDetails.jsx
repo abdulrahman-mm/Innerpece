@@ -23,15 +23,14 @@ function Programs() {
 
   useEffect(() => {
     document.title = "Program Details - Innerpece";
-    // const timer = setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 200); // Adjust time as needed
-
-    // return () => clearTimeout(timer); // Cleanup timeout
   }, []); // Empty dependency array ensures it runs once on mount
+
   const location = useLocation();
   let navigate = useNavigate();
   const { id, themes_name } = location.state || {};
+
+  console.log("themename",themes_name);
+  
   const [apiData, setApiData] = useState([]);
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
 
@@ -52,13 +51,19 @@ function Programs() {
     ? apiData.slice(indexOfFirstItem, indexOfLastItem)
     : [];
 
+    const pathName = window.location.pathname;
+    const slicedPathName = pathName.split("/")[2];
+    const slicedLocationName=pathName.split('/')[3];
+    
   useEffect(() => {
+   
+
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
           "https://backoffice.innerpece.com/api/v1/get-program",
           {
-            theme: id,
+            theme: id ? id : slicedPathName,
           }
         );
         setLoading(false);
@@ -70,10 +75,6 @@ function Programs() {
     };
     fetchProgramData();
   }, [id]);
-
-  console.log("apiData", apiData);
-
-  console.log("id", id);
 
   const handleDateChange = (e) => {
     setStartDate(e.target.value);
@@ -259,8 +260,6 @@ function Programs() {
     );
   };
 
-  console.log("apidata", apiData);
-
   // if (isLoading) {
   //   return (
   //     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
@@ -268,6 +267,27 @@ function Programs() {
   //     </div>
   //   );
   // }
+
+  const [sliceCount, setSliceCount] = useState(2);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 500) {
+        setSliceCount(3); // large screens
+      } else {
+        setSliceCount(2); // small screens
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div>
@@ -320,16 +340,49 @@ function Programs() {
                 id="blur"
                 className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
               >
-                <h1 className="text-white text-lg md:text-2xl font-nunito text-center lg:text-4xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">{`Explore ${
-                  apiData.length > 0 ? apiData[0].theme : themes_name
+                <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-rancho tracking-widest text-center lg:text-5xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{`Explore ${
+                  apiData.length > 0 ? apiData[0].theme : slicedLocationName
                 }`}</h1>
-                <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
+                <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
                   Find your perfect tour with personalized themes and
                   destinations to match your preferences
                 </p>
               </div>
             </div>
           </div>
+
+          {/* <div
+            id="hero"
+            className="h-64 md:h-80 lg:h-[420px] relative overflow-hidden"
+          >
+
+            <img
+              src={
+                currentItems?.[0]?.themes?.[0]?.theme_pic
+                  ? `https://backoffice.innerpece.com/${currentItems[0].themes[0].theme_pic}`
+                  : defaultimage
+              }
+              alt="hero background"
+              className="absolute inset-0 w-full h-full object-cover object-top"
+            />
+
+            <div className="absolute flex w-full h-full items-center justify-center">
+              <div
+                id="blur"
+                className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
+              >
+                <h1 className="text-white text-lg md:text-2xl font-nunito text-center lg:text-4xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
+                  {`Explore ${
+                    apiData.length > 0 ? apiData[0].theme : themes_name
+                  }`}
+                </h1>
+                <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
+                  Find your perfect tour with personalized themes and
+                  destinations to match your preferences
+                </p>
+              </div>
+            </div>
+          </div> */}
         </div>
 
         {/* Main Section  */}
@@ -472,18 +525,31 @@ function Programs() {
                       />
                     </div>
 
-                    <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0  border-[#BABABA]  py-2 px-3 ">
+                    <div
+                      onClick={() => handleCardClick(item.id, item.title)}
+                      className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0 cursor-pointer+
+                                vv border-[#BABABA]  py-2 px-3 "
+                    >
                       <p className="font-semibold flex-wrap text-xl md:text-3xl font-jost">
                         {item.title}
                       </p>
 
                       <div className="flex items-centeroverflow-hidden justify-between gap-2 flex-wrap font-mulish">
-                        {item.current_location && (
-                          <div className="flex items-center gap-2">
-                            <FaLocationDot className="text-sky-800" />
-                            <p className="text-sm sm:text-base">{item.current_location}</p>
-                          </div>
-                        )}
+                        {item.current_location &&
+                          item.current_location !== "<p><br></p>" && (
+                            <div className="flex items-center gap-2">
+                              <FaLocationDot className="text-sky-800" />
+                              {/* <p className="text-sm sm:text-base">
+                              {item.current_location}
+                            </p> */}
+                              <p
+                                className="text-sm sm:text-base"
+                                dangerouslySetInnerHTML={{
+                                  __html: item.current_location,
+                                }}
+                              />
+                            </div>
+                          )}
 
                         <div className="flex items-center gap-1">
                           <FaStar className="text-yellow-500" />
@@ -494,7 +560,9 @@ function Programs() {
                       </div>
 
                       <div className="flex items-center flex-wrap gap-2">
-                        <p>Upto {item.member_capacity} guests</p>
+                        {item.member_capacity && (
+                          <p>Upto {item.member_capacity} guests</p>
+                        )}
 
                         {item.bed_room && (
                           <div className="flex items-center gap-3">
@@ -524,8 +592,11 @@ function Programs() {
                           <div className="border-b border-[#BABABA] "></div>
 
                           <div className="flex justify-start mt-5 gap-3 flex-wrap items-start">
-                            {item.amenities
+                            {/* {item.amenities
                               .slice(0, 3)
+                              .map((amenity, index) => ( */}
+                            {item.amenities
+                              .slice(0, sliceCount)
                               .map((amenity, index) => (
                                 <div
                                   key={index}
@@ -543,10 +614,31 @@ function Programs() {
                                 </div>
                               ))}
 
-                            {item.amenities.length > 3 && (
+                            {/* {item.amenities.length > 3 && (
                               <p className="text-gray-500">
                                 {item.amenities.length - 3}+
                               </p>
+                            )} */}
+                            {item.amenities.length > 3 && (
+                              //  <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
+
+                              // <p className="text-gray-500 text-xs mx-auto">
+                              //   +{item.amenities.length - 3}
+                              // </p>
+                              // </span>
+                              <div
+                                key={index}
+                                className="flex flex-col w-20 flex-wrap"
+                              >
+                                <span className=" bg-sky-700 p-2 w-9 h-9  rounded-full">
+                                  <p className="text-white text-xs mx-auto">
+                                    +{item.amenities.length - 3}
+                                  </p>
+                                </span>
+                                <p className="text-sky-700 flex-wrap text-xs">
+                                  More
+                                </p>
+                              </div>
                             )}
                           </div>
                         </div>
@@ -554,23 +646,23 @@ function Programs() {
                     </div>
 
                     <div className="flex flex-wrap  flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]   px-3 py-2 font-mulish   ">
+                      <div className="flex flex-row lg:flex-col gap-2 lg:gap-3 items-center justify-center">
+                        <p className="text-[#001031] text-sm md:text-base text-center mx-auto ">
+                          Starting From{" "}
+                        </p>
+                        <p className="font-bold text-green-700 text-xl mx-auto">
+                          ₹{item.pricing[0]}
+                        </p>
+                      </div>
 
-                    <div className="flex flex-row lg:flex-col gap-3 items-center sm:items-start">
-                    <p className="text-[#001031] text-sm sm:text-base">Starting From </p>
-                      <p className="font-bold text-[#000000] text-xl">
-                        ₹{item.pricing[0]}
-                      </p>
-
-                    </div>
-                     
                       <div
                         onClick={() => handleCardClick(item.id, item.title)}
-                        className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1  lg:py-2 rounded-lg "
+                        className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1 lg:py-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md hover:brightness-110"
                       >
-                        <p className="text-white cursor-pointer  font-medium md:text-xl text-center ">
+                        <p className="text-white font-medium md:text-xl text-center">
                           View Detail
                         </p>
-                        {/* <FaArrowRight className="text-white h-full " /> */}
+                        {/* <FaArrowRight className="text-white h-full" /> */}
                       </div>
                     </div>
                   </div>
@@ -622,7 +714,7 @@ function Programs() {
 
                 <div
                   onClick={() => window.open("https://wa.me/6384131642")}
-                  className="cursor-pointer border-2 rounded-xl border-[#00A64D] flex gap-2 items-center px-5 py-1 w-48"
+                  className="cursor-pointer border-2 rounded-xl border-[#00A64D] flex gap-2 items-center px-5 py-1 w-48 transition-all duration-300 transform  hover:shadow-md hover:scale-105"
                 >
                   <img
                     src={whatsapp}
@@ -638,7 +730,7 @@ function Programs() {
                     window.scrollTo(0, 0);
                     navigate("/sendenquiry");
                   }}
-                  className="cursor-pointer border-2 rounded-xl border-[#EC3B63] flex items-center gap-4 px-5 py-2 w-48"
+                  className="cursor-pointer border-2 rounded-xl border-[#EC3B63] flex items-center gap-4 px-5 py-2 w-48 transition-all duration-300 transform  hover:shadow-md hover:scale-105"
                 >
                   <img
                     src={sendEnquiry}
@@ -671,10 +763,12 @@ function Programs() {
                     </p>
                   </div>
 
-                  {/* <div className="flex gap-4 items-center">
-                          <img src={insurance} alt="" />
-                          <p>Free Travel Insurance</p>
-                        </div> */}
+                  <div className="flex gap-4 items-center">
+                    <img src={insurance} alt="" />
+                    <p className="text-sm font-medium text-[#44454F]">
+                      Women-Friendly Environments
+                    </p>
+                  </div>
 
                   <div className="flex gap-4 items-center">
                     <img src={pricetag} alt="" />

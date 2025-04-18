@@ -12,7 +12,7 @@ function Privacypolicy_Hero() {
       />
 
       <div className="absolute w-full h-full z-40 flex flex-col gap-5 items-center justify-center  text-white ">
-        <p className="font-semibold text-2xl md:text-3xl lg:text-4xl xl:text-5xl">PRIVACY POLICY</p>
+        <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-4xl">PRIVACY POLICY</p>
         <div className="flex gap-2">
           <p className="cursor-pointer hover:text-gray-300" onClick={()=>navigate('/')}>Home</p>
           <p>/</p>

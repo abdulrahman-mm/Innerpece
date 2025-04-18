@@ -8,7 +8,6 @@ import defaultimage from "../assets/defaultimg.png";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Swal from "sweetalert2";
-
 import ReCAPTCHA from "react-google-recaptcha";
 
 function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
@@ -17,6 +16,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const { id } = location.state || {};
   const [apiData, setApiData] = useState([]);
   const sanitizedHTML = DOMPurify.sanitize(apiData.program_desc);
+
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [loading, setLoading] = useState(true);
   const currentUrl = window.location.href;
@@ -25,6 +25,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const [hover, setHover] = useState(""); // Hovered rating
   const [userReview, setUserReview] = useState("");
   const [date, setDate] = useState(new Date());
+  const [yearMonthDate, setYearMonthDate] = useState(new Date());
   const [userDetails, setUserDetails] = useState(false);
   const [userId, setUserId] = useState();
   const [loginCliked, setLoginClicked] = useState(false);
@@ -102,6 +103,10 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
     let interval = setInterval(() => {
       setDate(new Date());
+      // setYearMonthDate(new Date());
+      const today = new Date();
+      const formattedDate = today.toISOString().split("T")[0];
+      setYearMonthDate(formattedDate);
     }, 1000);
 
     return () => {
@@ -117,6 +122,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         comment: userReview,
         rating: rating,
         created_at: date,
+        review_dt: yearMonthDate,
       };
 
       const authToken = userId;
@@ -147,8 +153,6 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             // "https://backoffice.innerpece.com/api/v1/get-program",
             payload
           );
-
-          console.log(response.data.data);
 
           setApiData(response.data.data);
           setLoading(false);
@@ -301,7 +305,43 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
     setCaptchaValue(value);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 3;
 
+  const totalReviews = apiData?.reviews?.length;
+  const totalPages = Math.ceil(totalReviews / reviewsPerPage);
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = apiData?.reviews?.slice(
+    indexOfFirstReview,
+    indexOfLastReview
+  );
+
+  const formatPlanDescription = (htmlString) => {
+    const sanitizedHTML = DOMPurify.sanitize(htmlString);
+
+    return sanitizedHTML.replace(
+      /<p>Day (\d+)([^<]*)<\/p>/g,
+      "<p><strong>Day $1</strong><br><br$2</p>"
+    );
+  };
+
+  // const [reviewScrollRef, setReviewScrollRef] = useState("");
+  
+  //   useEffect(() => {
+  //     const handleResize = () => {
+  //       window.innerWidth > 1024 ? setReviewScrollRef(reviewRef) : "";
+  //     };
+  
+  //     handleResize();
+  
+  //     // Event listener
+  //     window.addEventListener("resize", handleResize);
+  
+  //     // Cleanup
+  //     return () => window.removeEventListener("resize", handleResize);
+  //   }, []);
+  
 
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
@@ -360,7 +400,9 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
       <div className="flex gap-2 mt-8">
         <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-        <p className="font-semibold text-2xl  text-[#11142D]">Highlights</p>
+        <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+          Highlights
+        </p>
       </div>
 
       <p
@@ -368,63 +410,49 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
       ></p>
 
-      {apiData.tour_planning && (
-        <div ref={TourPlanningRef} className="mt-8 md:mt-10">
-          <div className="flex gap-2 mt-8">
-            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-            <p className="font-semibold text-2xl  text-[#11142D]">
-              Tour Planning
-            </p>
-          </div>
+      {apiData.tour_planning?.plan_description &&
+        !apiData.tour_planning?.plan_description.includes("<p><br></p>") && (
+          <div ref={TourPlanningRef} className="mt-8 md:mt-10">
+            <div className="flex gap-2 mt-8">
+              <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+              <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+                Tour Planning
+              </p>
+            </div>
 
-          {apiData.tour_planning.plan_title &&
-            apiData.tour_planning.plan_title.length > 0 && ( // Check for presence and length
-              <div>
-                {/* {apiData.tour_planning.plan_title.map((title, index) => (
-                <div key={index} className="mt-3">
-                  <p className="font-medium text-xl mb-5">{title}</p>
-                  <p className="font-semibold mt-1 text-xl text-[#0E598F]">
-                    {apiData.tour_planning.plan_subtitle[index]}
-                  </p>
-
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: apiData.tour_planning.plan_description[index],
-                    }}
-                    className="  md:leading-7 text-[#1A1A1A] "
-                  ></p>
-                </div>
-              ))} */}
-                
-                  <div  className="mt-3">
-                    <p className="font-medium text-xl mb-5">{apiData.tour_planning.plan_title}</p>
-                    <p className="font-semibold mt-1 text-xl text-[#0E598F]">
-                      {apiData.tour_planning.plan_subtitle}
-                    </p>
-
-                    <p
+            {apiData.tour_planning.plan_description &&
+              apiData.tour_planning.plan_description.length > 0 && ( // Check for presence and length
+                <div>
+                  <div className="mt-3">
+                    {/* <p
                       dangerouslySetInnerHTML={{
                         __html: apiData.tour_planning.plan_description,
                       }}
-                      className="  md:leading-7 text-[#1A1A1A] "
+                      className={`md:leading-7 text-[#11142D] ${apiData.tour_planning.plan_description.includes(
+                        "Day" && "font-bold"
+                      )} `}
+                    ></p> */}
+
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: formatPlanDescription(
+                          apiData?.tour_planning?.plan_description
+                        ),
+                      }}
+                      className="md:leading-7"
                     ></p>
                   </div>
-              
-              </div>
-            )}
-        </div>
-      )}
+                </div>
+              )}
+          </div>
+        )}
 
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
           <div className="border-[1px] px-4 py-3 border-black/40 mt-8 md:mt-10 rounded-3xl">
-            {/* <p className="font-semibold text-2xl">
-              <span className="border-l-8 border-[#0E598F] me-4"></span>{" "}
-              Amenities
-            </p> */}
             <div className="flex gap-2 ">
               <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-              <p className="font-semibold text-2xl  text-[#11142D]">
+              <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
                 Amenities
               </p>
             </div>
@@ -441,9 +469,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                         // alt={amenity.amenity_name}
                         className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
-                      <p className="text-lg text-gray-700">
-                        {amenity.amenity_name}
-                      </p>
+                      <p className=" text-gray-700">{amenity.amenity_name}</p>
                     </div>
                   );
                 })}
@@ -460,7 +486,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             </p> */}
             <div className="flex gap-2 ">
               <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-              <p className="font-semibold text-2xl  text-[#11142D]">
+              <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
                 Food and Beverages
               </p>
             </div>
@@ -477,7 +503,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                         // alt={foodBeverage.food_beverage_pic}
                         className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
-                      <p className="text-lg text-gray-700">
+                      <p className=" text-gray-700">
                         {foodBeverage.food_beverage}
                       </p>
                     </div>
@@ -497,7 +523,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             </p> */}
             <div className="flex gap-2">
               <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-              <p className="font-semibold text-2xl  text-[#11142D]">
+              <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
                 Safety Features
               </p>
             </div>
@@ -513,7 +539,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                         src={`https://backoffice.innerpece.com/${safety_features.safety_features_pic}`}
                         className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
-                      <p className="text-lg text-gray-700">
+                      <p className=" text-gray-700">
                         {safety_features.safety_features}
                       </p>
                     </div>
@@ -532,7 +558,9 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           </p> */}
           <div className="flex gap-2">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-            <p className="font-semibold text-2xl  text-[#11142D]">Activities</p>
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+              Activities
+            </p>
           </div>
 
           <div className="flex flex-wrap justify-start mt-5 gap-4">
@@ -548,9 +576,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                     src={`https://backoffice.innerpece.com/${activities.activities_pic}`}
                     className="w-6 h-6 bg-cover md:w-7 md:h-7"
                   />
-                  <p className="text-lg text-gray-700">
-                    {activities.activities}
-                  </p>
+                  <p className=" text-gray-700">{activities.activities}</p>
                 </div>
               );
             })}
@@ -562,7 +588,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         <div className="mt-8 md:mt-10  ">
           <div className="flex gap-2 mt-8">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-            <p className="font-semibold text-2xl  text-[#11142D]">
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
               Payment Policy
             </p>
           </div>
@@ -579,12 +605,13 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           )}
         </div>
       )}
+
       {apiData.important_info && (
         <div ref={informationRef} className="mt-8 md:mt-10   ">
           <div className="flex gap-2 mt-8">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-            <p className="font-semibold text-2xl  text-[#11142D]">
-              Important Info
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+              Notes
             </p>
           </div>
 
@@ -597,69 +624,106 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         </div>
       )}
 
-      <div className="border border-gray-500 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
-        <div className="flex ">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <button
-              disabled={!userDetails}
-              key={star}
-              type="button"
-              className={`w-8 text-2xl h-8 flex  rounded-full ${
-                star <= (hover || rating) ? "text-yellow-500" : "text-gray-300"
-              }`}
-              onClick={() => setRating(star)} // Set rating on click
-              onMouseEnter={() => setHover(star)} // Highlight stars on hover
-              onMouseLeave={() => setHover(0)} // Reset hover effect
-            >
-              ★
-            </button>
-          ))}
-        </div>
-        <textarea
-          name="Review"
-          disabled={!userDetails}
-          value={userReview}
-          onChange={(e) => setUserReview(e.target.value)}
-          placeholder="Write a Review"
-          className="w-full resize-none bg-white h-fit mt-3 placeholder-black text-wrap border-none outline-none"
-        />
-        <button
-          disabled={!userDetails}
-          onClick={onClickPostReview}
-          className="bg-sky-800 transition-all duration-500 hover:bg-sky-900 text-white rounded-full w-fit h-fit py-1 px-8 "
-        >
-          Post
-        </button>
-      </div>
+      {apiData.program_inclusion && (
+        <div className="mt-8 md:mt-10   ">
+          <div className="flex gap-2 mt-8">
+            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+              Package Inclusion
+            </p>
+          </div>
 
-      {!userDetails && (
-        <p className="text-red-500 mt-1">
-          Please{" "}
-          <button
-            onClick={handleLoginClick}
-            className="cursor-pointer hover:underline"
-          >
-            login{" "}
-          </button>
-          {"  "} to add review
-        </p>
+          <div>
+            <div
+              className="mt-5 md:leading-7  text-[#11142D] "
+              dangerouslySetInnerHTML={{ __html: apiData.program_inclusion }}
+            />
+          </div>
+        </div>
       )}
 
-      {apiData.reviews && apiData.reviews.length > 0 && (
-        <div ref={reviewRef} className="mt-8 md:mt-10">
-          <div className="flex flex-wrap flex-col justify-start ">
-            {/* <p className="font-semibold text-xl md:text-2xl">
+      {apiData.program_exclusion && (
+        <div className="mt-8 md:mt-10   ">
+          <div className="flex gap-2 mt-8">
+            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+              Package Exclusion
+            </p>
+          </div>
+
+          <div>
+            <div
+              className="mt-5 md:leading-7  text-[#11142D] "
+              dangerouslySetInnerHTML={{ __html: apiData.program_exclusion }}
+            />
+          </div>
+        </div>
+      )}
+
+      <div ref={reviewRef} className="mt-8 md:mt-10 max-lg:hidden">
+        <div className="flex flex-wrap flex-col justify-start ">
+          {/* <p className="font-semibold text-xl md:text-2xl">
               <span className="border-l-8 border-[#0E598F] me-4"></span>{" "}
               Client's Review
             </p> */}
-            <div className="flex gap-2 ">
-              <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-              <p className="font-semibold text-2xl  text-[#11142D]">
-                Client's Review
-              </p>
-            </div>
+          <div className="flex gap-2 ">
+            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+            <p className="font-semibold text-2xl  text-[#11142D]">
+              Client's Review
+            </p>
+          </div>
 
-            {/* <div className="mt-5 border-4 h-36 w-36 flex flex-col justify-center items-center border-sky-800 rounded-full">
+          <div className="border max-lg:hidden border-gray-500 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
+            <div className="flex ">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  disabled={!userDetails}
+                  key={star}
+                  type="button"
+                  className={`w-8 text-2xl h-8 flex  rounded-full ${
+                    star <= (hover || rating)
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                  }`}
+                  onClick={() => setRating(star)} // Set rating on click
+                  onMouseEnter={() => setHover(star)} // Highlight stars on hover
+                  onMouseLeave={() => setHover(0)} // Reset hover effect
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+            <textarea
+              name="Review"
+              disabled={!userDetails}
+              value={userReview}
+              onChange={(e) => setUserReview(e.target.value)}
+              placeholder="Write a Review"
+              className="w-full resize-none bg-white h-fit mt-3 placeholder-black text-wrap border-none outline-none"
+            />
+            <button
+              disabled={!userDetails}
+              onClick={onClickPostReview}
+              className="bg-sky-800 transition-all duration-500 hover:bg-sky-900 text-white rounded-full w-fit h-fit py-1 px-8 "
+            >
+              Post
+            </button>
+          </div>
+
+          {!userDetails && (
+            <p className="text-red-500 mt-1 max-lg:hidden">
+              Please{" "}
+              <button
+                onClick={handleLoginClick}
+                className="cursor-pointer underline"
+              >
+                login{" "}
+              </button>
+              {"  "} to add review
+            </p>
+          )}
+
+          {/* <div className="mt-5 border-4 h-36 w-36 flex flex-col justify-center items-center border-sky-800 rounded-full">
               <p className="text-sm">Overall Ratings</p>
               <p className="text-sm">
                 {apiData.average_rating}
@@ -667,7 +731,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
               </p>
             </div> */}
 
-            {apiData.reviews.length > 0 && (
+          {/* {apiData.reviews.length > 0 && (
               <div className="mt-5  overflow-y-auto">
                 <div className="flex  flex-col-reverse  gap-5 ">
                   {apiData.reviews.map((item, index) => (
@@ -715,57 +779,98 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                       </div>
                     </div>
                   ))}
-                  {/* {apiData.client_reviews.map((item, index) => (
-                    <div
-                      key={index}
-                      className="mx-3 bg-gray-100 p-4 rounded-lg shadow-md"
-                    >
-                      <div className="flex   flex-col gap-1">
-                        <div className="flex gap-1 items-center">
-                          {Array(item.rating)
-                            .fill(null)
-                            .map((_, i) => (
-                              <img
-                                key={i}
-                                src={star}
-                                alt="Star"
-                                className="w-4 md:w-5"
-                              />
-                            ))}
-                        </div>
-
-                        <p
-                          className="text-gray-600 text-sm md:text-base"
-                          dangerouslySetInnerHTML={{
-                            __html: item.client_review,
-                          }}
-                        />
-
-                        <p className="text-gray-500 text-xs md:text-sm">
-                          {item.review_dt}
-                        </p>
-
-                        <hr className="border-black/20 w-full" />
-
-                        <div className="flex gap-3">
-                          <img
-                            src={`https://backoffice.innerpece.com/${item.client_pic}`}
-                            alt="Profile"
-                            className="w-[40px] h-[40px] object-cover rounded-full border-2 border-gray-300"
-                          />
-                          <p className="font-semibold text-lg md:text-xl text-gray-800">
-                            {item.client_name}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))} */}
+                  
                 </div>
               </div>
-            )}
-          </div>
+            )} */}
+
+          {apiData?.reviews?.length > 0 && (
+            <div  className="mt-5 overflow-y-auto">
+              <div className="flex flex-col gap-5">
+                {currentReviews.map((item, index) => (
+                  <div key={index} className=" bg-gray-100 p-4 rounded-xl">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex gap-1 items-center">
+                        {Array(item.rating)
+                          .fill(null)
+                          .map((_, i) => (
+                            <img
+                              key={i}
+                              src={star}
+                              alt="Star"
+                              className="w-4 md:w-5"
+                            />
+                          ))}
+                      </div>
+
+                      <p
+                        className="text-gray-600 text-sm md:text-base"
+                        dangerouslySetInnerHTML={{
+                          __html: item.comment,
+                        }}
+                      />
+
+                      <p className="text-gray-500 text-xs md:text-sm">
+                        {item.date}
+                      </p>
+
+                      <hr className="border-black/20 w-full" />
+
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={`https://backoffice.innerpece.com/${item.profile_image}`}
+                          alt="Profile"
+                          className="w-[40px] h-[40px] object-cover rounded-full border-2 border-gray-300"
+                        />
+                        <p className="font-medium text-lg md:text-xl text-gray-800">
+                          {item.first_name}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              <div className="flex justify-center mt-5 gap-2">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+                >
+                  Prev
+                </button>
+
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === i + 1
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-300 hover:bg-gray-400"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {loginCliked && (
         <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
@@ -785,18 +890,6 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                     <p className="text-xl md:text-2xl lg:text-3xl font-semibold">
                       Log In To Get Started
                     </p>
-
-                    <div className="flex flex-wrap gap-2 items-center">
-                      <p
-                        style={{ backgroundColor: "#EB9009" }}
-                        className="text-white px-2 rounded"
-                      >
-                        20% off
-                      </p>
-                      <p className="text-gray-500">
-                        get 20% off for web signup
-                      </p>
-                    </div>
 
                     <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                       <div className="flex flex-col flex-grow gap-2">

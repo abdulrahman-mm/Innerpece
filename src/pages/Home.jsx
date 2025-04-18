@@ -19,6 +19,7 @@ import Swal from "sweetalert2";
 let Perfecttraveltype = lazy(() => import("../components/Perfecttraveltype"));
 // import Perfecttraveltype from "";
 import TripCategories from "../components/TripCategories";
+import Blogs from "../components/Blogs";
 
 function Home() {
   // const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -100,7 +101,7 @@ function Home() {
         />
       </div>
 
-      <div>
+      {/* <div>
         <div
           onClick={() => setAssiatanceFormClicked(!assistanceFormClicked)}
           className="fixed group top-1/2 right-0 -translate-y-1/2 z-20 "
@@ -267,7 +268,7 @@ function Home() {
             </div>
           </>
         )}
-      </div>
+      </div> */}
 
       <Suspense
         fallback={
@@ -276,8 +277,8 @@ function Home() {
           </div>
         }
       >
-        <Header />
-        <Hero />
+        {/* <Header /> */}
+        {/* <Hero /> */}
         <HomePrograms />
         <Perfecttraveltype />
         <HomeDestinations />
@@ -286,6 +287,7 @@ function Home() {
         {/* <ExplorePopularEvents /> */}
         {/* <TripCategories /> */}
         <LetsGetStarted />
+        <Blogs />
         <Footer />
       </Suspense>
     </div>

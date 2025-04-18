@@ -55,6 +55,7 @@ const SendEnquiryForm = () => {
   const [reference_id, setReferenceId] = useState("");
   const [userId, setUserId] = useState("");
   const [childAge, setChildAge] = useState([]);
+  
 
   useEffect(() => {
     const storedReferenceId = sessionStorage.getItem("reference_id");
@@ -176,7 +177,7 @@ const SendEnquiryForm = () => {
     <div className="flex items-center justify-center mt-8 md:mt-16">
       <div className="w-[95vw] sm:w-[90vw] md:w-[95vw] lg:w-[80vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex justify-start gap-2 md:gap-4  h-full w-full px-2 md:px-4 py-4">
-          <div className=' bg-[url("././assets/sendenquiry_formimage.jpeg")] max-md:hidden  w-1/5  md:w-1/4 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+          <div className=' bg-[url("././assets/sendenquiry_formimage2.jpg")] max-md:hidden  w-1/5  md:w-1/4 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
           <div className="w-full">
             <form onSubmit={handleSubmit} className="space-y-4">

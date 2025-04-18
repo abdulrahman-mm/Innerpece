@@ -32,7 +32,7 @@ function Destinations() {
       .replace(/-+/g, "-") // Replace multiple hyphens with a single hyphen
       .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
 
-    navigate(`/destinationsdetails/${formattedCityName}`, {
+    navigate(`/destinationsdetails/${id}/${formattedCityName}`, {
       state: { id, city_name },
     });
 
@@ -68,6 +68,7 @@ function Destinations() {
       items: 1,
     },
   };
+
   const CustomLeftArrow = ({ onClick }) => {
     return (
       <button
@@ -77,7 +78,7 @@ function Destinations() {
       >
         {/* <img src="/left-arrow.png" alt="Left" className="w-6 h-6" />
          */}
-        <ChevronLeft size={24} />
+        <ChevronLeft size={20} />
       </button>
     );
   };
@@ -90,7 +91,7 @@ function Destinations() {
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         {/* <img src="/right-arrow.png" alt="Right" className="w-6 h-6" /> */}
-        <ChevronRight size={24} />
+        <ChevronRight size={20} />
       </button>
     );
   };
@@ -99,7 +100,7 @@ function Destinations() {
     <div>
       {destinationData.length > 0 && (
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-          <p className="text-xl md:text-4xl leading-loose text-[#141414]">
+          <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
             <span className="font-jost font-medium">Popular </span>
             <span className="font-jost font-bold">Destinations</span>
           </p>
@@ -144,7 +145,7 @@ function Destinations() {
                       />
                       <div className="absolute -z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
                       <div className="absolute bottom-5 z-20 left-0 w-full text-white text-center py-2 px-3">
-                        <p className="md:text-base font-rancho text-lg xl:text-4xl">
+                        <p className="font-rancho text-2xl md:text-3xl xl:text-4xl">
                           {item.city_name}
                         </p>
                       </div>

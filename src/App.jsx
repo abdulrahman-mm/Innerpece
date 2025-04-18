@@ -79,6 +79,7 @@ const User_Wishlist = lazy(() => import("./pages/User_Wishlist"));
 const User_Enquiries = lazy(() => import("./pages/User_Enquiries"));
 const Faq = lazy(() => import("./pages/Faq"));
 import { HelmetProvider } from "react-helmet-async";
+import Destinations from "./pages/Destinations";
 
 
 
@@ -107,13 +108,14 @@ function App() {
           <Route path="/:id/:title" element={<TourDetails />} />
           <Route path="/home-filter/:city_name" element={<HomeFilter />} />
           <Route
-            path="/programsdetails/:theme_name"
+            path="/programsdetails/:theme_id/:theme_name"
             element={<ProgramsDetails />}
           />
           <Route
-            path="/destinationsdetails/:city_name"
+            path="/destinationsdetails/:city_id/:city_name"
             element={<DestinationsDetails />}
           />
+          <Route path="/destinations" element={<Destinations/>} />
           <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="/termsofservice" element={<TermsOfService />} />
           <Route path="/sitemap" element={<Sitemap />} />

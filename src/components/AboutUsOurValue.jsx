@@ -16,11 +16,12 @@ function OurValue() {
             <p className="text-xl md:text-2xl font-semibold text-[#003061] w-full ">Individual Impact</p>
           </div>
 
-          <img src={ourvalueimg1} alt="" className="basis-[30%] flex-wrap" />
+          <img src={ourvalueimg1} alt="" className="basis-[30%] flex-wrap " />
 
           <div className="flex flex-col basis-[30%] gap-8 flex-wrap">
             <p className="text-[#828284] md:text-lg font-medium">
-            At Innerpece, your well-being is our passion. We understand the struggles of anxiety and depression, and we're here to help you embrace peace, clarity, and joy, guiding you to your happiest self.
+            At Innerpece, your well-being is our passion. We understand the challenges of anxiety, depression, and the constant pressure to balance work and life. We're here to help you slow down, make space for self-time, and embrace peace, clarity, and joy—guiding you toward your happiest self.
+
             </p>
           </div>
         </div>
@@ -39,7 +40,8 @@ function OurValue() {
 
           <div className="flex flex-col basis-[30%] gap-8 flex-wrap">
             <p className="text-[#828284] md:text-lg font-medium">
-            Our vision is a world where kindness and compassion lead. Through unity in communities, we create a society where love and empathy flourish, one peaceful heart at a time.
+            We are empowering local communities by turning locals into hosts and onboarding homestays to create more job opportunities. Additionally, we prioritize the safety of women travelers, ensuring secure and reliable travel experiences.
+
             </p>
           </div>
         </div>

@@ -45,12 +45,20 @@ function LetsGetStarted() {
           </div>
         </div>
         <div>
-          <button
+          {/* <button
             onClick={onclickBtn}
             className="bg-white p-3 transition-all duration-700  font-semibold rounded"
           >
             LET'S GET STARTED
-          </button>
+          </button> */}
+<button
+  onClick={onclickBtn}
+  className="bg-white text-black p-3 px-6 rounded font-semibold  relative overflow-hidden transition-all duration-700 hover:bg-blue-700 hover:text-white hover:shadow-xl hover:-translate-y-1 hover:scale-105"
+>
+  LET'S GET STARTED
+</button>
+
+
         </div>
       </div>
     </div>

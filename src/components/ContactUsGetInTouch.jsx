@@ -11,8 +11,10 @@ function GetInTouch() {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [captchaValue, setCaptchaValue] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const validateForm = () => {
+    setLoading(false)
     const newErrors = {};
     if (!firstname.trim()) newErrors.firstname = "First name is required.";
     if (!lastname.trim()) newErrors.lastname = "Last name is required.";
@@ -62,6 +64,7 @@ function GetInTouch() {
   };
 
   const onClickSendMessage = async () => {
+    setLoading(true);
     if (!validateForm()) return;
 
     try {
@@ -86,6 +89,7 @@ function GetInTouch() {
         showConfirmButton: false,
         timer: 1500,
       });
+      setLoading(false);
     } catch (err) {
       Swal.fire({
         position: "center",
@@ -94,6 +98,7 @@ function GetInTouch() {
         showConfirmButton: false,
         timer: 1500,
       });
+      setLoading(false);
     }
   };
 
@@ -214,9 +219,15 @@ function GetInTouch() {
               onClick={onClickSendMessage}
               className={`${
                 !captchaValue ? "bg-gray-400" : "bg-sky-800"
-              } transition-all duration-300 px-5 py-2 md:px-7 outline-none md:py-3 lg:px-8 lg:py-4 xl:px-10 xl:py-5 w-fit rounded-full text-white`}
+              } transition-all duration-300 px-5 w-36 py-2 md:px-7 outline-none md:py-3 lg:px-8 lg:py-4 xl:px-10  rounded-full text-white`}
             >
-              Send Message
+              {/* {loading ? (
+                <div className="flex justify-center items-center">
+                  <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                </div>
+              ) : ( */}
+                Sign Up
+              {/* )} */}
             </button>
           </div>
         </div>

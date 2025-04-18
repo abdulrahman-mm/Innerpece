@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import random1 from "../assets/random1.jpg";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function Signup() {
   let navigate = useNavigate();
@@ -23,6 +24,7 @@ function Signup() {
   const [preferred_lang, setPreferredLang] = useState("");
   const [newsletter_sub, setNewsletterSub] = useState("");
   const [terms_condition, setTermsCondition] = useState("");
+  const [signupLoader, setSignupLoader] = useState(false);
 
   const [userDetailsError, setUserDetailsError] = useState({
     first_name: "",
@@ -81,7 +83,7 @@ function Signup() {
     if (name === "dob") {
       setDob(value);
     }
-    if(name==="AnniversaryDate"){
+    if (name === "AnniversaryDate") {
       setAnniversaryDate(value);
     }
     if (name === "phone") {
@@ -117,7 +119,7 @@ function Signup() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
+    setSignupLoader(true);
     try {
       let response = await axios.post(
         // `https://backoffice.innerpece.com/api/signup`,
@@ -131,6 +133,7 @@ function Signup() {
           password: password,
           password_confirmation: password_confirmation,
           dob: dob,
+          anniversary_date: anniversaryDate,
           preferred_lang: preferred_lang,
           street: street,
           city: city,
@@ -195,10 +198,12 @@ function Signup() {
         navigate("/login");
         window.scrollTo({ top: 0, behavior: "smooth" });
       }, 2000);
+      setSignupLoader(false);
     } catch (err) {
       console.log(err);
       let errors = err.response.data.errors;
       setUserDetailsError({ ...errors });
+      setSignupLoader(false);
     }
   };
 
@@ -216,8 +221,10 @@ function Signup() {
     }
   };
 
-  console.log(anniversaryDate);
-  
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
+  };
 
   return (
     <div className="flex items-center justify-center mt-8 md:px-1 md:mt-14">
@@ -436,7 +443,7 @@ function Signup() {
               <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="dob" className="font-semibold">
-                    Date Of Birth *
+                    Birthday Date *
                   </label>
                   <input
                     type="date"
@@ -457,10 +464,10 @@ function Signup() {
 
                 <div className="flex flex-col basis-[25%] flex-grow gap-1">
                   <label htmlFor="AnniversaryDate" className="font-semibold">
-                  Anniversary Date
+                    Anniversary Date
                   </label>
                   <input
-                    type='date'
+                    type="date"
                     name="AnniversaryDate"
                     id="AnniversaryDate"
                     value={anniversaryDate}
@@ -469,7 +476,6 @@ function Signup() {
                     className="border-2 border-gray-300 outline-none p-2 rounded-md placeholder-gray-300"
                     placeholder="Anniversary Date"
                   />
-                  
                 </div>
               </div>
 
@@ -602,11 +608,9 @@ function Signup() {
                     </p>
                   )}
                 </div>
-
-                
               </div>
 
-              <div className="flex flex-col gap-1">
+              {/* <div className="flex flex-col gap-1">
                 <div className="flex justify-start gap-2 mt-5">
                   <input
                     type="checkbox"
@@ -633,10 +637,10 @@ function Signup() {
                     </p>
                   )}
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex flex-col gap-1">
-                <div className="flex items-center justify-start gap-2">
+                {/* <div className="flex items-center justify-start gap-2">
                   <input
                     type="checkbox"
                     name="terms_condition"
@@ -659,22 +663,43 @@ function Signup() {
                   >
                     Terms Of Service
                   </span>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   {userDetailsError.terms_condition && (
                     <p className="text-red-500 text-xs sm:text-sm ">
                       {userDetailsError.terms_condition}
                     </p>
                   )}
-                </div>
+                </div> */}
+              </div>
+
+              {/* <button
+                onClick={handleSignup}
+                className="bg-sky-800 p-3 mt-5 text-white rounded"
+              >
+                Sign Up
+              </button> */}
+
+              <div className="recaptacha-login  mt-5">
+                <ReCAPTCHA
+                  sitekey="6LfDSrsqAAAAAI2jP2tOdr2l4VkiztyX2S2H0Fxg"
+                  onChange={handleCaptchaChange}
+                />
               </div>
 
               <button
                 onClick={handleSignup}
-                className="bg-sky-800 p-3 mt-5 text-white"
+                className={` ${
+                  !captchaValue ? "bg-gray-400" : "bg-sky-800"
+                } p-3 mt-5 text-white rounded flex items-center justify-center`}
+                disabled={signupLoader || !captchaValue}
               >
-                Sign Up
+                {signupLoader ? (
+                  <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                ) : (
+                  "Sign Up"
+                )}
               </button>
 
               <div className="flex flex-wrap justify-start items-center gap-8 mt-5">

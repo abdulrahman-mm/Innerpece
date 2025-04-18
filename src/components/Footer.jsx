@@ -65,7 +65,7 @@ function Footer() {
                 />
               </div>
 
-              <p className="mt-5 text-lg">
+              <p className="mt-5 ">
                 Innerpece is a travel curator that transforms your travel ideas
                 into customized, unforgettable journeys.
               </p>
@@ -81,7 +81,7 @@ function Footer() {
                   <span className="inline-block me-5">
                     <IoIosMail className="text-lg md:text-2xl text-sky-300" />
                   </span>
-                  <p> {footerContent.contact_email}</p>
+                  <p className="font-medium"> {footerContent.contact_email}</p>
                 </div>
               </a>
 
@@ -94,7 +94,7 @@ function Footer() {
                     {/* <FaPhoneAlt className="text-lg md:text-2xl  text-sky-300" /> */}
                     <FaSquarePhone className="text-lg md:text-2xl  text-sky-300" />
                   </span>
-                  <p> {footerContent.contact_number}</p>
+                  <p className="font-medium"> {footerContent.contact_number}</p>
                 </div>
               </a>
 
@@ -102,59 +102,74 @@ function Footer() {
                 <span className="inline-block me-5">
                   <FaMapLocationDot className="text-lg md:text-2xl  text-sky-300" />
                 </span>
-                <p> {footerContent.contact_address}</p>
+                <p className="font-medium"> {footerContent.contact_address}</p>
               </div>
             </div>
 
             <div className="text-white basis-30 flex gap-2 flex-col  md:gap-4">
-              <p className="font-semibold text-xl md:text-2xl pb-3 md:pb-5 ">
+              <p className="font-semibold text-xl  pb-3 md:pb-5 ">
                 Services Request
               </p>
 
               <p
                 onClick={() => navigate("/aboutus")}
-                className="text-lg text-gray-400 cursor-pointer hover:text-white"
+                className="font-medium  text-gray-400 cursor-pointer hover:text-white"
               >
                 About Us
               </p>
 
               <p
                 onClick={() => navigate("/contactus")}
-                className="text-lg text-gray-400 cursor-pointer hover:text-white"
+                className="font-medium  text-gray-400 cursor-pointer hover:text-white"
               >
                 Contact
               </p>
               <p
                 onClick={() => navigate("/faq")}
-                className="text-lg text-gray-400 cursor-pointer hover:text-white"
+                className="font-medium  text-gray-400 cursor-pointer hover:text-white"
               >
                 FAQ
               </p>
 
               <p
                 onClick={() => navigate("/termsofservice")}
-                className="text-lg text-gray-400 cursor-pointer hover:text-white"
+                className="font-medium  text-gray-400 cursor-pointer hover:text-white"
               >
                 Terms Of Service
               </p>
 
               <p
                 onClick={() => navigate("/privacypolicy")}
-                className="text-lg text-gray-400 cursor-pointer hover:text-white"
+                className="font-medium  text-gray-400 cursor-pointer hover:text-white"
               >
                 Privacy Policy
               </p>
+
+              {/* <p
+              onClick={onClickSitemap}
+              className="font-medium  text-gray-400 cursor-pointer hover:text-white"
+              
+            >
+              Sitemap
+            </p> */}
+              <a
+                href="https://blogs.innerpece.com/"
+                target="_blank"
+                className="font-medium  text-gray-400 cursor-pointer hover:text-white"
+              >
+                Blogs
+              </a>
             </div>
 
-            <div className="flex  flex-col flex-wrap ">
+            <div className="flex  flex-col gap-2 flex-wrap ">
               <div className="flex items-center gap-3 pb-3 md:pb-5">
                 <FaCircleArrowRight className="inline-block text-sky-200 text-3xl" />
-                <p className="text-xl md:text-2xl text-white font-semibold">
+                <p className="text-xl  text-white font-semibold">
                   Get In Touch
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-x-5 md:mt-5">
+              <div className="flex flex-wrap gap-x-5 ">
                 <a href={footerContent.facebook} target="_blank">
                   <img src={homefooterfb} alt="" className="cursor-pointer" />
                 </a>
@@ -175,16 +190,20 @@ function Footer() {
                 </a>
               </div>
 
-              <img
-                src={`https://backoffice.innerpece.com/uploads/settings/official_logo/1724229229_1.PNG`}
-                alt=""
-                className="bg-contain w-40 h-16 mt-5 md:mt-8"
-              />
+              <div className="flex flex-col mt-5 md:mt-8 gap-2">
+                <p className="text-white md:text-center">Incubated at</p>
+
+                <img
+                  src={`https://backoffice.innerpece.com/uploads/settings/official_logo/1724229229_1.PNG`}
+                  alt=""
+                  className="bg-cover w-44 h-16 "
+                />
+              </div>
             </div>
 
             <div className="flex flex-col md:items-center  flex-wrap gap-y-3">
               <div className="flex items-center pb-3 md:pb-5">
-                <p className="text-white text-xl md:text-2xl font-semibold">
+                <p className="text-white text-xl  font-semibold">
                   Crafting Excellence With{" "}
                 </p>
                 <FaHeart className="text-white ms-1 " />
@@ -227,14 +246,14 @@ function Footer() {
             </div>
           </div>
 
-          <div className="flex w-full justify-end">
+          {/* <div className="flex w-full justify-end">
             <p
               onClick={onClickSitemap}
               className="text-gray-400 cursor-pointer hover:text-white w-fit  -my-5 text-end"
             >
               Sitemap
             </p>
-          </div>
+          </div> */}
 
           <div className="flex flex-wrap gap-8 items-center justify-between ">
             <p className="text-xs md:text-sm text-white ">

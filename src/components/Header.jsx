@@ -28,9 +28,13 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-between items-center ps-5 pe-5 lg:ps-10 lg:pe-10 py-0   sm:py-2   bg-black text-white ">
+    <div className="flex justify-between items-center px-2  xl:px-10 py-0   sm:py-2   bg-black text-white ">
       <div onClick={() => navigate("/")} className="cursor-pointer">
-        <img src={innerpece_logo2} alt="" className="w-40 h-14 object-contain" />
+        <img
+          src={innerpece_logo2}
+          alt=""
+          className="w-28 lg:w-40 h-14 object-contain"
+        />
       </div>
 
       <div className="max-md:hidden">
@@ -40,12 +44,22 @@ function Header() {
               Home
             </Link>
           </li>
+
           <li className="md:pe-5 lg:pe-11 font-semibold  ">
             <Link
               to="/sendenquiry"
               className="cursor-pointer hover:text-gray-500"
             >
-              Send Enquiry
+              Customization Enquiry
+            </Link>
+          </li>
+
+          <li className="md:pe-5 lg:pe-11  font-semibold ">
+            <Link
+              className="cursor-pointer hover:text-gray-500"
+              to="/destinations"
+            >
+              Destinations
             </Link>
           </li>
 
@@ -72,7 +86,7 @@ function Header() {
               </Link>
             </li>
           )}
-          {userLogedIn ? (
+          {/* {userLogedIn ? (
             <Link
               onClick={onClickLogout}
               to="/login"
@@ -81,6 +95,15 @@ function Header() {
               Logout
             </Link>
           ) : (
+            <Link
+              to="/login"
+              className="cursor-pointer font-semibold   border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 text-center   md:px-3 lg:px-6 py-2"
+            >
+              Login
+            </Link>
+          )} */}
+
+          {!userLogedIn && (
             <Link
               to="/login"
               className="cursor-pointer font-semibold   border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 text-center   md:px-3 lg:px-6 py-2"
@@ -116,7 +139,12 @@ function Header() {
           </li>
           <li className="text-black text-xl cursor-pointer">
             <Link to="/sendenquiry" onClick={() => setIsOpen(false)}>
-              Send Enquiry
+              Customization Enquiry
+            </Link>
+          </li>
+          <li className="text-black text-xl cursor-pointer">
+            <Link className="cursor-pointer" to="/destinations">
+              Destinations
             </Link>
           </li>
           <li className="text-black text-xl cursor-pointer">
@@ -137,18 +165,7 @@ function Header() {
             </li>
           )}
 
-          {userLogedIn ? (
-            <Link
-              to="/login"
-              onClick={() => {
-                setIsOpen(false);
-                onClickLogout();
-              }}
-              className="px-6 py-2 cursor-pointer text-center font-semibold border-[#005FC4] border-2 rounded-2xl text-[#005FC4] bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700"
-            >
-              Logout
-            </Link>
-          ) : (
+          {!userLogedIn && (
             <Link
               to="/login"
               onClick={() => setIsOpen(false)}

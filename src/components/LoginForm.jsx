@@ -12,6 +12,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [checkboxChecked, setCheckBoxChecked] = useState("");
   const [loginError, setLoginError] = useState({});
+  const [signInLoader, setSignInLoader] = useState(false);
   const location = useLocation();
   const from = location.state?.from || "/";
 
@@ -42,6 +43,7 @@ function Login() {
   }
 
   async function onClickSignIn() {
+    setSignInLoader(true);
     try {
       let response = await axios.post(
         // `https://backoffice.innerpece.com/api/login`,
@@ -93,17 +95,13 @@ function Login() {
   const [user, setUser] = useState(null);
 
   const handleSuccess = (response) => {
-    console.log(response);
 
     const token = response.credential;
     const userDetails = jwtDecode(token);
     setUser(userDetails); // Store user details in state
-    console.log(userDetails);
   };
 
-  const handleError = () => {
-    console.log("Google Sign-In Failed");
-  };
+ 
 
   return (
     <div className="flex items-center justify-center mt-8 md:mt-14">
@@ -198,13 +196,19 @@ function Login() {
               </div>
 
               <button
-                disabled={!captchaValue}
+                disabled={!captchaValue || signInLoader}
                 onClick={onClickSignIn}
                 className={`${
                   !captchaValue ? "bg-gray-400" : "bg-sky-800"
-                } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
+                } transition-all duration-300 w-full p-3 mt-2 rounded-md text-white`}
               >
-                Sign In
+                {signInLoader ? (
+                  <div className="flex justify-center items-center">
+                    <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  </div>
+                ) : (
+                  "Sign In"
+                )}
               </button>
 
               <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
@@ -219,8 +223,8 @@ function Login() {
             </div>
           </div>
         </div>
-      </div>-
-
+      </div>
+      -
       {/* <GoogleOAuthProvider clientId="921328741345-3pthhre9l7vskb4i0046u4gh87jk7ktj.apps.googleusercontent.com">
         <div className="flex flex-col items-center justify-center h-screen">
           {user ? (

@@ -27,10 +27,10 @@ function Hero({
   const [loading, setLoading] = useState(true);
   const [ogImage, setOgImage] = useState("");
 
-  const pathName = window.location.pathname;
-  const slicedPathName = pathName.slice(1, 3);
-
   useEffect(() => {
+    const pathName = window.location.pathname;
+    const slicedPathName = pathName.slice(1, 3);
+
     const fetchProgramData = async () => {
       try {
         const storedUserDetails = localStorage.getItem("loginDetails");
@@ -126,7 +126,7 @@ function Hero({
             alt={apiData.title}
             className="object-contain h-6 md:h-8"
           />
-          <p className="text-sm md:text-base font-semibold">Information</p>
+          <p className="text-sm md:text-base font-semibold">Notes</p>
         </div>
         <div
           onClick={handleTourPlanningScroll}
@@ -135,13 +135,17 @@ function Hero({
           <img src={vector2} alt="" className="object-contain h-6 md:h-8" />
           <p className="text-sm md:text-base  font-semibold">Tour Planning</p>
         </div>
-        <div
-          onClick={handleLocationShareScroll}
-          className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
-        >
-          <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
-          <p className="text-sm md:text-base  font-semibold">Location Share</p>
-        </div>
+        {apiData.google_map && (
+          <div
+            onClick={handleLocationShareScroll}
+            className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
+          >
+            <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
+            <p className="text-sm md:text-base  font-semibold">
+              Location Share
+            </p>
+          </div>
+        )}
         {apiData.review_count > 0 && (
           <div
             onClick={reviewRefScroll}

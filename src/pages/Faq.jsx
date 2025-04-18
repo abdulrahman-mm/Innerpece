@@ -67,8 +67,8 @@ function Faq() {
         <Header />
 
         <div className="p-5 md:px-20 lg:px-30 xl:px-40 gap-16  mt-8 md:mt-14">
-          <p className="text-3xl md:text-5xl">FAQ</p>
-          <p className="text-2xl md:text-3xl mt-5 md:mt-10">
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">FAQ</p>
+          <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl">
             Booking and Reservations
           </p>
           <hr className="mt-5 w-20 border-sky-800" />

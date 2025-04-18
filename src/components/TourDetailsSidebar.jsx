@@ -32,14 +32,21 @@ import { GiLovers } from "react-icons/gi";
 import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
 import { PiMoneyWavyFill } from "react-icons/pi";
+import star from "../assets/star.png";
 
-function Sidebar({ LocationShareRef }) {
+function Sidebar({ LocationShareRef, reviewRef }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = location.state || {};
   const [apiData, setApiData] = useState([]);
   const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
+  // const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setFailure(false);
+    setSuccess(false);
+    setLoading(false);
+    setShow(false);
+  };
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -71,6 +78,19 @@ function Sidebar({ LocationShareRef }) {
   const [loginCliked, setLoginClicked] = useState(false);
   const [image, setImage] = useState("");
   const [priceSelected, setPriceSelected] = useState("");
+  const [selectedPackage, setSelectedPackage] = useState("");
+  const [yearMonthDate, setYearMonthDate] = useState(new Date());
+
+  const [rating, setRating] = useState(""); // Current rating
+  const [hover, setHover] = useState(""); // Hovered rating
+  const [userReview, setUserReview] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [loginClikedForAddReview, setLoginClickedForAddReview] =
+    useState(false);
+
+  const handleLoginClickForAddReview = () => {
+    setLoginClickedForAddReview(true);
+  };
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.slice(1, 3);
@@ -110,6 +130,9 @@ function Sidebar({ LocationShareRef }) {
         setHomeImage(response.data.data.gallery_img);
         // apiData.gallery_img
         setImage(response.data.data.cover_img);
+        setSelectedPackage(response.data.data.price_title[0]);
+        setPriceSelected(response.data.data.price_amount[0]);
+
         // console.log(response.data.data.google_map);
 
         let modifiedMapHtml = response.data.data.google_map;
@@ -243,12 +266,12 @@ function Sidebar({ LocationShareRef }) {
       setChildAge([]);
       setDob("");
       setEngagementDate("");
-      setPriceSelected("");
 
       // Clear success message after 5 seconds
       setTimeout(() => {
         setSuccess("");
-      }, 5000); // 5000 ms = 5 seconds
+        setShow(false);
+      }, 3000); // 5000 ms = 5 seconds
     } catch (error) {
       // Handle validation errors if any
       setLoadingform("");
@@ -298,12 +321,14 @@ function Sidebar({ LocationShareRef }) {
         email: loggedUser_email,
         phone: loggedUser_phone,
         city: loggedUser_city,
+        dob: loggedUser_dob,
       } = loggedUserDetails;
 
       setName(loggedUser_fistName + " " + loggedUser_lastName);
       setEmail(loggedUser_email);
       setPhone(loggedUser_phone);
       setYourResidenceLocation(loggedUser_city);
+      setDob(loggedUser_dob);
     }
   }, []);
 
@@ -398,14 +423,172 @@ function Sidebar({ LocationShareRef }) {
     return () => clearInterval(interval);
   }, [homeImage.length]);
 
-  
-  console.log("apidata",apiData);
-  
-  
+  const onChangePrice = (item, index) => {
+    setSelectedPackage(item);
+    setPriceSelected(apiData.price_amount[index]);
+  };
+
+  useEffect(() => {
+    const storedUserDetails = localStorage.getItem("loginDetails");
+    const userDetails = storedUserDetails
+      ? JSON.parse(storedUserDetails)
+      : null;
+    setUserDetails(userDetails);
+
+    const storedUserId = localStorage.getItem("loginid");
+    setUserId(storedUserId);
+
+    let interval = setInterval(() => {
+      setDate(new Date());
+      const today = new Date();
+      const formattedDate = today.toISOString().split("T")[0];
+      setYearMonthDate(formattedDate);
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const onClickPostReview = async () => {
+    try {
+      const payload = {
+        user_id: userDetails?.id,
+        package_id: id,
+        comment: userReview,
+        rating: rating,
+        created_at: date,
+        review_dt: yearMonthDate,
+      };
+
+      const authToken = userId;
+      const response = await axios.post(
+        "https://backoffice.innerpece.com/api/add_review",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the token here
+          },
+        }
+      );
+
+      const fetchProgramData = async () => {
+        try {
+          const storedUserDetails = localStorage.getItem("loginDetails");
+          const userDetails = storedUserDetails
+            ? JSON.parse(storedUserDetails)
+            : null;
+
+          const payload = {
+            program_id: id ? id : slicedPathName,
+            user_id: userDetails?.id || null,
+          };
+
+          const response = await axios.post(
+            "https://backoffice.innerpece.com/api/v1/get-program-details",
+            // "https://backoffice.innerpece.com/api/v1/get-program",
+            payload
+          );
+
+          setApiData(response.data.data);
+          setLoading(false);
+
+          const metaOgTitle = document.querySelector(
+            "meta[property='og:title']"
+          );
+          if (metaOgTitle) {
+            metaOgTitle.setAttribute(
+              "content",
+              apiData.title || "Default Title"
+            );
+          }
+
+          const metaOgDescription = document.querySelector(
+            "meta[property='og:description']"
+          );
+          if (metaOgDescription) {
+            metaOgDescription.setAttribute(
+              "content",
+              apiData.program_desc || "Default description"
+            );
+          }
+
+          const metaOgImage = document.querySelector(
+            "meta[property='og:image']"
+          );
+          if (metaOgImage) {
+            metaOgImage.setAttribute(
+              "content",
+              `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+            );
+          }
+        } catch (err) {
+          console.log(err);
+          setLoading(false);
+        }
+      };
+      if (response.data) {
+        fetchProgramData();
+      }
+
+      setRating("");
+      setHover("");
+      setUserReview("");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Review Posted",
+        showConfirmButton: false,
+        timer: 1500,
+        customClass: {
+          popup: "w-72 p-4 text-sm", // Tailwind classes
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Write a Review",
+        showConfirmButton: false,
+        timer: 1500,
+        customClass: {
+          popup: "w-72  p-4 text-sm", // Tailwind classes
+        },
+      });
+    }
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 3;
+
+  const totalReviews = apiData?.reviews?.length;
+  const totalPages = Math.ceil(totalReviews / reviewsPerPage);
+  const indexOfLastReview = currentPage * reviewsPerPage;
+  const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+  const currentReviews = apiData?.reviews?.slice(
+    indexOfFirstReview,
+    indexOfLastReview
+  );
+  // const [reviewScrollRef, setReviewScrollRef] = useState("");
+
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     window.innerWidth <= 1024 ? setReviewScrollRef(reviewRef) : "";
+  //   };
+
+  //   handleResize();
+
+  //   // Event listener
+  //   window.addEventListener("resize", handleResize);
+
+  //   // Cleanup
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   return (
     <div
-      className={` w-full lg:sticky pb-10   overflow-y-auto sidebar bg-[#FEFEFE]   top-5  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:my-7 ${
+      className={` w-full  pb-10   overflow-y-auto sidebar bg-[#FEFEFE]   top-5  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:mt-10   ${
         show ? "fixed" : ""
       }`}
     >
@@ -418,13 +601,7 @@ function Sidebar({ LocationShareRef }) {
             <span className="text-green-800 font-semibold text-xl ms-1">
               ₹{`${apiData.price_amount && apiData.price_amount[0]}`}
             </span>
-            {/* <del className="font-semibold">
-              ₹{`${apiData.actual_price && apiData.actual_price}`}
-            </del>{" "} */}
           </span>
-          {/* <p className="text-green-800 font-semibold text-2xl">
-            ₹{`${apiData.discount_price && apiData.discount_price}`}
-          </p> */}
 
           <div className="border-t-2 border-dotted w-full border-sky-800"></div>
 
@@ -432,11 +609,43 @@ function Sidebar({ LocationShareRef }) {
             Per Person
           </span>
 
+          {apiData?.price_amount?.length > 0 && (
+            <div className="flex flex-col w-full">
+              <div className="flex items-center text-center justify-center">
+                <div className="flex gap-2 flex-wrap">
+                  {apiData.price_title.map(
+                    (item, index) =>
+                      item && (
+                        <div className="flex gap-2 text-center  ">
+                          <input
+                            type="radio"
+                            name=""
+                            id={item}
+                            value={item}
+                            checked={selectedPackage === item}
+                            onChange={() => onChangePrice(item, index)}
+                            // onChange={() => setPriceSelected(item)}
+                          />
+                          <label htmlFor={item} className="h-fit">
+                            <span> {item} : </span>
+                            <span className="font-semibold">
+                              ₹{apiData.price_amount[index]}
+                            </span>
+                          </label>
+                        </div>
+                      )
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col items-center flex-wrap justify-center ">
             <button
               onClick={handleShow}
+              // disabled={userDetails && selectedPackage ? false : true}
               disabled={userDetails ? false : true}
-              className="flex flex-wrap bg-red-500 text-white font-semibold flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
+              className="flex hover:scale-105 transition-all duration-300 ease-in-out flex-wrap bg-red-500 text-white font-semibold flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
             >
               <img src={telegram} alt="" />
               Book Now
@@ -446,7 +655,7 @@ function Sidebar({ LocationShareRef }) {
               <p className="text-red-500 ">
                 Please{" "}
                 <span
-                  className="hover:underline cursor-pointer"
+                  className="underline cursor-pointer"
                   onClick={handleLoginClick}
                 >
                   login
@@ -454,11 +663,17 @@ function Sidebar({ LocationShareRef }) {
                 to book now
               </p>
             )}
+
+            {/* {!selectedPackage && userDetails && (
+              <p className="text-red-500 ">
+                Please select any packages to book{" "}
+              </p>
+            )} */}
           </div>
         </div>
       )}
 
-      <div className="shadow-md mt-5  bg-white py-4  shadow-black/10 rounded-lg">
+      <div className="shadow-md mt-8 md:mt-10  bg-white py-4  shadow-black/10 rounded-lg">
         <div className="flex gap-4  ms-3 text-lg">
           <p className="text-sky-800">|</p>
           <p className="font-semibold">Book With Confidence</p>
@@ -475,10 +690,10 @@ function Sidebar({ LocationShareRef }) {
             <p>Hand-picked Tours & Activities</p>
           </div>
 
-          {/* <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center">
             <img src={insurance} alt="" />
-            <p>Free Travel Insurance</p>
-          </div> */}
+            <p>Women-Friendly Environments</p>
+          </div>
 
           <div className="flex gap-4 items-center">
             <img src={pricetag} alt="" />
@@ -487,14 +702,179 @@ function Sidebar({ LocationShareRef }) {
         </div>
       </div>
 
-      <p ref={LocationShareRef} className="font-semibold mt-5">
-        Where you'll be
-      </p>
+      {apiData.google_map && (
+        <p
+          ref={LocationShareRef}
+          className="font-semibold mt-8 md:mt-10 text-lg "
+        >
+          Location
+        </p>
+      )}
 
       <div
+      ref={reviewRef}
         className="mt-2 overflow-hidden w-full object-cover  "
         dangerouslySetInnerHTML={{ __html: map }}
       />
+
+      <div  className="mt-8 md:mt-10  lg:hidden">
+        <div className="flex flex-wrap flex-col justify-start ">
+          {/* <p className="font-semibold text-xl md:text-2xl">
+                    <span className="border-l-8 border-[#0E598F] me-4"></span>{" "}
+                    Client's Review
+                  </p> */}
+          <div className="flex gap-2 ">
+            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+            <p className="font-semibold text-2xl  text-[#11142D]">
+              Client's Review
+            </p>
+          </div>
+
+          <div className="border border-gray-500 flex lg:hidden flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
+            <div className="flex ">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  disabled={!userDetails}
+                  key={star}
+                  type="button"
+                  className={`w-8 text-2xl h-8 flex  rounded-full ${
+                    star <= (hover || rating)
+                      ? "text-yellow-500"
+                      : "text-gray-300"
+                  }`}
+                  onClick={() => setRating(star)} // Set rating on click
+                  onMouseEnter={() => setHover(star)} // Highlight stars on hover
+                  onMouseLeave={() => setHover(0)} // Reset hover effect
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+            <textarea
+              name="Review"
+              disabled={!userDetails}
+              value={userReview}
+              onChange={(e) => setUserReview(e.target.value)}
+              placeholder="Write a Review"
+              className="w-full resize-none bg-white h-fit mt-3 placeholder-black text-wrap border-none outline-none"
+            />
+            <button
+              disabled={!userDetails}
+              onClick={onClickPostReview}
+              className="bg-sky-800 transition-all duration-500 hover:bg-sky-900 text-white rounded-full w-fit h-fit py-1 px-8 "
+            >
+              Post
+            </button>
+          </div>
+
+          {!userDetails && (
+            <p className="text-red-500 mt-1 lg:hidden">
+              Please{" "}
+              <button
+                onClick={handleLoginClickForAddReview}
+                className="cursor-pointer underline"
+              >
+                login{" "}
+              </button>
+              {"  "} to add review
+            </p>
+          )}
+
+          {/* <div className="mt-5 border-4 h-36 w-36 flex flex-col justify-center items-center border-sky-800 rounded-full">
+                    <p className="text-sm">Overall Ratings</p>
+                    <p className="text-sm">
+                      {apiData.average_rating}
+                      <span className="ms-1">Out of 5</span>{" "}
+                    </p>
+                  </div> */}
+
+          {apiData?.reviews?.length > 0 && (
+            <div className="mt-5 overflow-y-auto">
+              <div className="flex flex-col-reverse gap-5">
+                {currentReviews.map((item, index) => (
+                  <div key={index} className="mx-3 bg-gray-100 p-4 rounded-lg">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex gap-1 items-center">
+                        {Array(item.rating)
+                          .fill(null)
+                          .map((_, i) => (
+                            <img
+                              key={i}
+                              src={star}
+                              alt="Star"
+                              className="w-4 md:w-5"
+                            />
+                          ))}
+                      </div>
+
+                      <p
+                        className="text-gray-600 text-sm md:text-base"
+                        dangerouslySetInnerHTML={{
+                          __html: item.comment,
+                        }}
+                      />
+
+                      <p className="text-gray-500 text-xs md:text-sm">
+                        {item.date}
+                      </p>
+
+                      <hr className="border-black/20 w-full" />
+
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={`https://backoffice.innerpece.com/${item.profile_image}`}
+                          alt="Profile"
+                          className="w-[40px] h-[40px] object-cover rounded-full border-2 border-gray-300"
+                        />
+                        <p className="font-medium text-lg md:text-xl text-gray-800">
+                          {item.first_name}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              <div className="flex justify-center mt-5 gap-2">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+                >
+                  Prev
+                </button>
+
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === i + 1
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-300 hover:bg-gray-400"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
 
       {loginCliked && (
         <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
@@ -514,18 +894,6 @@ function Sidebar({ LocationShareRef }) {
                     <p className="text-xl md:text-2xl lg:text-3xl font-semibold">
                       Log In To Get Started
                     </p>
-
-                    <div className="flex flex-wrap gap-2 items-center">
-                      <p
-                        style={{ backgroundColor: "#EB9009" }}
-                        className="text-white px-2 rounded"
-                      >
-                        20% off
-                      </p>
-                      <p className="text-gray-500">
-                        get 20% off for web signup
-                      </p>
-                    </div>
 
                     <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
                       <div className="flex flex-col flex-grow gap-2">
@@ -548,7 +916,7 @@ function Sidebar({ LocationShareRef }) {
                           </p>
                         )}
 
-                        {loginError.error === "Unauthorized User " && (
+                        {loginError.error && (
                           <p className="text-red-500 text-xs sm:text-sm ">
                             {loginError.error}
                           </p>
@@ -670,13 +1038,17 @@ function Sidebar({ LocationShareRef }) {
                     {apiData.title}
                   </h1>
                   <div className="  flex items-center gap-3 flex-wrap">
-                    <span className="block  text-gray-500">Starting From</span>
-                    <span className="block text-xs text-gray-500 line-through">
-                      INR {apiData.actual_price}
-                    </span>
-                    <h2 className="text-green-600 text-lg font-semibold">
-                      INR {apiData.discount_price}
-                    </h2>
+                    {/* <span className="block  text-gray-500">Starting From</span>
+                    
+                    <span className="text-green-800 font-semibold text-xl ms-1">
+                      ₹{`${apiData.price_amount && apiData.price_amount[0]}`}
+                    </span> */}
+                    <p>
+                      {selectedPackage} :{" "}
+                      <span className="font-semibold text-green-800">
+                        ₹ {priceSelected}
+                      </span>{" "}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -901,7 +1273,7 @@ function Sidebar({ LocationShareRef }) {
 
                       <div className="flex gap-4 w-full flex-col sm:flex-row">
                         {/*Budget Per Head */}
-                        <div className="flex flex-col sm:w-1/2">
+                        {/* <div className="flex flex-col sm:w-1/2">
                           <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <RiMoneyRupeeCircleFill />
@@ -924,7 +1296,7 @@ function Sidebar({ LocationShareRef }) {
                               {errors.budget_per_head[0]}
                             </p>
                           )}
-                        </div>
+                        </div> */}
 
                         {/*total count*/}
                         <div className="flex flex-col sm:w-1/2">
@@ -948,13 +1320,8 @@ function Sidebar({ LocationShareRef }) {
                             </p>
                           )}
                         </div>
-                      </div>
 
-                      <div className="flex gap-4 w-full flex-col  sm:flex-row">
-                        {/*male &  count*/}
-                        {/* <div className="flex flex-col "> */}
-                        {/* <div className="flex gap-5"> */}
-                        <div className="flex flex-col sm:w-1/3">
+                        <div className="flex flex-col sm:w-1/2">
                           <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <FaMale />
@@ -975,8 +1342,12 @@ function Sidebar({ LocationShareRef }) {
                             </p>
                           )}
                         </div>
+                      </div>
 
-                        <div className="flex flex-col sm:w-1/3 ">
+                      <div className="flex gap-4 w-full flex-col  sm:flex-row">
+                        {/*male &  count*/}
+
+                        <div className="flex flex-col sm:w-1/2 ">
                           <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <FaFemale />
@@ -999,7 +1370,7 @@ function Sidebar({ LocationShareRef }) {
                         </div>
 
                         {/*Child count*/}
-                        <div className="flex flex-col sm:w-1/3">
+                        <div className="flex flex-col sm:w-1/2">
                           <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <FaChildReaching />
@@ -1177,14 +1548,14 @@ function Sidebar({ LocationShareRef }) {
                         </div>
                       </div>
 
-                      {apiData.price_amount.length>0 && (
+                      {/* {apiData.price_amount.length > 0 && (
                         <div className="flex flex-col w-full">
                           <div className="flex items-center border rounded-md">
                             <span className="p-2 border-r">
                               <PiMoneyWavyFill />
                             </span>
                             <p className="ms-2 me-3">Price amount </p>
-                            <div className="flex gap-2 flex-wrap">
+                            {/* <div className="flex gap-2 flex-wrap">
                               {apiData.price_amount.map(
                                 (item, index) =>
                                   item && (
@@ -1203,15 +1574,67 @@ function Sidebar({ LocationShareRef }) {
                                     </div>
                                   )
                               )}
-                            </div>
+                            </div> */}
+
+                      {/* <select
+                              name="price"
+                              id="price"
+                              className="w-fit border-none p-2.5 outline-none"
+                              onChange={() => setPriceSelected(item)}
+                            >
+                              <option value="" disabled selected>
+                                Select a price
+                              </option>
+                              {apiData.price_amount.map(
+                                (item, index) =>
+                                  item && (
+                                    <option key={index} value={item}>
+                                      {apiData.price_title[index]} : ₹{item}
+                                    </option>
+                                  )
+                              )}
+                            </select> */}
+
+                      {/* <select
+                              name="price"
+                              id="price"
+                              className="w-fit border-none p-2.5 outline-none"
+                              defaultValue=""
+                              onChange={(e) => setPriceSelected(e.target.value)}
+                            >
+                              <option value="" disabled selected>
+                                Select a price
+                              </option>
+                              {apiData.price_amount.map(
+                                (item, index) =>
+                                  item && (
+                                    <option key={index} value={item}>
+                                      {apiData.price_title[index]} : ₹{item}
+                                    </option>
+                                  )
+                              )}
+                            </select>
                           </div>
                           {errors.pricing && (
                             <p className="text-red-500 text-xs ">
                               {errors.pricing[0]}
                             </p>
                           )}
-                        </div>
-                      )}
+                        </div> */}
+                      {/* )} */}
+
+                      <div className="flex items-center border rounded-md">
+                        <span className="p-2">
+                          <FaPeopleLine />
+                        </span>
+                        <input
+                          type="text"
+                          className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                          id="Total Count"
+                          name="Total Count"
+                          value={`${selectedPackage} : ${priceSelected}`}
+                        />
+                      </div>
                     </div>
 
                     {success && (
@@ -1240,6 +1663,122 @@ function Sidebar({ LocationShareRef }) {
                       </button>
                     </div>
                   </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {loginClikedForAddReview && (
+        <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
+          <div className="flex items-center justify-center  bg-white">
+            <div className="w-screen   md:w-[70vw] py-3  lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
+              <button
+                onClick={() => setLoginClickedForAddReview(false)}
+                className="text-gray-500 w-full pe-5  font-extrabold text-xl hover:text-gray-700 focus:outline-none placeholder:text-gray-600 placeholder:text-sm flex justify-end"
+              >
+                ✕
+              </button>
+              <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
+                <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+
+                <div className="w-full md:w-2/5 flex-grow flex-shrink">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-xl md:text-2xl lg:text-3xl font-semibold">
+                      Log In To Get Started
+                    </p>
+
+                    <div className="flex flex-col flex-wrap lg:flex-row justify-between gap-5 mt-5">
+                      <div className="flex flex-col flex-grow gap-2">
+                        <label htmlFor="loginEmail" className="font-semibold">
+                          Email
+                        </label>
+                        <input
+                          type="text"
+                          name="loginEmail"
+                          id="loginEmail"
+                          value={loginEmail}
+                          autoComplete="off"
+                          onChange={onChangeInput}
+                          className="border-2 border-gray-300 outline-none p-2 rounded-md"
+                          placeholder="Enter your Email"
+                        />
+                        {loginError.email && (
+                          <p className="text-red-500 text-xs sm:text-sm ">
+                            {loginError.email}
+                          </p>
+                        )}
+
+                        {loginError.error === "Unauthorized User " && (
+                          <p className="text-red-500 text-xs sm:text-sm ">
+                            {loginError.error}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col mt-5 gap-2">
+                      <div className="flex items-center justify-between">
+                        <label htmlFor="password" className="font-semibold">
+                          Your Password
+                        </label>
+                        {/* <p className="text-red-400 cursor-pointer text-xs md:text-sm font-semibold">
+                          Forgot Password?
+                        </p> */}
+                      </div>
+                      <input
+                        onFocus={(e) => (e.target.type = "text")}
+                        onBlur={(e) => (e.target.type = "password")}
+                        type="loginPassword"
+                        id="loginPassword"
+                        name="loginPassword"
+                        value={loginPassword}
+                        onChange={onChangeInput}
+                        autoComplete="off"
+                        placeholder="Enter your Password"
+                        className="border-2  border-gray-300 outline-none p-2 rounded-md"
+                      />
+                      {loginError.password && (
+                        <p className="text-red-500 text-xs sm:text-sm ">
+                          {loginError.password}
+                        </p>
+                      )}
+
+                      {loginError.error === "Incorrect password" && (
+                        <p className="text-red-500 text-xs sm:text-sm ">
+                          {loginError.error}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="recaptacha-login  mt-5 ">
+                      <ReCAPTCHA
+                        sitekey="6LfDSrsqAAAAAI2jP2tOdr2l4VkiztyX2S2H0Fxg"
+                        onChange={handleCaptchaChange}
+                      />
+                    </div>
+
+                    <button
+                      disabled={!captchaValue}
+                      onClick={onClickSignIn}
+                      className={`${
+                        !captchaValue ? "bg-gray-400" : "bg-sky-800"
+                      } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
+                    >
+                      Sign In
+                    </button>
+
+                    <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
+                      <p>Don't you have an account?</p>
+                      <button
+                        onClick={onClickBtn}
+                        className="bg-sky-800 px-3 py-1 cursor-pointer  text-white rounded"
+                      >
+                        Register
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -28,9 +28,13 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-between  items-center  me-5 ms-5 lg:ms-10 lg:me-10 py-0  sm:py-2">
+    <div className="flex justify-between  items-center  mx-2 lg:mx-8  py-0  sm:py-2">
       <div onClick={() => navigate("/")} className="cursor-pointer">
-        <img src={innerpece_logo} alt="" className="w-40 h-14 object-contain "/>
+        <img
+          src={innerpece_logo}
+          alt=""
+          className="w-28 lg:w-40 h-14 object-contain "
+        />
       </div>
 
       <div className="max-md:hidden">
@@ -44,7 +48,12 @@ function Header() {
 
           <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
             <Link className="cursor-pointer" to="/sendenquiry">
-              Send Enquiry
+              Customization Enquiry
+            </Link>
+          </li>
+          <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
+            <Link className="cursor-pointer" to="/destinations">
+              Destinations
             </Link>
           </li>
           <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
@@ -61,11 +70,11 @@ function Header() {
             <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
               <Link className="cursor-pointer" to="/profile">
                 My Profile
-            </Link>
-          </li>
+              </Link>
+            </li>
           )}
 
-          {userLogedIn ? (
+          {/* {userLogedIn ? (
             <li className="">
               <Link
                 onClick={onClickLogout}
@@ -84,6 +93,15 @@ function Header() {
                 Login
               </Link>
             </li>
+          )} */}
+
+          {!userLogedIn && (
+            <Link
+              to="/login"
+              className="cursor-pointer font-semibold   border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 text-center   md:px-3 lg:px-6 py-2"
+            >
+              Login
+            </Link>
           )}
         </ul>
       </div>
@@ -113,7 +131,12 @@ function Header() {
           </li>
           <li className="text-xl cursor-pointer">
             <Link to="/sendenquiry" onClick={() => setIsOpen(false)}>
-              Send Enquiry
+              Customization Enquiry
+            </Link>
+          </li>
+          <li className="text-xl cursor-pointer">
+            <Link className="cursor-pointer" to="/destinations">
+              Destinations
             </Link>
           </li>
 
@@ -132,11 +155,11 @@ function Header() {
             <li className="text-xl cursor-pointer">
               <Link to="/profile" onClick={() => setIsOpen(false)}>
                 My Profile
-            </Link>
-          </li>
+              </Link>
+            </li>
           )}
 
-          {userLogedIn ? (
+          {/* {userLogedIn ? (
             <Link
               to="/login"
               onClick={() => {
@@ -148,6 +171,16 @@ function Header() {
               Logout
             </Link>
           ) : (
+            <Link
+              to="/login"
+              onClick={() => setIsOpen(false)}
+              className="px-6 py-2 text-center cursor-pointer font-semibold border border-[#005FC4] rounded-2xl text-white bg-[#005FC4]"
+            >
+              Login
+            </Link>
+          )} */}
+
+          {!userLogedIn && (
             <Link
               to="/login"
               onClick={() => setIsOpen(false)}

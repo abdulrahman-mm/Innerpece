@@ -24,11 +24,6 @@ function DestinationsDetails() {
 
   useEffect(() => {
     document.title = "Destination Details - Innerpece";
-    // const timer = setTimeout(() => {
-    //   setIsLoading(false);
-    // }, 200); // Adjust time as needed
-
-    // return () => clearTimeout(timer); // Cleanup timeout
   }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { id, city_name } = location.state || {};
@@ -61,13 +56,17 @@ function DestinationsDetails() {
     id.scrollIntoView({ behavior: "instant" });
   };
 
+  const pathName = window.location.pathname;
+  const slicedPathName = pathName.split("/")[2];
+  const slicedLocationName=pathName.split('/')[3];
+
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
         const response = await axios.post(
           "https://backoffice.innerpece.com/api/v1/get-program",
           {
-            destination: id,
+            destination: id ? id : slicedPathName,
           }
         );
 
@@ -249,7 +248,26 @@ function DestinationsDetails() {
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
 
-  console.log("apidata", apiData);
+  const [sliceCount, setSliceCount] = useState(2);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 500) {
+        setSliceCount(3); // large screens
+      } else {
+        setSliceCount(2); // small screens
+      }
+    };
+
+    // Initial check
+    handleResize();
+
+    // Event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const SkeletonLoader = () => {
     return (
@@ -311,8 +329,6 @@ function DestinationsDetails() {
   //   return () => window.removeEventListener("scroll", handleScroll);
   // }, []);
 
-  console.log("current items", currentItems);
-
   return (
     <div>
       {!filterButtonClicked && (
@@ -351,10 +367,12 @@ function DestinationsDetails() {
               id="blur"
               className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
             >
-              <h1 className="text-white text-lg md:text-2xl font-nunito text-center lg:text-4xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">{`Explore ${
-                apiData.length > 0 ? apiData[0].destination : city_name
+              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl  font-rancho tracking-widest text-center  font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{`Explore ${
+                apiData?.length > 0
+                  ? apiData[0]?.destination[0]?.city_name
+                  : slicedLocationName
               }`}</h1>
-              <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
+              <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
                 Find your perfect tour with personalized themes and destinations
                 to match your preferences
               </p>
@@ -575,21 +593,36 @@ function DestinationsDetails() {
                           }
                           alt={item.title}
                           className="w-full h-44 sm:h-52 md:h-60 object-cover object-center transform transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+
+                          // className="w-full h-44 sm:h-52 md:h-60 object-cover object-center transition duration-500 transform hover:scale-105 hover:-skew-y-1 cursor-pointer"
                         />
                       </div>
 
-                      <div className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4 flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white border-[#BABABA] py-2 px-3">
+                      <div
+                        onClick={() => handleCardClick(item.id, item.title)}
+                        className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4 flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white border-[#BABABA] py-2 px-3 cursor-pointer"
+                      >
                         <p className="font-semibold flex-wrap text-xl md:text-3xl font-jost">
                           {item.title}
                         </p>
 
                         <div className="flex  items-center justify-between gap-2 flex-wrap">
-                          <div className="flex items-center gap-2">
-                            <FaLocationDot className="text-sky-800" />
-                            <p className="text-sm sm:text-base">
+                          {item.current_location &&
+                            item.current_location !== "<p><br></p>" && (
+                              <div className="flex items-center gap-2">
+                                <FaLocationDot className="text-sky-800" />
+                                {/* <p className="text-sm sm:text-base">
                               {item.current_location}
-                            </p>
-                          </div>
+                            </p> */}
+
+                                <p
+                                  className="text-sm sm:text-base"
+                                  dangerouslySetInnerHTML={{
+                                    __html: item.current_location,
+                                  }}
+                                />
+                              </div>
+                            )}
 
                           <div className="flex items-center gap-1">
                             <FaStar className="text-yellow-500" />
@@ -626,9 +659,12 @@ function DestinationsDetails() {
                           <div>
                             <div className="border-b border-[#BABABA]"></div>
 
-                            <div className="flex justify-start mt-3 gap-3 flex-wrap items-start">
+                            <div className="flex justify-start mt-3 gap-1 md:gap-3 flex-wrap items-start">
+                              {/* {item.amenities
+                                .slice(0, 2)
+                                .map((amenity, index) => ( */}
                               {item.amenities
-                                .slice(0, 3)
+                                .slice(0, sliceCount)
                                 .map((amenity, index) => (
                                   <div
                                     key={index}
@@ -662,7 +698,7 @@ function DestinationsDetails() {
                                       +{item.amenities.length - 3}
                                     </p>
                                   </span>
-                                  <p className="text-white flex-wrap text-xs">
+                                  <p className="text-sky-700 flex-wrap text-xs">
                                     More
                                   </p>
                                 </div>
@@ -673,23 +709,32 @@ function DestinationsDetails() {
                       </div>
 
                       <div className="flex flex-wrap bg-white flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]  px-3 py-2 ">
-                        <div className="flex flex-row lg:flex-col gap-3 items-center sm:items-start">
-                          <p className="text-[#001031] text-sm sm:text-base">
+                        <div className="flex flex-row lg:flex-col gap-3 items-center justify-center">
+                          <p className="text-[#001031] text-sm md:text-base text-center mx-auto ">
                             Starting From{" "}
                           </p>
-                          <p className="font-bold text-[#000000] text-xl">
+                          <p className="font-bold text-green-700 text-xl mx-auto">
                             ₹{item.pricing[0]}
                           </p>
                         </div>
 
-                        <div
+                        {/* <div
                           onClick={() => handleCardClick(item.id, item.title)}
                           className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1  lg:py-2 rounded-lg "
                         >
                           <p className="text-white cursor-pointer  font-medium md:text-xl text-center ">
                             View Detail
                           </p>
-                          {/* <FaArrowRight className="text-white h-full " /> */}
+                        </div> */}
+
+                        <div
+                          onClick={() => handleCardClick(item.id, item.title)}
+                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1 lg:py-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md hover:brightness-110"
+                        >
+                          <p className="text-white font-medium md:text-xl text-center">
+                            View Detail
+                          </p>
+                          {/* <FaArrowRight className="text-white h-full" /> */}
                         </div>
                       </div>
                     </div>
@@ -743,7 +788,7 @@ function DestinationsDetails() {
 
                   <div
                     onClick={() => window.open("https://wa.me/6384131642")}
-                    className="cursor-pointer border-2 rounded-xl border-[#00A64D] flex gap-2 items-center px-5 py-1 w-48"
+                    className="cursor-pointer border-2 rounded-xl border-[#00A64D] transition-all duration-300 transform  hover:shadow-md hover:scale-105 flex gap-2 items-center px-5 py-1 w-48"
                   >
                     <img
                       src={whatsapp}
@@ -759,7 +804,7 @@ function DestinationsDetails() {
                       window.scrollTo(0, 0);
                       navigate("/sendenquiry");
                     }}
-                    className="cursor-pointer border-2 rounded-xl border-[#EC3B63] flex items-center gap-4 px-5 py-2 w-48"
+                    className="cursor-pointer border-2 rounded-xl border-[#EC3B63] flex items-center gap-4 px-5 py-2 w-48 transition-all duration-300 transform  hover:shadow-md hover:scale-105"
                   >
                     <img
                       src={sendEnquiry}
@@ -792,10 +837,12 @@ function DestinationsDetails() {
                       </p>
                     </div>
 
-                    {/* <div className="flex gap-4 items-center">
-                                      <img src={insurance} alt="" />
-                                      <p>Free Travel Insurance</p>
-                                    </div> */}
+                    <div className="flex gap-4 items-center">
+                      <img src={insurance} alt="" />
+                      <p className="text-sm font-medium text-[#44454F]">
+                        Women-Friendly Environments
+                      </p>
+                    </div>
 
                     <div className="flex gap-4 items-center">
                       <img src={pricetag} alt="" />

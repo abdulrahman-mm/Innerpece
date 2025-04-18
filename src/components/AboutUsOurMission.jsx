@@ -19,9 +19,9 @@ function OurMission() {
                   Seamless Trip Planning
                 </p>
                 <p className="text-gray-500 font-dmSans">
-                  Innerpece handles all aspects of your weekend getaway, from
-                  logistics to activities, ensuring a well-organized and
-                  effortless experience.
+                  We handle all aspects of your trip, from logistics to
+                  activities, ensuring a well-organized and effortless
+                  experience.
                 </p>
                 <hr className="w-full mt-1 md:mt-6 border-sky-900/20" />
               </div>
@@ -31,10 +31,11 @@ function OurMission() {
               <p className="text-[#003061] font-bold font-dmSans text-xl">02</p>
               <div className="flex flex-col gap-2">
                 <p className="text-[#003061] font-bold font-dmSans text-xl">
-                High-Quality Food
+                  High-Quality Food
                 </p>
                 <p className="text-gray-500 font-dmSans">
-                Enjoy a variety of gourmet meals during your stay, each prepared with care to enhance your overall getaway experience.
+                  Enjoy a variety of gourmet meals during your stay, each
+                  prepared with care to enhance your overall getaway experience.
                 </p>
                 <hr className="w-full mt-1 md:mt-6 border-sky-900/20" />
               </div>
@@ -44,10 +45,12 @@ function OurMission() {
               <p className="text-[#003061] font-bold font-dmSans text-xl">03</p>
               <div className="flex flex-col gap-2">
                 <p className="text-[#003061] font-bold font-dmSans text-xl">
-                Personalized Service
+                  Personalized Service
                 </p>
                 <p className="text-gray-500 font-dmSans">
-                Benefit from attentive, individualized support throughout your trip, ensuring all your needs are met for a memorable and enjoyable escape.
+                  Benefit from attentive, individualized support throughout your
+                  trip, ensuring all your needs are met for a memorable and
+                  enjoyable escape.
                 </p>
               </div>
             </div>
@@ -55,15 +58,11 @@ function OurMission() {
         </div>
 
         <div className="relative  basis-[20%] mt-8 lg:mt-0 lg:basis-[50%]">
-          <img
-            src={ourmissionimg1}
-            alt=""
-            className=" w-full  object-cover"
-          />
+          <img src={ourmissionimg1} alt="" className=" w-full  object-cover " />
           <img
             src={ourmissionimg2}
             alt=""
-            className="max-md:hidden  absolute top-36  sm:top-40 sm:-left-14 md:top-44 md:-left-28  lg:top-44 lg:-left-16 xl:top-64 xl:-left-24 bg-contain bg-center"
+            className="max-md:hidden  absolute top-36  sm:top-40 sm:-left-14 md:top-44 md:-left-28  lg:top-44 lg:-left-16 xl:top-64 xl:-left-24 bg-contain bg-center "
           />
         </div>
       </div>

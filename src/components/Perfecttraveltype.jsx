@@ -3,6 +3,11 @@ import dummy1 from "../assets/dummy1.png";
 import dummy2 from "../assets/dummy2.png";
 import dummy3 from "../assets/dummy3.png";
 import dummy4 from "../assets/dummy4.jpeg";
+import traveltype1 from "../assets/traveltype1.png";
+import traveltype2 from "../assets/traveltype2.png";
+import traveltype3 from "../assets/traveltype3.jpg";
+import traveltype4 from "../assets/traveltype4.png";
+import traveltype5 from "../assets/traveltype5.jpg";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
@@ -126,14 +131,13 @@ const Perfecttraveltype = () => {
     //   </div>
     // </Carousel>
     // </div>
-    <div className="mx-5 mt-10 md:mx-16 md:mt-16 flex flex-col md:flex-row gap-5 md:gap-10">
-      
+    <div className="mx-5 mt-10 md:mx-16 md:mt-24 flex flex-col md:flex-row gap-5 md:gap-10">
       {/* Text Section */}
       <div className="w-full md:w-[30%]">
         <p className="text-[#000000] text-2xl md:text-3xl lg:text-4xl">
           Choose Your
         </p>
-        <p className="text-[#0E598F] font-extrabold text-2xl md:text-3xl lg:text-4xl">
+        <p className="text-[#0E598F] font-bold md:font-extrabold text-2xl md:text-3xl lg:text-4xl">
           Perfect Travel Type
         </p>
         <p className="text-[#000000] text-sm md:text-lg mt-3">
@@ -143,7 +147,7 @@ const Perfecttraveltype = () => {
       </div>
 
       {/* Carousel Section */}
-      <div className="w-full md:w-2/3 rounded-xl">
+      <div className="w-full md:w-2/3 rounded-xl ">
         <Carousel
           responsive={{
             superLargeDesktop: {
@@ -156,28 +160,39 @@ const Perfecttraveltype = () => {
           }}
           infinite
           autoPlay
-          autoPlaySpeed={3000}
+          autoPlaySpeed={2000}
           arrows={false}
           keyBoardControl
+          pauseOnHover={false}
           itemClass="px-2"
-          
         >
-          {[dummy1, dummy4, dummy3].map((img, index) => (
+          {[
+            { image: traveltype5, name: "Trips for your peace" },
+            { image: dummy2, name: "Trips for beaches & water activities" },
+            { image: dummy3, name: "Trips for trekking & hiking" },
+            { image: traveltype3, name: "Trips for snow experiences" },
+            { image: traveltype1, name: "Trips for spiritual needs" },
+            { image: traveltype4, name: "Trips for honeymoon" },
+          ].map((item, index) => (
             <div
               key={index}
-              className="relative w-full h-44 sm:h-52 md:h-60 lg:h-64 rounded-xl overflow-hidden"
+              className="relative w-full h-44 sm:h-44  rounded-xl overflow-hidden"
             >
               <img
-                src={img}
+                src={item.image}
                 alt="travel type"
                 className="absolute w-full h-full object-cover"
               />
-              <div className="absolute w-full h-full z-10 bg-gradient-to-b from-black/40 from-5% to-transparent"></div>
-              <div className="absolute top-5 w-full z-10 font-rancho text-xl md:text-2xl lg:text-3xl text-white text-center p-2 [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
-                {index === 2
-                  ? "Trips For Trekking & Hiking"
-                  : "Trips for Beaches & Water Activities"}
-              </div>
+              <div className="absolute w-full h-full z-10 bg-gradient-to-b from-black  to-transparent"></div>
+              <p
+                className="absolute top-2 w-full z-10 font-jost tracking-[0.2em]
+                uppercase text-sm  text-white text-center p-2 [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]"
+              >
+                <p>
+                  {item.name.split(" ")[0]} {item.name.split(" ")[1]}
+                </p>
+                <p>{item.name.split(" ").slice(2).join(' ')}</p>
+              </p>
             </div>
           ))}
         </Carousel>
