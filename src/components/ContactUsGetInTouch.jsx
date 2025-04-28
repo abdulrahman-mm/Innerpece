@@ -14,7 +14,7 @@ function GetInTouch() {
   const [loading, setLoading] = useState(false);
 
   const validateForm = () => {
-    setLoading(false)
+    setLoading(false);
     const newErrors = {};
     if (!firstname.trim()) newErrors.firstname = "First name is required.";
     if (!lastname.trim()) newErrors.lastname = "Last name is required.";
@@ -64,9 +64,11 @@ function GetInTouch() {
   };
 
   const onClickSendMessage = async () => {
-    setLoading(true);
-    if (!validateForm()) return;
-
+    const isValid = validateForm();
+    if (!isValid) return; // don't proceed if invalid
+  
+    setLoading(true); // move setLoading after validation passes
+  
     try {
       await axios.post(`https://backoffice.innerpece.com/api/v1/contact`, {
         first_name: firstname,
@@ -75,13 +77,14 @@ function GetInTouch() {
         phone,
         message,
       });
-
+  
+      // Clear form
       setFirstname("");
       setLastname("");
       setPhone("");
       setEmail("");
       setMessage("");
-
+  
       Swal.fire({
         position: "center",
         icon: "success",
@@ -89,7 +92,6 @@ function GetInTouch() {
         showConfirmButton: false,
         timer: 1500,
       });
-      setLoading(false);
     } catch (err) {
       Swal.fire({
         position: "center",
@@ -98,9 +100,11 @@ function GetInTouch() {
         showConfirmButton: false,
         timer: 1500,
       });
-      setLoading(false);
+    } finally {
+      setLoading(false); // always reset loading at the end
     }
   };
+  
 
   return (
     <div>
@@ -215,19 +219,21 @@ function GetInTouch() {
             </div>
 
             <button
-              disabled={!captchaValue}
+              disabled={!captchaValue || loading}
               onClick={onClickSendMessage}
               className={`${
-                !captchaValue ? "bg-gray-400" : "bg-sky-800"
+                !captchaValue || loading ? "bg-gray-400" : "bg-sky-800"
               } transition-all duration-300 px-5 w-36 py-2 md:px-7 outline-none md:py-3 lg:px-8 lg:py-4 xl:px-10  rounded-full text-white`}
             >
-              {/* {loading ? (
-                <div className="flex justify-center items-center">
-                  <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                </div>
-              ) : ( */}
-                Sign Up
-              {/* )} */}
+              {loading ? (
+                <>
+                  <div className="flex justify-center items-center">
+                    <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  </div>
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </button>
           </div>
         </div>

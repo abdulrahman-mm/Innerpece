@@ -277,8 +277,8 @@ function Home() {
           </div>
         }
       >
-        {/* <Header /> */}
-        {/* <Hero /> */}
+        <Header />
+        <Hero />
         <HomePrograms />
         <Perfecttraveltype />
         <HomeDestinations />

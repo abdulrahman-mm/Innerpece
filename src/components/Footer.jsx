@@ -157,7 +157,7 @@ function Footer() {
                 target="_blank"
                 className="font-medium  text-gray-400 cursor-pointer hover:text-white"
               >
-                Blogs
+                Blog
               </a>
             </div>
 

@@ -9,7 +9,7 @@ import aboutusimg6 from "../assets/aboutusimg6.png";
 function Hero() {
   return (
     <div className="ms-3 me-3 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-28 xl:me-28">
-      <p className="text-center font-mulish font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl mt-8 md:mt-20 tracking-wide">
+      <p className="text-center text-2xl lg:text-3xl xl:text-5xl font-dmSans font-semibold mt-8 md:mt-20 tracking-wide">
         ABOUT US
       </p>
 

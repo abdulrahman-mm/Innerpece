@@ -32,7 +32,7 @@ function Destinations() {
       .replace(/-+/g, "-") // Replace multiple hyphens with a single hyphen
       .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
 
-    navigate(`/destinationsdetails/${id}/${formattedCityName}`, {
+    navigate(`/populardestinations/${id}/${formattedCityName}`, {
       state: { id, city_name },
     });
 
@@ -42,12 +42,12 @@ function Destinations() {
     });
   };
 
-  // Skeleton Loader for Destination Cards
   const SkeletonCard = () => (
-    <div className="flex items-center gap-5 border-2 px-5 border-gray-400 py-1 w-80 rounded-2xl bg-gray-400 animate-pulse">
-      <div className="w-14 h-14 rounded-full bg-gray-500 animate-pulse"></div>
-      <div className="flex-1 h-6 bg-gray-500 rounded animate-pulse"></div>
-    </div>
+    <div className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
+  );
+
+  const SkeletonCarouselCard = () => (
+    <div className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
   );
 
   const responsive = {
@@ -96,72 +96,110 @@ function Destinations() {
     );
   };
 
+  const [skeltonArrayLength, setSkeletonArraylength] = useState(4);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 3000 && window.innerWidth <= 4000) {
+        setSkeletonArraylength(4); // super large desktop
+      } else if (window.innerWidth >= 1281 && window.innerWidth < 3000) {
+        setSkeletonArraylength(4); // large desktop
+      }
+      // else if (window.innerWidth >= 1024 && window.innerWidth < 1440) {
+      //   setSkeletonArraylength(4); // desktop
+      // }
+      else if (window.innerWidth >= 1025 && window.innerWidth < 1200) {
+        setSkeletonArraylength(3); // small desktop
+      } else if (window.innerWidth >= 641 && window.innerWidth <= 1024) {
+        setSkeletonArraylength(2); // tablet
+      }
+    };
+    // Initial check
+    handleResize();
+    // Event listener
+    window.addEventListener("resize", handleResize);
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div>
-      {destinationData.length > 0 && (
+    <>
+      {loading ? (
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
           <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
             <span className="font-jost font-medium">Popular </span>
             <span className="font-jost font-bold">Destinations</span>
           </p>
-          {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 gap-x-7 mt-8 md:mt-10">
-              {Array(4)
-                .fill(0)
-                .map((_, index) => (
-                  <SkeletonCard key={index} />
-                ))}
-            </div>
-          ) : destinationData && destinationData.length > 0 ? (
-            <div className="mt-8 md:mt-10">
-              <Carousel
-                responsive={responsive}
-                infinite={true}
-                autoPlay={false}
-                swipeable={true}
-                draggable={true}
-                showDots={false}
-                keyBoardControl={true}
-                containerClass="carousel-container"
-                itemClass="px-2"
-                customLeftArrow={<CustomLeftArrow />}
-                customRightArrow={<CustomRightArrow />}
-              >
-                {destinationData.map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleCardClick(item.id, item.city_name)}
-                    className="relative overflow-hidden rounded-2xl"
-                  >
-                    <div className="relative h-80 md:h-96  shrink-0 rounded-2xl overflow-hidden  group  cursor-pointer">
-                      <img
-                        src={
-                          item.cities_pic
-                            ? `https://backoffice.innerpece.com/${item.cities_pic}`
-                            : defaultimg
-                        }
-                        alt={`trip-${index}`}
-                        className="h-full w-full -z-30 absolute object-cover transform transition-transform duration-500 group-hover:scale-125"
-                      />
-                      <div className="absolute -z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                      <div className="absolute bottom-5 z-20 left-0 w-full text-white text-center py-2 px-3">
-                        <p className="font-rancho text-2xl md:text-3xl xl:text-4xl">
-                          {item.city_name}
-                        </p>
+          <div className="flex items-center flex-1 mt-8 md:mt-10   flex-grow flex-wrap justify-start ">
+            {Array(skeltonArrayLength)
+              .fill(0)
+              .map((_, index) => (
+                <SkeletonCard />
+              ))}
+          </div>
+          {/* <div className="flex items-center flex-1 w-full  mt-5  flex-grow flex-wrap justify-center "> */}
+          <div className="flex items-center flex-1   flex-grow flex-wrap justify-center  w-full">
+            {Array(1)
+              .fill(0)
+              .map((_, index) => (
+                <SkeletonCarouselCard />
+              ))}
+          </div>
+        </div>
+      ) : (
+        <>
+          {destinationData && destinationData.length > 0 && (
+            <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+              <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
+                <span className="font-jost font-medium">Popular </span>
+                <span className="font-jost font-bold">Destinations</span>
+              </p>
+              <div className="mt-8 md:mt-10">
+                <Carousel
+                  responsive={responsive}
+                  infinite={true}
+                  autoPlay={false}
+                  swipeable={true}
+                  draggable={true}
+                  showDots={false}
+                  keyBoardControl={true}
+                  containerClass="carousel-container"
+                  itemClass="px-2"
+                  customLeftArrow={<CustomLeftArrow />}
+                  customRightArrow={<CustomRightArrow />}
+                >
+                  {destinationData.map((item, index) => (
+                    <div
+                      key={index}
+                      onClick={() => handleCardClick(item.id, item.city_name)}
+                      className="relative overflow-hidden rounded-2xl"
+                    >
+                      <div className="relative h-80 md:h-96  shrink-0 rounded-2xl overflow-hidden  group  cursor-pointer">
+                        <img
+                          src={
+                            item.cities_pic
+                              ? `https://backoffice.innerpece.com/${item.cities_pic}`
+                              : defaultimg
+                          }
+                          alt={`trip-${index}`}
+                          className="h-full w-full -z-30 absolute object-cover transform transition-transform duration-500 group-hover:scale-125"
+                        />
+                        <div className="absolute -z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                        <div className="absolute bottom-5 z-20 left-0 w-full text-white text-center py-2 px-3">
+                          <p className="font-rancho text-2xl md:text-3xl xl:text-4xl">
+                            {item.city_name}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </Carousel>
-            </div>
-          ) : (
-            <div className="flex w-full items-center justify-center my-20">
-              <p className="md:text-3xl">No Destinations Found</p>
+                  ))}
+                </Carousel>
+              </div>
             </div>
           )}
-        </div>
+        </>
       )}
-    </div>
+    </>
   );
 }
 

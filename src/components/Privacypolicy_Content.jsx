@@ -196,7 +196,7 @@ function Privacypolicy_Content() {
       <p className="mt-1 md:text-lg">
         35-C, Sevaliye Sivaji Nagar, Darasuram, Kumbakonam,
       </p>
-      <p className=" md:text-lg">jay@innerpeace.com,</p>
+      <p className=" md:text-lg">jay@innerpece.com,</p>
       <p className=" md:text-lg">+91 6384131642.</p>
 
       <p className="mt-1 md:text-lg">

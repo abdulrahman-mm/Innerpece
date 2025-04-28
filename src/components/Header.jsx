@@ -65,7 +65,7 @@ function Header() {
 
           <li className="md:pe-5 lg:pe-11 font-semibold  ">
             <Link to="/aboutus" className="cursor-pointer hover:text-gray-500">
-              About
+              About Us
             </Link>
           </li>
           <li className="md:pe-5 lg:pe-11 font-semibold  ">
@@ -77,7 +77,7 @@ function Header() {
             </Link>
           </li>
           {userLogedIn && (
-            <li className="md:pe-5 lg:pe-11 font-semibold   ">
+            <li className=" lg:pe-11 font-semibold   ">
               <Link
                 to="/profile"
                 className="cursor-pointer hover:text-gray-500"
@@ -132,33 +132,33 @@ function Header() {
           &times;
         </button>
         <ul className="flex flex-col gap-5 mt-20">
-          <li className="text-black text-xl cursor-pointer">
+          <li className="text-black text-xl cursor-pointer font-medium">
             <Link to="/" onClick={() => setIsOpen(false)}>
               Home
             </Link>
           </li>
-          <li className="text-black text-xl cursor-pointer">
+          <li className="text-black text-xl cursor-pointer font-medium">
             <Link to="/sendenquiry" onClick={() => setIsOpen(false)}>
               Customization Enquiry
             </Link>
           </li>
-          <li className="text-black text-xl cursor-pointer">
+          <li className="text-black text-xl cursor-pointer font-medium">
             <Link className="cursor-pointer" to="/destinations">
               Destinations
             </Link>
           </li>
-          <li className="text-black text-xl cursor-pointer">
+          <li className="text-black text-xl cursor-pointer font-medium">
             <Link to="/aboutus" onClick={() => setIsOpen(false)}>
               About
             </Link>
           </li>
-          <li className="text-black text-xl cursor-pointer">
+          <li className="text-black text-xl cursor-pointer font-medium">
             <Link to="/contactus" onClick={() => setIsOpen(false)}>
               Contact Us
             </Link>
           </li>
           {userLogedIn && (
-            <li className="text-black text-xl cursor-pointer">
+            <li className="text-black text-xl cursor-pointer font-medium">
               <Link to="/profile" onClick={() => setIsOpen(false)}>
                 My Profile
               </Link>

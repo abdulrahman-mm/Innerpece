@@ -30,13 +30,11 @@ function ImportantInfo({ informationRef }) {
 
         setApiData(response.data.data);
 
-        // console.log(response.data.data.title);
         // setIsWishlisted(response.data.data.wishlists);
 
         document.title = response.data.data.title;
 
         const metaOgTitle = document.querySelector("meta[property='og:title']");
-        // console.log("metaOgTitle",metaOgTitle);
         if (metaOgTitle) {
           metaOgTitle.setAttribute("content", response.data.data.title);
         }

@@ -6,7 +6,7 @@ import ourvalueimg3 from "../assets/ourvalueimg3.png";
 function OurValue() {
   return (
     <div className="ms-3 me-3 mt-8 md:mt-20 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 ">
-      <p className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-medium font-dmSans">OUR VALUE</p>
+      <p className="text-2xl lg:text-3xl xl:text-5xl font-dmSans font-semibold">OUR VALUE</p>
      
 
       <div className="flex flex-col mt-5 gap-3 md:mt-14 items-center font-dmSans ">

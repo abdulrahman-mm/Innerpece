@@ -108,11 +108,11 @@ function App() {
           <Route path="/:id/:title" element={<TourDetails />} />
           <Route path="/home-filter/:city_name" element={<HomeFilter />} />
           <Route
-            path="/programsdetails/:theme_id/:theme_name"
+            path="/tripcategories/:theme_id/:theme_name"
             element={<ProgramsDetails />}
           />
           <Route
-            path="/destinationsdetails/:city_id/:city_name"
+            path="/populardestinations/:city_id/:city_name"
             element={<DestinationsDetails />}
           />
           <Route path="/destinations" element={<Destinations/>} />

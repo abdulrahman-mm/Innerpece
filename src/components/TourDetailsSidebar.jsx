@@ -33,6 +33,8 @@ import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
 import { PiMoneyWavyFill } from "react-icons/pi";
 import star from "../assets/star.png";
+import default_user_image from "../assets/default_user_image.png";
+import default_user_image2 from "../assets/default_user_image_2.jpg";
 
 function Sidebar({ LocationShareRef, reviewRef }) {
   const navigate = useNavigate();
@@ -65,7 +67,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
   const [howManyRoomsYouNeed, setHowManyRoomsYouNeed] = useState("");
   const [comments, setCommends] = useState("");
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [failure, setFailure] = useState("");
   const [map, setMap] = useState("");
@@ -87,13 +89,14 @@ function Sidebar({ LocationShareRef, reviewRef }) {
   const [date, setDate] = useState(new Date());
   const [loginClikedForAddReview, setLoginClickedForAddReview] =
     useState(false);
+  const [signInLoader, setSignInLoader] = useState(false);
 
   const handleLoginClickForAddReview = () => {
     setLoginClickedForAddReview(true);
   };
 
   const pathName = window.location.pathname;
-  const slicedPathName = pathName.slice(1, 3);
+  const slicedPathName = window.location.pathname.split("/")[1];
 
   useEffect(() => {
     const reference_id = window.location.search.split("=")[1]
@@ -135,21 +138,23 @@ function Sidebar({ LocationShareRef, reviewRef }) {
 
         // console.log(response.data.data.google_map);
 
-        let modifiedMapHtml = response.data.data.google_map;
+        let modifiedMapHtml = response?.data?.data?.google_map;
 
         // Remove width and height attributes from the iframe
         // modifiedMapHtml = modifiedMapHtml.replace(/width="[^"]*"/g, "");
         // modifiedMapHtml = modifiedMapHtml.replace(/height="[^"]*"/g, "");
         // modifiedMapHtml = modifiedMapHtml.replace(/style="[^"]*"/g, "");
 
-        modifiedMapHtml = modifiedMapHtml
-          .replace(/width="[^"]*"/g, "")
-          .replace(/height="[^"]*"/g, "")
-          .replace(/style="[^"]*"/g, "")
-          .replace(
-            /<iframe /,
-            '<iframe style="border-radius: 1rem; width: 100%; height: 100%; border:0;" '
-          );
+        modifiedMapHtml =
+          modifiedMapHtml ||
+          ""
+            .replace(/width="[^"]*"/g, "")
+            .replace(/height="[^"]*"/g, "")
+            .replace(/style="[^"]*"/g, "")
+            .replace(
+              /<iframe /,
+              '<iframe style="border-radius: 1rem; width: 100%; height: 100%; border:0;" '
+            );
 
         setMap(modifiedMapHtml);
         // setIsWishlisted(response.data.data.wishlists);
@@ -362,6 +367,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
   }
 
   async function onClickSignIn() {
+    setSignInLoader(true);
     try {
       let response = await axios.post(
         // `https://backoffice.innerpece.com/api/login`,
@@ -394,6 +400,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
       setTimeout(() => {
         window.location.reload();
       }, 1000);
+      setSignInLoader(false);
     } catch (err) {
       console.log(err);
 
@@ -402,6 +409,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
         : err.response.data;
       setLoginError({ ...errors });
       console.log(errors);
+      setSignInLoader(false);
     }
   }
 
@@ -588,24 +596,29 @@ function Sidebar({ LocationShareRef, reviewRef }) {
 
   return (
     <div
-      className={` w-full  pb-10   overflow-y-auto sidebar bg-[#FEFEFE]   top-5  md:basis-[32%] xl:basis-[25%] flex-grow mt-8 md:mt-10   ${
+      className={` w-full overflow-y-auto lg:h-screen  pb-10 lg:sticky top-5  sidebar bg-[#FEFEFE]  md:basis-[32%] xl:basis-[25%] flex-grow  md:mt-10   ${
         show ? "fixed" : ""
       }`}
     >
       {loading ? (
         <div className="h-60 w-full bg-gray-500 animate-pulse"></div>
       ) : (
-        <div className="flex flex-col p-3  shadow-md  bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
+        <div className="flex flex-col p-3 border border-gray-200  shadow-md max-md:hidden bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
           <span className="text-gray-600 pb-2 ">
             Starting From{" "}
-            <span className="text-green-800 font-semibold text-xl ms-1">
-              ₹{`${apiData.price_amount && apiData.price_amount[0]}`}
+            <span className="text-green-800 font-semibold text-xl lg:text-2xl ms-1">
+              ₹
+              {`${
+                apiData.price_amount &&
+                Number(apiData.price_amount[0]).toLocaleString("en-IN")
+              }`}
+              {/* ₹{Number(item.pricing[0]).toLocaleString('en-IN')} */}
             </span>
           </span>
 
           <div className="border-t-2 border-dotted w-full border-sky-800"></div>
 
-          <span className="bg-sky-800 -mt-8 px-16 py-1  text-sm rounded-full text-white font-bold">
+          <span className="bg-sky-800 -mt-8 px-16 py-1  text-sm rounded-full text-white font-semibold">
             Per Person
           </span>
 
@@ -616,7 +629,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                   {apiData.price_title.map(
                     (item, index) =>
                       item && (
-                        <div className="flex gap-2 text-center  ">
+                        <div className="flex gap-2 items-center h-fit text-start  ">
                           <input
                             type="radio"
                             name=""
@@ -625,11 +638,15 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                             checked={selectedPackage === item}
                             onChange={() => onChangePrice(item, index)}
                             // onChange={() => setPriceSelected(item)}
+                            className="h-fit"
                           />
                           <label htmlFor={item} className="h-fit">
                             <span> {item} : </span>
-                            <span className="font-semibold">
-                              ₹{apiData.price_amount[index]}
+                            <span className="font-semibold sm:font-bold text-green-800 text-base sm:text-lg">
+                              ₹
+                              {Number(
+                                apiData.price_amount[index]
+                              ).toLocaleString("en-IN")}
                             </span>
                           </label>
                         </div>
@@ -673,7 +690,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
         </div>
       )}
 
-      <div className="shadow-md mt-8 md:mt-10  bg-white py-4  shadow-black/10 rounded-lg">
+      <div className="shadow-md  md:mt-10  bg-white py-3 border border-gray-200  shadow-black/10 rounded-lg">
         <div className="flex gap-4  ms-3 text-lg">
           <p className="text-sky-800">|</p>
           <p className="font-semibold">Book With Confidence</p>
@@ -712,12 +729,12 @@ function Sidebar({ LocationShareRef, reviewRef }) {
       )}
 
       <div
-      ref={reviewRef}
+        ref={reviewRef}
         className="mt-2 overflow-hidden w-full object-cover  "
         dangerouslySetInnerHTML={{ __html: map }}
       />
 
-      <div  className="mt-8 md:mt-10  lg:hidden">
+      <div className="mt-8 md:mt-10  lg:hidden">
         <div className="flex flex-wrap flex-col justify-start ">
           {/* <p className="font-semibold text-xl md:text-2xl">
                     <span className="border-l-8 border-[#0E598F] me-4"></span>{" "}
@@ -792,7 +809,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
             <div className="mt-5 overflow-y-auto">
               <div className="flex flex-col-reverse gap-5">
                 {currentReviews.map((item, index) => (
-                  <div key={index} className="mx-3 bg-gray-100 p-4 rounded-lg">
+                  <div key={index} className=" bg-gray-100 p-4 rounded-lg">
                     <div className="flex flex-col gap-1">
                       <div className="flex gap-1 items-center">
                         {Array(item.rating)
@@ -822,12 +839,23 @@ function Sidebar({ LocationShareRef, reviewRef }) {
 
                       <div className="flex items-center gap-3">
                         <img
-                          src={`https://backoffice.innerpece.com/${item.profile_image}`}
+                          // src={`https://backoffice.innerpece.com/${item.profile_image}`}
+                          // src={`${
+                          //   item.profile_image
+                          //     ? "https://backoffice.innerpece.com/${item.profile_image"
+                          //     : default_user_image2
+                          // }`}
+
+                          src={`${
+                            item.profile_image
+                              ? `https://backoffice.innerpece.com/${item.profile_image}`
+                              : default_user_image2
+                          }`}
                           alt="Profile"
                           className="w-[40px] h-[40px] object-cover rounded-full border-2 border-gray-300"
                         />
-                        <p className="font-medium text-lg md:text-xl text-gray-800">
-                          {item.first_name}
+                        <p className="font-medium text-gray-800">
+                          {item.first_name} {item.last_name}
                         </p>
                       </div>
                     </div>
@@ -965,7 +993,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                       />
                     </div>
 
-                    <button
+                    {/* <button
                       disabled={!captchaValue}
                       onClick={onClickSignIn}
                       className={`${
@@ -973,6 +1001,21 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                       } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
                     >
                       Sign In
+                    </button> */}
+                    <button
+                      disabled={!captchaValue || signInLoader}
+                      onClick={onClickSignIn}
+                      className={`${
+                        !captchaValue ? "bg-gray-400" : "bg-sky-800"
+                      } transition-all duration-300 w-full p-3 mt-2 rounded-md text-white`}
+                    >
+                      {signInLoader ? (
+                        <div className="flex justify-center items-center">
+                          <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        </div>
+                      ) : (
+                        "Sign In"
+                      )}
                     </button>
 
                     <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
@@ -1045,8 +1088,8 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                     </span> */}
                     <p>
                       {selectedPackage} :{" "}
-                      <span className="font-semibold text-green-800">
-                        ₹ {priceSelected}
+                      <span className="font-semibold text-xl lg:text-2xl text-green-800">
+                        ₹ {Number(priceSelected).toLocaleString("en-IN")}
                       </span>{" "}
                     </p>
                   </div>

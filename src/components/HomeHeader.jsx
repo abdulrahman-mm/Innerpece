@@ -58,7 +58,7 @@ function Header() {
           </li>
           <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
             <Link className="cursor-pointer" to="/aboutus">
-              About
+              About Us
             </Link>
           </li>
           <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
@@ -67,7 +67,7 @@ function Header() {
             </Link>
           </li>
           {userLogedIn && (
-            <li className="md:pe-5 lg:pe-11  font-semibold hover:text-gray-500">
+            <li className="lg:pe-11  font-semibold hover:text-gray-500">
               <Link className="cursor-pointer" to="/profile">
                 My Profile
               </Link>
@@ -124,35 +124,35 @@ function Header() {
           &times;
         </button>
         <ul className="flex flex-col gap-5 mt-20">
-          <li className="text-xl cursor-pointer">
+          <li className="text-xl cursor-pointer font-medium">
             <Link to="/" onClick={() => setIsOpen(false)}>
               Home
             </Link>
           </li>
-          <li className="text-xl cursor-pointer">
+          <li className="text-xl cursor-pointer font-medium">
             <Link to="/sendenquiry" onClick={() => setIsOpen(false)}>
               Customization Enquiry
             </Link>
           </li>
-          <li className="text-xl cursor-pointer">
+          <li className="text-xl cursor-pointer font-medium">
             <Link className="cursor-pointer" to="/destinations">
               Destinations
             </Link>
           </li>
 
-          <li className="text-xl cursor-pointer">
+          <li className="text-xl cursor-pointer font-medium">
             <Link to="/aboutus" onClick={() => setIsOpen(false)}>
               About
             </Link>
           </li>
-          <li className="text-xl cursor-pointer">
+          <li className="text-xl cursor-pointer font-medium">
             <Link to="/contactus" onClick={() => setIsOpen(false)}>
               Contact Us
             </Link>
           </li>
 
           {userLogedIn && (
-            <li className="text-xl cursor-pointer">
+            <li className="text-xl cursor-pointer font-medium">
               <Link to="/profile" onClick={() => setIsOpen(false)}>
                 My Profile
               </Link>

@@ -15,6 +15,32 @@ function Programs() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const [skeltonArrayLength, setSkeletonArraylength] = useState(4);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 3000 && window.innerWidth <= 4000) {
+        setSkeletonArraylength(6); // super large desktop
+      } else if (window.innerWidth >= 1440 && window.innerWidth < 3000) {
+        setSkeletonArraylength(5); // large desktop
+      } else if (window.innerWidth >= 1024 && window.innerWidth < 1440) {
+        setSkeletonArraylength(4); // desktop
+      } else if (window.innerWidth >= 900 && window.innerWidth < 1024) {
+        setSkeletonArraylength(3); // small desktop
+      } else if (window.innerWidth >= 600 && window.innerWidth < 900) {
+        setSkeletonArraylength(2); // tablet
+      } else {
+        setSkeletonArraylength(1); // mobile
+      }
+    };
+    // Initial check
+    handleResize();
+    // Event listener
+    window.addEventListener("resize", handleResize);
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     axios
       .get(`https://backoffice.innerpece.com/api/v1/theme`)
@@ -37,7 +63,7 @@ function Programs() {
       .replace(/-+/g, "-")
       .replace(/^-+|-+$/g, "");
 
-    navigate(`/programsdetails/${id}/${formattedThemeName}`, {
+    navigate(`/tripcategories/${id}/${formattedThemeName}`, {
       state: { id, themes_name },
     });
 
@@ -48,24 +74,37 @@ function Programs() {
   };
 
   const SkeletonCard = () => (
-    <div className=" max-md:hidden h-60 bg-gray-500 rounded-3xl animate-pulse"></div>
+    <div className=" max-md:hidden mx-3 h-[362px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
   );
 
   const SkeletonCarouselCard = () => (
-    <div className="w-full h-60 block md:hidden bg-gray-500 rounded-3xl animate-pulse"></div>
+    <div className="w-[90vw] sm:w-[70vw] mx-auto h-60 md:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
   );
+
   const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 6,
+    },
+    largeDesktop: {
+      breakpoint: { max: 3000, min: 1440 },
       items: 5,
     },
-    tablet: {
-      breakpoint: { max: 1024, min: 768 },
+    desktop: {
+      breakpoint: { max: 1440, min: 1024 },
+      items: 4,
+    },
+    smallDesktop: {
+      breakpoint: { max: 1024, min: 900 },
       items: 3,
     },
-    mobile: {
-      breakpoint: { max: 768, min: 0 },
+    tablet: {
+      breakpoint: { max: 900, min: 600 },
       items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 600, min: 0 },
+      items: 1,
     },
   };
 
@@ -98,132 +137,117 @@ function Programs() {
 
   return (
     <>
-      {programsData.length > 0 && (
-        <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-          <p className="text-2xl md:text-3xl  lg:text-4xl leading-loose text-[#141414]">
+      {loading ? ( // Show skeleton loaders while fetching data
+        <div className=" ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+          <p className="text-2xl md:text-3xl  lg:text-4xl leading-loose text-[#141414] ">
             <span className="font-jost font-medium ">Trip </span>{" "}
             <span className="font-jost font-bold">Categories</span>
           </p>
+          <div className="flex items-center flex-1 md:mt-10   flex-grow flex-wrap justify-start ">
+            {Array(skeltonArrayLength)
+              .fill(0)
+              .map((_, index) => (
+                <SkeletonCard />
+              ))}
+          </div>
+          {/* <div className="flex items-center flex-1 w-full  mt-5  flex-grow flex-wrap justify-center "> */}
+          <div className="flex items-center flex-1  mt-5 flex-grow flex-wrap justify-center  w-full">
 
-          {loading ? ( // Show skeleton loaders while fetching data
-            <div className="flex items-center flex-1 flex-grow flex-wrap justify-start gap-7 mt-8 md:mt-10">
-              {Array(3)
-                .fill(0)
-                .map((_, index) => (
-                  <div className="flex-grow">
-                    <SkeletonCard key={index} />
-                  </div>
-                ))}
-              <SkeletonCarouselCard />
-            </div>
-          ) : programsData && programsData.length > 0 ? ( // Show programs if data exists
-            <div className="">
-              {/* <div className="max-md:hidden mt-8 md:mt-10 flex items-center flex-grow flex-wrap justify-start gap-7">
-                {programsData.map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleThemeClick(item.id, item.themes_name)}
-                    className=" flex-1 relative lg:w-72 h-[362px] cursor-pointer group rounded-2xl overflow-hidden flex items-center justify-center"
+            {Array(1)
+              .fill(0)
+              .map((_, index) => (
+                  <SkeletonCarouselCard />
+              ))}
+          </div>
+        </div>
+      ) : (
+        <>
+          {programsData.length > 0 && (
+            <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+              <p className="text-2xl md:text-3xl  lg:text-4xl leading-loose text-[#141414] ">
+                <span className="font-jost font-medium ">Trip </span>{" "}
+                <span className="font-jost font-bold">Categories</span>
+              </p>
+
+              <div className="">
+                <div className="relative w-full mt-10 max-md:hidden">
+                  <Carousel
+                    responsive={responsive}
+                    swipeable={true}
+                    draggable={true}
+                    showDots={false}
+                    arrows={true}
+                    autoPlay={false}
+                    infinite={true}
+                    customLeftArrow={<CustomLeftArrow />}
+                    customRightArrow={<CustomRightArrow />}
+                    containerClass="carousel-container"
+                    itemClass="px-3"
                   >
-                    <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                    <img
-                      src={
-                        item.theme_pic
-                          ? `https://backoffice.innerpece.com/${item.theme_pic}`
-                          : defaultimg
-                      }
-                      alt={item.themes_name}
-                      className="w-full h-[362px]   transform transition-transform duration-500 group-hover:scale-125  -z-40 bg-gradient  shadow-black object-cover bg-center  absolute inset-0 "
-                    />
-                    <p className="absolute   font-rancho text-lg xl:text-5xl text-white  text-center bottom-5">
-                      {item.themes_name}
-                    </p>
-                  </div>
-                ))}
-              </div> */}
-
-              <div className="relative w-full mt-10 max-md:hidden">
-                <Carousel
-                  responsive={responsive}
-                  swipeable={true}
-                  draggable={true}
-                  showDots={false}
-                  arrows={true}
-                  autoPlay={false}
-                  infinite={true}
-                  customLeftArrow={<CustomLeftArrow />}
-                  customRightArrow={<CustomRightArrow />}
-                  containerClass="carousel-container"
-                  itemClass="px-3"
-                >
-                  {programsData.map((item, index) => (
-                    <div
-                      key={index}
-                      onClick={() =>
-                        handleThemeClick(item.id, item.themes_name)
-                      }
-                      className="relative h-[362px] cursor-pointer group w-full rounded-2xl overflow-hidden flex items-center justify-center flex-grow"
-                    >
-                      <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                      <img
-                        src={
-                          item.theme_pic
-                            ? `https://backoffice.innerpece.com/${item.theme_pic}`
-                            : defaultimg
+                    {programsData.map((item, index) => (
+                      <div
+                        key={index}
+                        onClick={() =>
+                          handleThemeClick(item.id, item.themes_name)
                         }
-                        alt={item.themes_name}
-                        className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
-                      />
-                      <p className="absolute font-rancho  text-3xl lg:text-4xl  text-white text-center bottom-5">
-                        {item.themes_name}
-                      </p>
-                    </div>
-                  ))}
-                </Carousel>
-              </div>
+                        className="relative h-[362px] cursor-pointer group w-full rounded-2xl overflow-hidden flex items-center justify-center flex-grow"
+                      >
+                        <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                        <img
+                          src={
+                            item.theme_pic
+                              ? `https://backoffice.innerpece.com/${item.theme_pic}`
+                              : defaultimg
+                          }
+                          alt={item.themes_name}
+                          className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
+                        />
+                        <p className="absolute font-rancho  text-3xl lg:text-4xl  text-white text-center bottom-5">
+                          {item.themes_name}
+                        </p>
+                      </div>
+                    ))}
+                  </Carousel>
+                </div>
 
-              <div className="md:hidden h-60 overflow-hidden  relative w-full flex mt-5">
-                <Swiper
-                  effect="cards"
-                  grabCursor={true}
-                  loop={true}
-                  modules={[EffectCards]}
-                  className="w-[70vw]"
-                >
-                  {programsData.map((item, index) => (
-                    <SwiperSlide
-                      key={index}
-                      onClick={() =>
-                        handleThemeClick(item.id, item.themes_name)
-                      }
-                      className="relative flex items-center justify-center rounded-3xl w-56 h-60 cursor-pointer hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl"
-                    >
-                      <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                      <img
-                        src={
-                          item.theme_pic
-                            ? `https://backoffice.innerpece.com/${item.theme_pic}`
-                            : defaultimg
+                <div className="md:hidden h-60 overflow-hidden  relative w-full flex mt-5">
+                  <Swiper
+                    effect="cards"
+                    grabCursor={true}
+                    loop={true}
+                    modules={[EffectCards]}
+                    className="w-[70vw]"
+                  >
+                    {programsData.map((item, index) => (
+                      <SwiperSlide
+                        key={index}
+                        onClick={() =>
+                          handleThemeClick(item.id, item.themes_name)
                         }
-                        alt=""
-                        className="w-full rounded-3xl h-full -z-40 bg-gradient shadow-black object-cover absolute inset-0"
-                      />
+                        className="relative flex items-center justify-center rounded-3xl w-56 h-60 cursor-pointer hover:-translate-y-1 shadow-sm shadow-black/10 hover:shadow-xl"
+                      >
+                        <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                        <img
+                          src={
+                            item.theme_pic
+                              ? `https://backoffice.innerpece.com/${item.theme_pic}`
+                              : defaultimg
+                          }
+                          alt=""
+                          className="w-full rounded-3xl h-full -z-40 bg-gradient shadow-black object-cover absolute inset-0"
+                        />
 
-                      <p className="absolute z-10 w-full h-full flex items-end font-rancho text-2xl sm:text-3xl justify-center  text-white font-semibold text-center bottom-5">
-                        {item.themes_name}
-                      </p>
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                        <p className="absolute z-10 w-full h-full flex items-end font-rancho text-2xl sm:text-3xl justify-center  text-white font-semibold text-center bottom-5">
+                          {item.themes_name}
+                        </p>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
               </div>
-            </div>
-          ) : (
-            // Show fallback message if no data is found
-            <div className="flex items-center justify-center my-20">
-              <p className="md:text-3xl">No Programs Found</p>
             </div>
           )}
-        </div>
+        </>
       )}
     </>
   );

@@ -76,8 +76,10 @@ function Login() {
         navigate(from);
         window.scrollTo({ top: 0, behavior: "smooth" });
       }, 2000);
+      setSignInLoader(false);
     } catch (err) {
       console.log(err);
+      setSignInLoader(false);
 
       let errors = err.response.data.errors
         ? err.response.data.errors
@@ -95,13 +97,10 @@ function Login() {
   const [user, setUser] = useState(null);
 
   const handleSuccess = (response) => {
-
     const token = response.credential;
     const userDetails = jwtDecode(token);
     setUser(userDetails); // Store user details in state
   };
-
- 
 
   return (
     <div className="flex items-center justify-center mt-8 md:mt-14">

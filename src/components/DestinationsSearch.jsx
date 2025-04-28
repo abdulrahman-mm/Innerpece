@@ -28,7 +28,8 @@ function Search() {
       .replace(/-+/g, "-") // Replace multiple hyphens with a single hyphen
       .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
 
-    navigate(`/destinationsdetails/${formattedCityName}`, {
+    // navigate(`/destinationsdetails/${formattedCityName}`, {
+      navigate(`/populardestinations/${id}/${formattedCityName}`, {
       state: { id, city_name },
     });
 

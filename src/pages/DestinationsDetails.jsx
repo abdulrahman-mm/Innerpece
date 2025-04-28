@@ -58,7 +58,7 @@ function DestinationsDetails() {
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.split("/")[2];
-  const slicedLocationName=pathName.split('/')[3];
+  const slicedLocationName = pathName.split("/")[3];
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -252,8 +252,14 @@ function DestinationsDetails() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 500) {
+      if (window.innerWidth >= 1300) {
         setSliceCount(3); // large screens
+      } else if (window.innerWidth >= 1024) {
+        setSliceCount(3); // large screens
+      } else if (window.innerWidth >= 768) {
+        setSliceCount(3); // large screens
+      } else if (window.innerWidth >= 500) {
+        setSliceCount(3); // small screens
       } else {
         setSliceCount(2); // small screens
       }
@@ -271,63 +277,38 @@ function DestinationsDetails() {
 
   const SkeletonLoader = () => {
     return (
-      <div className="animate-pulse flex flex-col  gap-4 px-3 md:px-10 w-full md:w-[77vw]">
-        {[...Array(2)].map((_, index) => (
+      <div className="animate-pulse flex flex-col  gap-4  w-full m">
+        {[...Array(4)].map((_, index) => (
           <div
             key={index}
-            className="bg-gray-100 h-auto mt-11 justify-between flex flex-col gap-2 lg:flex-row "
+            className="bg-gray-300  mt-11 justify-between flex flex-col gap-2 lg:flex-row rounded-xl"
           >
             {/* Left section */}
-            <div className="w-full  lg:w-[30vw] h-64  bg-gray-300"></div>
+            <div className="rounded-t-xl lg:rounded-s-xl lg:rounded-r-none  h-32 lg:h-52 bg-gray-500 w-full lg:w-1/4 "></div>
 
             {/* Middle section */}
-            <div className="flex flex-col gap-2 md:gap-5 md:py-2 flex-1">
-              <div className="w-1/2 lg:w-96 h-10 bg-gray-300 rounded-lg"></div>
-              <div className="w-1/3 lg:w-72 h-10 bg-gray-300 rounded-lg"></div>
-              <div className="w-1/4 lg:w-52 h-10 bg-gray-300 rounded-lg"></div>
+            <div className="flex flex-col gap-2 md:gap-4 lg:gap-6 md:py-2 flex-1 border-r border-gray-400">
+              <div className="w-1/2 lg:w-96 h-10 bg-gray-500 rounded-lg"></div>
+              <div className="w-1/4 lg:w-52 h-10 bg-gray-500 rounded-lg"></div>
 
-              <div className="border-b border-gray-400 w-full lg:w-[300px]"></div>
-
-              <div className="flex gap-8">
-                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+              <div className="flex gap-8 justify-between md:justify-normal px-5">
+                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
+                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
+                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
               </div>
             </div>
 
             {/* Right section */}
-            <div className="flex lg:flex-col  gap-2 md:gap-4 pb-2 md:py-2 md:pe-5">
-              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
-              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
-              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
-              <div className="h-8 w-20 bg-gray-300 rounded-lg"></div>
+            <div className="flex lg:flex-col justify-center gap-2 px-5 md:gap-5 pb-2 md:py-2 md:pe-5 rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl">
+              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
+              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
+              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
             </div>
           </div>
         ))}
       </div>
     );
   };
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
-  //       <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-  //     </div>
-  //   );
-  // }
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const hero = document.getElementById("hero");
-  //     const scrollY = window.scrollY;
-  //     if (hero) {
-  //       hero.style.backgroundPosition = `center ${scrollY * 0.4}px`;
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
 
   return (
     <div>
@@ -369,11 +350,12 @@ function DestinationsDetails() {
             >
               <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl  font-rancho tracking-widest text-center  font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{`Explore ${
                 apiData?.length > 0
-                  ? apiData[0]?.destination[0]?.city_name
+                  ? // ? apiData[0]?.destination[0]?.city_name
+                    apiData[0]?.destination
                   : slicedLocationName
               }`}</h1>
               <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
-                Find your perfect tour with personalized themes and destinations
+                Find your perfect trip with personalized themes and destinations
                 to match your preferences
               </p>
             </div>
@@ -382,72 +364,13 @@ function DestinationsDetails() {
 
         {/* main section */}
 
-        {/* <div className="bg-[url('././assets/trip1.png')] bg-no-repeat bg-cover bg-fixed bg-opacity-95 flex flex-col md:flex-row gap-2 md:gap-3 lg:gap-5  ms-4 me-4 md:ms-7 md:me-7 lg:ms-10 lg:me-10  "> */}
-
         <div className="relative">
           <div className="bg-image-behind"></div>
 
           <div className="absolute w-full h-full bg-gradient-to-b from-white  via-transparent to-white -z-10"></div>
-          <div className="flex flex-col md:flex-row gap-2 md:gap-5 lg:gap-7 xl:gap-10  ps-4 pe-4 pd:ps-7 pd:pe-7 lg:ps-10 lg:pe-10">
-            {/* main section > sideBar */}
-            {/* {currentItems.length > 0 && (
-              <div className=" mt-20 py-5 px-5 sticky bg-white top-5 h-fit flex flex-col gap-4 md:rounded-lg  max-md:hidden border-2 basis-[10%]  ">
-                <p className="text-xl">Search By Filter</p>
-
-                <label htmlFor="fromDate">From Date</label>
-                <input
-                  type="date"
-                  id="fromDate"
-                  value={startDate}
-                  onChange={handleDateChange}
-                  className="border-2 p-2 rounded-md"
-                />
-
-                <label htmlFor="toDate">To Date</label>
-                <input
-                  type="date"
-                  value={toDate}
-                  id="toDate"
-                  onChange={handleToChange}
-                  className="border-2 p-2 rounded-md"
-                />
-
-                <button
-                  value="FILTER"
-                  onClick={handleFilterClick}
-                  className="bg-sky-800 hover:bg-sky-900 active:bg-gray-600 px-8 rounded-md text-center py-2 text-white place-items-end w-full"
-                >
-                  Filter
-                </button>
-
-                <button
-                  className="bg-white  px-8 rounded-md text-center py-2 text-sky-800 border-sky-800 border place-items-end w-full"
-                  value="FILTER"
-                  onClick={handleClearFilterClicked}
-                >
-                  Clear Filter
-                </button>
-
-                <p className="">Sort By</p>
-
-                <select
-                  name="select"
-                  id="select"
-                  className="border-2 p-2 outline-none rounded-md"
-                  onChange={handleSortChange}
-                  value={sortBy}
-                >
-                  <option value="" disabled>
-                    Select Sort Option
-                  </option>
-                  <option value="low">Low Price</option>
-                  <option value="high">High Price</option>
-                </select>
-              </div>
-            )} */}
-
+          <div className="flex flex-col xl:flex-row gap-2 md:gap-5 lg:gap-7 xl:gap-10  ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 ">
             {/* main section > mainBar */}
-            <div className="  w-full mt-10">
+            <div className="  w-full md:mt-10">
               {/* this will show only in smaller screens */}
               {/* {currentItems.length > 0 && (
                 <p
@@ -553,30 +476,6 @@ function DestinationsDetails() {
                     key={index}
                     className="flex flex-col  mt-10 overflow-hidden"
                   >
-                    {/* <div
-                      key={index}
-                      className="flex flex-col lg:flex-row overflow-hidden"
-                    >
-                      <div
-                        onClick={() => handleCardClick(item.id, item.title)}
-                        className="relative overflow-hidden w-full lg:w-1/3 rounded-t-xl lg:rounded-s-xl lg:rounded-r-none"
-                      >
-                      
-                        <img
-                          src={
-                            item.cover_img
-                              ? `https://backoffice.innerpece.com/${item.cover_img}`
-                              : defaultimage
-                          }
-                          alt={item.title}
-                          className="w-full h-44 sm:h-52 md:h-60  object-cover object-center transform transition-transform duration-500 group-hover:scale-105  cursor-pointer"
-                        />
-                      </div>
-
-                      <div className="flex group flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white   border-[#BABABA] py-2 px-3">
-                        <p className="font-semibold flex-wrap text-xl md:text-3xl font-jost">
-                          {item.title}
-                        </p> */}
                     <div
                       key={index}
                       className="group flex flex-col lg:flex-row overflow-hidden"
@@ -592,7 +491,7 @@ function DestinationsDetails() {
                               : defaultimage
                           }
                           alt={item.title}
-                          className="w-full h-44 sm:h-52 md:h-60 object-cover object-center transform transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+                          className="w-full h-44 lg:h-72 xl:h-64 object-cover object-center transform transition-transform duration-500 group-hover:scale-110 cursor-pointer"
 
                           // className="w-full h-44 sm:h-52 md:h-60 object-cover object-center transition duration-500 transform hover:scale-105 hover:-skew-y-1 cursor-pointer"
                         />
@@ -600,20 +499,42 @@ function DestinationsDetails() {
 
                       <div
                         onClick={() => handleCardClick(item.id, item.title)}
-                        className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4 flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white border-[#BABABA] py-2 px-3 cursor-pointer"
+                        className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white border-[#BABABA] py-2 px-2 md:px-3 cursor-pointer"
                       >
-                        <p className="font-semibold flex-wrap text-xl md:text-3xl font-jost">
+                        <p className="font-semibold text-[#2D2D2D] flex-wrap text-xl md:text-3xl font-jost">
+                          {/* {item.title.includes("-")
+                            ? item.title.split("-")[0]
+                            : item.title} */}
                           {item.title}
                         </p>
 
-                        <div className="flex  items-center justify-between gap-2 flex-wrap">
+                        {item.current_location &&
+                            item.current_location !== "<p><br></p>" && (
+                              <div className="flex items-center gap-2">
+                                <FaLocationDot className="text-sky-800" />
+                            
+
+                                <p
+                                  className="text-sm sm:text-base"
+                                  dangerouslySetInnerHTML={{
+                                    __html: item.current_location,
+                                  }}
+                                />
+                              </div>
+                            )}
+
+                        {/* <p className="flex-wrap text-[#11142D] font-mulish md:text-lg">
+                          {item.title.includes("-")
+                            ? item.title.split("-")[1]
+                            : ""}
+                        </p> */}
+
+                        {/* <div className="flex  items-center justify-between gap-2 flex-wrap">
                           {item.current_location &&
                             item.current_location !== "<p><br></p>" && (
                               <div className="flex items-center gap-2">
                                 <FaLocationDot className="text-sky-800" />
-                                {/* <p className="text-sm sm:text-base">
-                              {item.current_location}
-                            </p> */}
+                            
 
                                 <p
                                   className="text-sm sm:text-base"
@@ -630,9 +551,9 @@ function DestinationsDetails() {
                               <b className="me-1">{item.average_rating}</b>of 5
                             </p>
                           </div>
-                        </div>
+                        </div> */}
 
-                        <div className="flex items-center flex-wrap gap-2">
+                        {/* <div className="flex items-center flex-wrap gap-2">
                           {item.member_capacity && (
                             <p>Upto {item.member_capacity} guests</p>
                           )}
@@ -653,13 +574,13 @@ function DestinationsDetails() {
                                 : "bath room"}
                             </div>
                           )}
-                        </div>
+                        </div> */}
 
                         {item.amenities && item.amenities.length > 0 && (
                           <div>
-                            <div className="border-b border-[#BABABA]"></div>
+                            {/* <div className="border-b border-[#BABABA]"></div> */}
 
-                            <div className="flex justify-start mt-3 gap-1 md:gap-3 flex-wrap items-start">
+                            <div className="flex  mt-3 gap-2 flex-wrap items-start">
                               {/* {item.amenities
                                 .slice(0, 2)
                                 .map((amenity, index) => ( */}
@@ -668,7 +589,7 @@ function DestinationsDetails() {
                                 .map((amenity, index) => (
                                   <div
                                     key={index}
-                                    className="flex flex-col w-20 flex-wrap"
+                                    className="flex flex-col gap-1 justify-center items-center w-20 flex-wrap"
                                   >
                                     <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
                                       <img
@@ -676,7 +597,7 @@ function DestinationsDetails() {
                                         alt=""
                                       />
                                     </span>
-                                    <p className="text-gray-500 flex-wrap text-xs">
+                                    <p className="text-gray-500 text-center flex-wrap text-xs ">
                                       {amenity.amenity_name}
                                     </p>
                                   </div>
@@ -691,14 +612,14 @@ function DestinationsDetails() {
                                 // </span>
                                 <div
                                   key={index}
-                                  className="flex flex-col w-20 flex-wrap"
+                                  className="flex flex-col gap-1 justify-center w-20 items-center flex-wrap"
                                 >
                                   <span className=" bg-sky-700 p-2 w-9 h-9  rounded-full">
                                     <p className="text-white text-xs mx-auto">
                                       +{item.amenities.length - 3}
                                     </p>
                                   </span>
-                                  <p className="text-sky-700 flex-wrap text-xs">
+                                  <p className="text-sky-700 flex-wrap text-xs w-fit">
                                     More
                                   </p>
                                 </div>
@@ -708,13 +629,14 @@ function DestinationsDetails() {
                         )}
                       </div>
 
-                      <div className="flex flex-wrap bg-white flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]  px-3 py-2 ">
-                        <div className="flex flex-row lg:flex-col gap-3 items-center justify-center">
+                      <div className="flex flex-wrap bg-white flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]  px-2 md:px-3 py-2 ">
+                        <div className="flex flex-row lg:flex-col gap-1 sm:gap-3 items-center justify-center">
                           <p className="text-[#001031] text-sm md:text-base text-center mx-auto ">
                             Starting From{" "}
                           </p>
-                          <p className="font-bold text-green-700 text-xl mx-auto">
-                            ₹{item.pricing[0]}
+                          <p className="font-bold text-green-700 text-lg sm:text-xl mx-auto">
+                            {/* ₹{item.pricing[0]} */}₹
+                            {Number(item.pricing[0]).toLocaleString("en-IN")}
                           </p>
                         </div>
 
@@ -729,9 +651,9 @@ function DestinationsDetails() {
 
                         <div
                           onClick={() => handleCardClick(item.id, item.title)}
-                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1 lg:py-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md hover:brightness-110"
+                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-2 sm:px-4 lg:px-4.5 py-1 lg:py-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md hover:brightness-110"
                         >
-                          <p className="text-white font-medium md:text-xl text-center">
+                          <p className="text-white md:font-medium md:text-xl text-center">
                             View Detail
                           </p>
                           {/* <FaArrowRight className="text-white h-full" /> */}
@@ -757,10 +679,10 @@ function DestinationsDetails() {
                         <li key={i + 1} className="relative">
                           <button
                             onClick={() => paginate(i + 1)}
-                            className={`px-4 py-2 border-2 rounded-full text-black ${
+                            className={`px-4 py-2 border-2 rounded text-black ${
                               currentPage === i + 1
                                 ? "bg-sky-700 border-sky-700 text-white"
-                                : "hover:bg-sky-600 hover:border-sky-600"
+                                : "hover:bg-sky-700 hover:border-sky-700"
                             }`}
                           >
                             {i + 1}
@@ -774,86 +696,85 @@ function DestinationsDetails() {
             </div>
 
             {/* Main Section > Sidebar */}
-            {currentItems.length > 0 && (
-              <div className="mt-20  sticky top-5 h-fit flex flex-col gap-4  max-lg:hidden  basis-[24%] ">
-                <div className="flex flex-col gap-3 items-center  py-5 px-5 shadow-md shadow-black/10 rounded-xl">
-                  <p className="font-bold text-xl font-mulish">
-                    Any Questions ?
+            <div className="mt-10 lg:mt-20  sticky top-5 h-fit flex-grow flex flex-col md:flex-row xl:flex-col gap-4   xl:basis-[24%] ">
+          
+              <div className="flex w-full md:w-1/2 xl:w-auto flex-col gap-3 items-center flex-grow  py-5 px-5 shadow-md shadow-black/10 rounded-xl">
+                <p className="font-bold md:font-bold text-xl font-mulish">
+                  Any Questions ?
+                </p>
+                <p className="text-[#646464] font-medium font-mulish text-center">
+                  let our expert suggest the best for you!
+                </p>
+
+                <div class="h-[1.5px] w-full bg-gradient-to-r from-gray-300 via-gray-500 to-gray-300 rounded-full"></div>
+
+                <div
+                  onClick={() => window.open("https://wa.me/6384131642")}
+                  className="cursor-pointer border-2 rounded-xl border-[#00A64D] transition-all duration-300 transform  hover:shadow-md hover:scale-105 flex gap-2 items-center px-5 py-1 w-48"
+                >
+                  <img
+                    src={whatsapp}
+                    className="h-10 w-10  transition-all duration-500"
+                  />
+                  <p className="text-[#2D2D2D] font-semibold md:font-bold font-mulish">
+                    Whatsapp
                   </p>
-                  <p className="text-[#646464] font-medium font-mulish text-center">
-                    let our expert suggest the best for you!
-                  </p>
-
-                  <div class="h-[1.5px] w-full bg-gradient-to-r from-gray-300 via-gray-500 to-gray-300 rounded-full"></div>
-
-                  <div
-                    onClick={() => window.open("https://wa.me/6384131642")}
-                    className="cursor-pointer border-2 rounded-xl border-[#00A64D] transition-all duration-300 transform  hover:shadow-md hover:scale-105 flex gap-2 items-center px-5 py-1 w-48"
-                  >
-                    <img
-                      src={whatsapp}
-                      className="h-10 w-10  transition-all duration-500"
-                    />
-                    <p className="text-[#2D2D2D] font-bold font-mulish">
-                      Whatsapp
-                    </p>
-                  </div>
-
-                  <div
-                    onClick={() => {
-                      window.scrollTo(0, 0);
-                      navigate("/sendenquiry");
-                    }}
-                    className="cursor-pointer border-2 rounded-xl border-[#EC3B63] flex items-center gap-4 px-5 py-2 w-48 transition-all duration-300 transform  hover:shadow-md hover:scale-105"
-                  >
-                    <img
-                      src={sendEnquiry}
-                      className="h-8 w-7  transition-all duration-500"
-                    />
-                    <p className="text-[#2D2D2D] font-bold font-mulish">
-                      Send Enquiry
-                    </p>
-                  </div>
                 </div>
 
-                <div className="shadow-md mt-5  bg-white py-4  shadow-black/10 rounded-xl">
-                  <div className="flex gap-4  ms-3 text-lg">
-                    <p className="text-sky-800">|</p>
-                    <p className="font-semibold">Book With Confidence</p>
+                <div
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                    navigate("/sendenquiry");
+                  }}
+                  className="cursor-pointer border-2 rounded-xl border-[#EC3B63] flex items-center gap-4 px-5 py-2 w-48 transition-all duration-300 transform  hover:shadow-md hover:scale-105"
+                >
+                  <img
+                    src={sendEnquiry}
+                    className="h-8 w-7  transition-all duration-500"
+                  />
+                  <p className="text-[#2D2D2D] font-semibold md:font-bold font-mulish">
+                    Customization Enquiry
+                  </p>
+                </div>
+              </div>
+
+              <div className="shadow-md w-full md:w-1/2 xl:w-auto mt-5  bg-white py-4 flex-grow flex flex-col items-center  shadow-black/10 rounded-xl">
+              <div className="flex gap-4  w-full lg:justify-center ms-3 text-lg">
+                <p className="text-sky-800">|</p>
+                <p className="font-semibold">Book With Confidence</p>
+              </div>
+
+                <div className="flex flex-wrap  items-start  justify-between lg:flex-col  px-5 pt-5   gap-y-4 gap-2">
+                  <div className="flex gap-4 items-center">
+                    <img src={customerservice} alt="" />
+                    <p className="text-sm font-medium text-[#44454F]">
+                      Customer care available 24/7
+                    </p>
                   </div>
 
-                  <div className="flex flex-wrap  items-start  justify-between md:flex-col  px-5 pt-5   gap-y-4 gap-2">
-                    <div className="flex gap-4 items-center">
-                      <img src={customerservice} alt="" />
-                      <p className="text-sm font-medium text-[#44454F]">
-                        Customer care available 24/7
-                      </p>
-                    </div>
+                  <div className="flex gap-4 items-center">
+                    <img src={approve} alt="" />
+                    <p className="text-sm font-medium text-[#44454F]">
+                      Hand-picked Tours & Activities
+                    </p>
+                  </div>
 
-                    <div className="flex gap-4 items-center">
-                      <img src={approve} alt="" />
-                      <p className="text-sm font-medium text-[#44454F]">
-                        Hand-picked Tours & Activities
-                      </p>
-                    </div>
+                  <div className="flex gap-4 items-center">
+                    <img src={insurance} alt="" />
+                    <p className="text-sm font-medium text-[#44454F]">
+                      Women-Friendly Environments
+                    </p>
+                  </div>
 
-                    <div className="flex gap-4 items-center">
-                      <img src={insurance} alt="" />
-                      <p className="text-sm font-medium text-[#44454F]">
-                        Women-Friendly Environments
-                      </p>
-                    </div>
-
-                    <div className="flex gap-4 items-center">
-                      <img src={pricetag} alt="" />
-                      <p className="text-sm font-medium text-[#44454F]">
-                        No-hassle best price guarantee
-                      </p>
-                    </div>
+                  <div className="flex gap-4 items-center">
+                    <img src={pricetag} alt="" />
+                    <p className="text-sm font-medium text-[#44454F]">
+                      No-hassle best price guarantee
+                    </p>
                   </div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
 

@@ -10,8 +10,10 @@ import axios from "axios";
 // import { Helmet } from "react-helmet";
 // import { Helmet } from "react-helmet-async";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { BsHighlights } from "react-icons/bs";
 
 function Hero({
+  handlehighlightsScroll,
   handleInformationScroll,
   handleTourPlanningScroll,
   handleLocationShareScroll,
@@ -29,7 +31,7 @@ function Hero({
 
   useEffect(() => {
     const pathName = window.location.pathname;
-    const slicedPathName = pathName.slice(1, 3);
+    const slicedPathName = window.location.pathname.split("/")[1];
 
     const fetchProgramData = async () => {
       try {
@@ -115,8 +117,24 @@ function Hero({
         />
       )}
 
-      <div className="absolute  bg-white  -bottom-9 left-1/2 -translate-x-1/2 flex flex-wrap  gap-2 justify-start  md:justify-between rounded-3xl lg:rounded-full px-3 py-3 md:py-4  w-full md:w-11/12 lg:w-4/5 items-center shadow-lg shadow-black/10">
-        {" "}
+      <div className="absolute  bg-white  -bottom-9 left-1/2 -translate-x-1/2 flex flex-wrap  gap-2 justify-start  md:justify-between rounded-3xl lg:rounded-full px-5 md:px-10 py-3 md:py-4  w-full md:w-11/12 lg:w-4/5 items-center shadow-lg shadow-black/10">
+        <div
+          onClick={handlehighlightsScroll}
+          className="flex flex-grow cursor-pointer  gap-2 md:gap-3   py-1  items-center  md:justify-center"
+        >
+          <BsHighlights className="h-6 w-6 md:h-8 md:w-8 text-[#0F5B92]" />
+
+          <p className="text-sm md:text-base font-semibold">Highlights</p>
+        </div>
+
+        <div
+          onClick={handleTourPlanningScroll}
+          className="flex flex-grow cursor-pointer   py-1  gap-2 md:gap-3 items-center  md:justify-center"
+        >
+          <img src={vector2} alt="" className="object-contain h-6 md:h-8" />
+          <p className="text-sm md:text-base  font-semibold">Tour Planning</p>
+        </div>
+
         <div
           onClick={handleInformationScroll}
           className="flex flex-grow cursor-pointer  gap-2 md:gap-3   py-1  items-center  md:justify-center"
@@ -128,24 +146,17 @@ function Hero({
           />
           <p className="text-sm md:text-base font-semibold">Notes</p>
         </div>
-        <div
-          onClick={handleTourPlanningScroll}
-          className="flex flex-grow cursor-pointer   py-1  gap-2 md:gap-3 items-center  md:justify-center"
-        >
-          <img src={vector2} alt="" className="object-contain h-6 md:h-8" />
-          <p className="text-sm md:text-base  font-semibold">Tour Planning</p>
-        </div>
+
         {apiData.google_map && (
-          <div
-            onClick={handleLocationShareScroll}
-            className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
-          >
-            <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
-            <p className="text-sm md:text-base  font-semibold">
-              Location Share
-            </p>
-          </div>
-        )}
+        <div
+          onClick={handleLocationShareScroll}
+          className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
+        >
+          <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
+          <p className="text-sm md:text-base  font-semibold">Location Share</p>
+        </div>
+         )} 
+
         {apiData.review_count > 0 && (
           <div
             onClick={reviewRefScroll}

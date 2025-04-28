@@ -55,7 +55,6 @@ const SendEnquiryForm = () => {
   const [reference_id, setReferenceId] = useState("");
   const [userId, setUserId] = useState("");
   const [childAge, setChildAge] = useState([]);
-  
 
   useEffect(() => {
     const storedReferenceId = sessionStorage.getItem("reference_id");
@@ -671,8 +670,11 @@ const SendEnquiryForm = () => {
               {/* Submit Button */}
               <div className="text-center pt-7 ">
                 <button
+                  disabled={loading}
                   type="submit"
-                  className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+                  className={` ${
+                    loading ? "bg-gray-400" : "bg-blue-600"
+                  } text-white py-2 px-4 rounded hover:bg-blue-700`}
                 >
                   Send me Details
                 </button>

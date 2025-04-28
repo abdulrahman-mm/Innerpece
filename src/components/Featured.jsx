@@ -74,7 +74,7 @@ function Featured() {
   };
 
   const pathName = window.location.pathname;
-  const slicedPathName = pathName.slice(1, 3);
+  const slicedPathName = window.location.pathname.split("/")[1];
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -129,11 +129,12 @@ function Featured() {
     fetchProgramData();
   }, []);
   
+  
 
   return (
     <div className="mt-20 md:mt-28  mx-3 md:mx-10   xl:mx-20 ">
       <div className="flex flex-wrap flex-col items-start justify-between gap-4">
-        <span className="bg-red-500  text-white px-2">Featured</span>
+        {/* <span className="bg-red-500  text-white px-2">Featured</span> */}
         <p className="font-semibold text-2xl md:text-4xl">{apiData.title}</p>
 
         <div className="flex flex-wrap gap-5">
@@ -148,7 +149,7 @@ function Featured() {
           )}
 
           {apiData.current_location && (
-            <div className="flex items-center flex-wrap gap-1">
+            <div className="flex items-center  gap-1">
               <img src={locationimg} alt="" className="object-contain" />
               {/* <p className="text-gray-600">{apiData.current_location}</p> */}
 
@@ -208,7 +209,7 @@ function Featured() {
                 className="flex items-center cursor-pointer border-2 hover:bg-red-500  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200  rounded-full p-2 gap-2 px-3"
                 onClick={() => handleWishlistClick(id)}
               >
-                {isWishlisted ? <IoHeartSharp /> : <IoHeartOutline />}
+                {isWishlisted ? <IoHeartSharp className="text-red-300"/> : <IoHeartOutline />}
                 <p>WishList</p>
               </div>
             </div>

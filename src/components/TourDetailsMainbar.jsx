@@ -9,8 +9,12 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
+import default_user_image from "../assets/default_user_image.png";
+import default_user_image2 from "../assets/default_user_image_2.jpg";
+import { GoDotFill } from "react-icons/go";
+import { LuDot } from "react-icons/lu";
 
-function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
+function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
   const location = useLocation();
   let navigate = useNavigate();
   const { id } = location.state || {};
@@ -31,7 +35,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
   const [loginCliked, setLoginClicked] = useState(false);
 
   const pathName = window.location.pathname;
-  const slicedPathName = pathName.slice(1, 3);
+  const slicedPathName = window.location.pathname.split("/")[1];
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -54,6 +58,13 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         );
 
         setApiData(response.data.data);
+
+        const cleanedText = response.data.data.important_info
+          .split("·") // Split by bullet point
+          .map((line) => line.replace(/\s+/g, " ").trim()) // Remove extra spaces and trim
+          .filter(Boolean) // Remove empty lines
+          .map((line) => `· ${line}`) // Re-add clean bullets
+          .join("\n");
 
         // setIsWishlisted(response.data.data.wishlists);
         setLoading(false);
@@ -326,94 +337,130 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
     );
   };
 
-  // const [reviewScrollRef, setReviewScrollRef] = useState("");
-  
-  //   useEffect(() => {
-  //     const handleResize = () => {
-  //       window.innerWidth > 1024 ? setReviewScrollRef(reviewRef) : "";
-  //     };
-  
-  //     handleResize();
-  
-  //     // Event listener
-  //     window.addEventListener("resize", handleResize);
-  
-  //     // Cleanup
-  //     return () => window.removeEventListener("resize", handleResize);
-  //   }, []);
-  
+  function cleanBulletText(rawText) {
+    return rawText
+      .split("·")
+      .map((line) => line.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .map((line, index) => (
+        <div key={index} className="flex items-start gap-4  ">
+          <div>
+            <GoDotFill size={12} className=" text-black inline " />
+            <span className="md:leading-7 ms-3   text-[#4B4B4B] ">{line}</span>
+          </div>
+        </div>
+      ));
+  }
+
+  // const cleanHTML = (dirty) => {
+  //   const sanitized = DOMPurify.sanitize(dirty, {
+  //     FORBID_TAGS: ["style"],
+  //     FORBID_ATTR: ["style"],
+  //   });
+  //   return sanitized.replace(/&nbsp;/g, " ");
+  // };
+
+  // const cleanHTML = (htmlString) => {
+  //   const sanitizedHTML = DOMPurify.sanitize(htmlString);
+
+  //   return sanitizedHTML // ensures it's always a string
+  //   .replace(/<span[^>]*>|<\/span>/gi, "")                // Remove span tags
+  //   .replace(/<o:p>|<\/o:p>/gi, "")                       // Remove Word-specific tags
+  //   .replace(/style="[^"]*"/gi, "")                       // Remove inline styles
+  //   .replace(/&nbsp;/gi, " ")                             // Replace non-breaking spaces
+  //   .replace(/·\s*/g, "</li><li>")                        // Convert bullets to <li>
+  //   .replace(/<p[^>]*>/gi, "")                            // Remove <p> tags
+  //   .replace(/<\/p>/gi, "")                               // Remove </p> tags
+  //   .replace(/<\/li><li>/, "<ul><li>")                    // Start the <ul>
+  //   .concat("</li></ul>");                         // Remove multiple spaces
+  // };
+
+  const cleanHTML = (htmlString) => {
+    const sanitizedHTML = DOMPurify.sanitize(htmlString);
+
+    const cleaned = sanitizedHTML
+      .replace(/<span[^>]*>|<\/span>/gi, "")
+      .replace(/<o:p>|<\/o:p>/gi, "")
+      .replace(/style="[^"]*"/gi, "")
+      .replace(/&nbsp;/gi, " ")
+      .replace(/<p[^>]*>/gi, "")
+      .replace(/<\/p>/gi, "")
+      .replace(/·\s*/g, "<li>") // convert bullets to list items
+      .trim();
+
+    return cleaned;
+  };
 
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
-      {loading ? (
-        <div className="object-cover mt-3 flex-shrink h-96  w-full bg-gray-500 animate-pulse"></div>
-      ) : (
-        apiData &&
-        apiData.gallery_img && (
-          <Carousel
-            swipeable={true}
-            draggable={true}
-            pauseOnHover={false}
-            responsive={{
-              superLargeDesktop: {
-                breakpoint: { max: 4000, min: 1441 },
-                items: 1,
-              },
-              desktop: {
-                breakpoint: { max: 1440, min: 1024 },
-                items: 1,
-              },
-              tablet: {
-                breakpoint: { max: 1024, min: 640 },
-                items: 1,
-              },
-              mobile: {
-                breakpoint: { max: 640, min: 0 },
-                items: 1,
-              },
-            }}
-            infinite={true}
-            autoPlay={true}
-            autoPlaySpeed={5000}
-            arrows={true}
-            keyBoardControl={true}
-            transitionDuration={1000}
-            containerClass="carousel-container mx-auto z-0 w-full object-cover rounded-xl mt-5"
-            itemClass="carousel-item-padding-40-px block shadow-lg   object-cover shadow-black/10 "
-          >
-            {apiData.gallery_img.map((item, index) => (
-              <div key={item.id || index} className="overflow-hidden">
-                <img
-                  src={
-                    item
-                      ? `https://backoffice.innerpece.com/${item}`
-                      : defaultimage
-                  }
-                  alt={`Gallery Image ${index + 1}`}
-                  className="h-[30vh]  lg:h-[440px] w-full object-cover "
-                />
-              </div>
-            ))}
-          </Carousel>
-        )
+      {apiData && apiData.gallery_img && (
+        <Carousel
+          swipeable={true}
+          draggable={true}
+          pauseOnHover={false}
+          responsive={{
+            superLargeDesktop: {
+              breakpoint: { max: 4000, min: 1441 },
+              items: 1,
+            },
+            desktop: {
+              breakpoint: { max: 1440, min: 1024 },
+              items: 1,
+            },
+            tablet: {
+              breakpoint: { max: 1024, min: 640 },
+              items: 1,
+            },
+            mobile: {
+              breakpoint: { max: 640, min: 0 },
+              items: 1,
+            },
+          }}
+          infinite={true}
+          autoPlay={true}
+          autoPlaySpeed={5000}
+          arrows={true}
+          keyBoardControl={true}
+          transitionDuration={1000}
+          containerClass="carousel-container mx-auto z-0 w-full object-cover rounded-xl mt-5"
+          itemClass="carousel-item-padding-40-px block shadow-lg   object-cover shadow-black/10 "
+        >
+          {apiData.gallery_img.map((item, index) => (
+            <div key={item.id || index} className="overflow-hidden">
+              <img
+                src={
+                  item
+                    ? `https://backoffice.innerpece.com/${item}`
+                    : defaultimage
+                }
+                alt={`Gallery Image ${index + 1}`}
+                className="h-[30vh]  lg:h-[440px] w-full object-cover "
+              />
+            </div>
+          ))}
+        </Carousel>
       )}
 
-      <div className="flex gap-2 mt-8">
-        <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-        <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
-          Highlights
-        </p>
-      </div>
+      {apiData.program_desc && (
+        <>
+          <div ref={highlightsRef} className="flex gap-2 mt-8 md:mt-10 items-center">
+            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+              Highlights
+            </p>
+          </div>
 
-      <p
-        className="mt-3 text-[#4B4B4B] "
-        dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
-      ></p>
+          <p
+            className=" mt-3 md:mt-5  "
+            dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
+          ></p>
+        </>
+      )}
 
       {apiData.tour_planning?.plan_description &&
         !apiData.tour_planning?.plan_description.includes("<p><br></p>") && (
           <div ref={TourPlanningRef} className="mt-8 md:mt-10">
-            <div className="flex gap-2 mt-8">
+            <div className="flex gap-2 mt-8 items-center">
               <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
               <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
                 Tour Planning
@@ -423,24 +470,22 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             {apiData.tour_planning.plan_description &&
               apiData.tour_planning.plan_description.length > 0 && ( // Check for presence and length
                 <div>
-                  <div className="mt-3">
+                  <div className="mt-3 md:mt-5">
                     {/* <p
                       dangerouslySetInnerHTML={{
-                        __html: apiData.tour_planning.plan_description,
+                        __html: apiData?.tour_planning?.plan_description || "",
                       }}
-                      className={`md:leading-7 text-[#11142D] ${apiData.tour_planning.plan_description.includes(
-                        "Day" && "font-bold"
-                      )} `}
-                    ></p> */}
+                      className="md:leading-7"
+                    /> */}
 
                     <p
                       dangerouslySetInnerHTML={{
-                        __html: formatPlanDescription(
+                        __html: cleanHTML(
                           apiData?.tour_planning?.plan_description
                         ),
                       }}
                       className="md:leading-7"
-                    ></p>
+                    />
                   </div>
                 </div>
               )}
@@ -449,15 +494,15 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
-          <div className="border-[1px] px-4 py-3 border-black/40 mt-8 md:mt-10 rounded-3xl">
-            <div className="flex gap-2 ">
+          <div className="mt-8 md:mt-10">
+            <div className="flex gap-2 items-center">
               <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
               <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
                 Amenities
               </p>
             </div>
 
-            <div className="flex flex-wrap flex-col  mt-5">
+            <div className="flex flex-wrap flex-col  mt-3 md:mt-5">
               <div className="flex  flex-wrap gap-3 md:gap-5">
                 {Object.keys(apiData.amenity_details).map((key, index) => {
                   const amenity = apiData.amenity_details[key];
@@ -469,7 +514,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                         // alt={amenity.amenity_name}
                         className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
-                      <p className=" text-gray-700">{amenity.amenity_name}</p>
+                      <p className="">{amenity.amenity_name}</p>
                     </div>
                   );
                 })}
@@ -477,21 +522,22 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             </div>
           </div>
         )}
+
       {apiData.foodBeverages &&
         Object.keys(apiData.foodBeverages).length > 0 && (
-          <div className="border-[1px] px-4 py-3   border-black/40 mt-8 md:mt-10 rounded-3xl">
+          <div className="    mt-8 md:mt-10 ">
             {/* <p className="font-semibold text-2xl">
               <span className="border-l-8 border-[#0E598F] me-4"></span> Food
               and Beverages{" "}
             </p> */}
-            <div className="flex gap-2 ">
+            <div className="flex gap-2 items-center">
               <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
               <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
                 Food and Beverages
               </p>
             </div>
 
-            <div className="flex  flex-wrap flex-col gap-5 mt-5">
+            <div className="flex  flex-wrap flex-col gap-5 mt-3 md:mt-5">
               <div className="flex  flex-wrap gap-3 md:gap-5">
                 {Object.keys(apiData.foodBeverages).map((key, index) => {
                   const foodBeverage = apiData.foodBeverages[key];
@@ -503,9 +549,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                         // alt={foodBeverage.food_beverage_pic}
                         className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
-                      <p className=" text-gray-700">
-                        {foodBeverage.food_beverage}
-                      </p>
+                      <p className=" ">{foodBeverage.food_beverage}</p>
                     </div>
                   );
                 })}
@@ -513,22 +557,21 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             </div>
           </div>
         )}
-
       {apiData.safety_features &&
         Object.keys(apiData.safety_features).length > 0 && (
-          <div className="border-[1px] px-4 py-3 w-50vw  border-black/40 mt-8 md:mt-10 rounded-3xl">
+          <div className="w-50vw  mt-8 md:mt-10 ">
             {/* <p className="font-semibold text-2xl">
               <span className="border-l-8 border-[#0E598F] me-4"></span> Safety
               Features
             </p> */}
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
               <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
                 Safety Features
               </p>
             </div>
 
-            <div className="flex flex-wrap flex-col gap-5 mt-5">
+            <div className="flex flex-wrap flex-col gap-5 mt-3 md:mt-5">
               <div className="flex flex-wrap gap-3 md:gap-5">
                 {Object.keys(apiData.safety_features).map((key, index) => {
                   const safety_features = apiData.safety_features[key];
@@ -539,9 +582,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
                         src={`https://backoffice.innerpece.com/${safety_features.safety_features_pic}`}
                         className="w-6 h-6 bg-cover md:w-7 md:h-7"
                       />
-                      <p className=" text-gray-700">
-                        {safety_features.safety_features}
-                      </p>
+                      <p className=" ">{safety_features.safety_features}</p>
                     </div>
                   );
                 })}
@@ -556,27 +597,27 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             <span className="border-l-8 border-[#0E598F] me-4"></span>{" "}
             Activities
           </p> */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
             <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
               Activities
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-start mt-5 gap-4">
+          <div className="flex flex-wrap justify-start mt-3 md:mt-5 gap-4">
             {Object.keys(apiData.activities).map((key, index) => {
               const activities = apiData.activities[key];
 
               return (
                 <div
-                  className="flex flex-col justify-start  items-start border-[1px] gap-3 w-32 md:w-40  border-black/40 p-3 rounded-3xl py-3  "
+                  className="flex flex-col justify-start  items-start border-[1px] gap-3 w-32 md:w-40  border-black/40 p-3 rounded-xl py-3  "
                   key={index}
                 >
                   <img
                     src={`https://backoffice.innerpece.com/${activities.activities_pic}`}
                     className="w-6 h-6 bg-cover md:w-7 md:h-7"
                   />
-                  <p className=" text-gray-700">{activities.activities}</p>
+                  <p className="">{activities.activities}</p>
                 </div>
               );
             })}
@@ -586,7 +627,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
       {apiData.payment_policy && (
         <div className="mt-8 md:mt-10  ">
-          <div className="flex gap-2 mt-8">
+          <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
             <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
               Payment Policy
@@ -594,11 +635,11 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           </div>
 
           {apiData.payment_policy.length > 0 && (
-            <div className="flex flex-col mt-5 gap-2">
+            <div className="flex flex-col mt-3 md:mt-5">
               {apiData.payment_policy.map((item, index) => (
-                <p key={index} className="text-[#11142D]">
-                  <span className="pe-2">{index + 1}.</span>
-                  {item}
+                <p key={index} className=" ">
+                  <p className="inline font-bold text-xl h-fit pe-3">&bull;</p>
+                  <p className="inline   "> {item}</p>
                 </p>
               ))}
             </div>
@@ -606,9 +647,9 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
         </div>
       )}
 
-      {apiData.important_info && (
+      {apiData.important_info && apiData.important_info !== "<br>" && (
         <div ref={informationRef} className="mt-8 md:mt-10   ">
-          <div className="flex gap-2 mt-8">
+          <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
             <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
               Notes
@@ -616,27 +657,36 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
           </div>
 
           <div>
-            <div
-              className="mt-5 md:leading-7  text-[#11142D] "
-              dangerouslySetInnerHTML={{ __html: apiData.important_info }}
-            />
+            <div className="mt-3 md:mt-5 md:leading-7  ">
+              {/* <p>{cleanBulletText(apiData.important_info)}</p> */}
+
+              <p
+                className=""
+                dangerouslySetInnerHTML={{
+                  __html: cleanHTML(apiData.important_info),
+                }}
+              />
+            </div>
           </div>
         </div>
       )}
 
       {apiData.program_inclusion && (
         <div className="mt-8 md:mt-10   ">
-          <div className="flex gap-2 mt-8">
+          <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
             <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
               Package Inclusion
             </p>
           </div>
 
-          <div>
-            <div
-              className="mt-5 md:leading-7  text-[#11142D] "
-              dangerouslySetInnerHTML={{ __html: apiData.program_inclusion }}
+          <div className="mt-3 md:mt-5 md:leading-7  ">
+            {/* <p>{cleanBulletText(apiData.program_inclusion)}</p> */}
+            <p
+              className=""
+              dangerouslySetInnerHTML={{
+                __html: cleanHTML(apiData.program_inclusion),
+              }}
             />
           </div>
         </div>
@@ -644,17 +694,20 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
       {apiData.program_exclusion && (
         <div className="mt-8 md:mt-10   ">
-          <div className="flex gap-2 mt-8">
+          <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
             <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
               Package Exclusion
             </p>
           </div>
 
-          <div>
-            <div
-              className="mt-5 md:leading-7  text-[#11142D] "
-              dangerouslySetInnerHTML={{ __html: apiData.program_exclusion }}
+          <div className="mt-3 md:mt-5 md:leading-7  ">
+            {/* <p>{cleanBulletText(apiData.program_exclusion)}</p> */}
+            <p
+              className=""
+              dangerouslySetInnerHTML={{
+                __html: cleanHTML(apiData.program_exclusion),
+              }}
             />
           </div>
         </div>
@@ -662,10 +715,6 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
       <div ref={reviewRef} className="mt-8 md:mt-10 max-lg:hidden">
         <div className="flex flex-wrap flex-col justify-start ">
-          {/* <p className="font-semibold text-xl md:text-2xl">
-              <span className="border-l-8 border-[#0E598F] me-4"></span>{" "}
-              Client's Review
-            </p> */}
           <div className="flex gap-2 ">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
             <p className="font-semibold text-2xl  text-[#11142D]">
@@ -673,7 +722,7 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             </p>
           </div>
 
-          <div className="border max-lg:hidden border-gray-500 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-5">
+          <div className="border max-lg:hidden border-gray-500 flex  flex-col gap-2 rounded-xl ps-5 pe-3 py-3 mt-3 md:mt-5">
             <div className="flex ">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
@@ -785,8 +834,8 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
             )} */}
 
           {apiData?.reviews?.length > 0 && (
-            <div  className="mt-5 overflow-y-auto">
-              <div className="flex flex-col gap-5">
+            <div className="mt-5 overflow-y-auto">
+              <div className="flex flex-col-reverse gap-5">
                 {currentReviews.map((item, index) => (
                   <div key={index} className=" bg-gray-100 p-4 rounded-xl">
                     <div className="flex flex-col gap-1">
@@ -818,12 +867,16 @@ function Mainbar({ informationRef, TourPlanningRef, reviewRef }) {
 
                       <div className="flex items-center gap-3">
                         <img
-                          src={`https://backoffice.innerpece.com/${item.profile_image}`}
+                          src={`${
+                            item.profile_image
+                              ? `https://backoffice.innerpece.com/${item.profile_image}`
+                              : default_user_image2
+                          }`}
                           alt="Profile"
                           className="w-[40px] h-[40px] object-cover rounded-full border-2 border-gray-300"
                         />
-                        <p className="font-medium text-lg md:text-xl text-gray-800">
-                          {item.first_name}
+                        <p className="font-medium text-gray-800">
+                          {item.first_name} {item.last_name}
                         </p>
                       </div>
                     </div>

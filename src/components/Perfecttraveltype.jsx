@@ -137,17 +137,17 @@ const Perfecttraveltype = () => {
         <p className="text-[#000000] text-2xl md:text-3xl lg:text-4xl">
           Choose Your
         </p>
-        <p className="text-[#0E598F] font-bold md:font-extrabold text-2xl md:text-3xl lg:text-4xl">
+        <p className="text-[#0E598F] font-bold md:font-semibold lg:font-extrabold text-2xl md:text-3xl lg:text-4xl">
           Perfect Travel Type
         </p>
-        <p className="text-[#000000] text-sm md:text-lg mt-3">
+        <p className="text-[#000000] text-base lg:text-lg mt-3">
           We Have Abundance Of Destinations And Activities List For You To
           Explore.
         </p>
       </div>
 
       {/* Carousel Section */}
-      <div className="w-full md:w-2/3 rounded-xl ">
+      <div className="w-full md:w-2/3 h-full rounded-xl ">
         <Carousel
           responsive={{
             superLargeDesktop: {

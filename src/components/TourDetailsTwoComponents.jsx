@@ -4,6 +4,7 @@ import TourDetailsSidebar from "../components/TourDetailsSidebar";
 import { useState, useEffect } from "react";
 
 function TwoComponents({
+  highlightsRef,
   LocationShareRef,
   informationRef,
   TourPlanningRef,
@@ -15,7 +16,7 @@ function TwoComponents({
   useEffect(() => {
     const handleResize = () => {
       // window.innerWidth > 1024 ? setReviewScrollRef(reviewRef) : "";
-      setWindowSize(window.innerWidth)
+      setWindowSize(window.innerWidth);
     };
 
     handleResize();
@@ -27,12 +28,10 @@ function TwoComponents({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log("windowSize",windowSize);
-  
-
   return (
     <div className="flex bg-[#FEFEFE] gap-8 md:gap-12  flex-col justify-between lg:flex-row bg-gray-50/10 mx-3 md:mx-10   xl:mx-20  items-start font-mulish">
       <TourDetailsMainbar
+      highlightsRef={highlightsRef}
         informationRef={informationRef}
         TourPlanningRef={TourPlanningRef}
         reviewRef={windowSize >= 1024 ? reviewRef : dummyRef}
