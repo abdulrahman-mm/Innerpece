@@ -19,7 +19,6 @@ import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
 
 function Programs() {
-  // const [isLoading, setIsLoading] = useState(true); // Loading state
 
   useEffect(() => {
     document.title = "Program Details - Innerpece";
@@ -28,8 +27,6 @@ function Programs() {
   const location = useLocation();
   let navigate = useNavigate();
   const { id, themes_name } = location.state || {};
-
-  console.log("themename", themes_name);
 
   const [apiData, setApiData] = useState([]);
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);

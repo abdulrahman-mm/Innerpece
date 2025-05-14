@@ -16,7 +16,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaSquarePhone } from "react-icons/fa6";
 
-function Footer() {
+function Footer({className}) {
   const [footerContent, setFooterContent] = useState("");
   let navigator = useNavigate();
 
@@ -255,7 +255,7 @@ function Footer() {
             </p>
           </div> */}
 
-          <div className="flex flex-wrap gap-8 items-center justify-between ">
+          <div className={`flex flex-wrap gap-8 items-center justify-between ${className}`}>
             <p className="text-xs md:text-sm text-white ">
               {footerContent.copyright}
             </p>

@@ -78,15 +78,13 @@ const Blogs = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const SkeletonCard = () => (
-    <div className=" max-sm:hidden mx-2 h-[260px] md:h-[280px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
+  const SkeletonCard = ({index}) => (
+    <div key={index} className="max-sm:hidden mx-2 h-[260px] md:h-[280px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
   );
 
-  const SkeletonCarouselCard = () => (
-    <div className="w-[90vw] sm:w-[70vw] mx-auto h-[280px] sm:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
+  const SkeletonCarouselCard = ({index}) => (
+    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-[280px] sm:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
   );
-
-  console.log("apidata", apiData);
 
   // const imageUrl = post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? defaultimg;
 
@@ -103,7 +101,7 @@ const Blogs = () => {
             {Array(skeltonArrayLength)
               .fill(0)
               .map((_, index) => (
-                <SkeletonCard />
+                <SkeletonCard key={index} />
               ))}
           </div>
           {/* <div className="flex items-center flex-1 w-full  mt-5  flex-grow flex-wrap justify-center "> */}
@@ -111,7 +109,7 @@ const Blogs = () => {
             {Array(1)
               .fill(0)
               .map((_, index) => (
-                <SkeletonCarouselCard />
+                <SkeletonCarouselCard key={index} />
               ))}
           </div>
         </div>
@@ -179,65 +177,65 @@ const Blogs = () => {
             </div>
           )} */}
 
-{apiData && apiData.length > 0 && (
-  <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16 md:mt-16">
-    <p className="text-2xl md:text-3xl lg:text-4xl leading-loose text-[#141414]">
-      <span className="font-jost font-medium">Our </span>
-      <span className="font-jost font-bold">Blog</span>
-    </p>
+          {apiData && apiData.length > 0 && (
+            <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16 md:mt-16">
+              <p className="text-2xl md:text-3xl lg:text-4xl leading-loose text-[#141414]">
+                <span className="font-jost font-medium">Our </span>
+                <span className="font-jost font-bold">Blog</span>
+              </p>
 
-    <Carousel
-      responsive={responsive}
-      swipeable
-      draggable
-      showDots={false}
-      infinite
-      autoPlay
-      autoPlaySpeed={3000}
-      keyBoardControl
-      transitionDuration={500}
-      containerClass="carousel-container"
-      removeArrowOnDeviceType={["tablet", "mobile"]}
-      itemClass="flex gap-5 justify-center pb-2 px-2 mt-8 md:mt-10 rounded-2xl"
-    >
-      {apiData?.map((post, index) => {
-        const imageUrl =
-          post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? defaultimg;
+              <Carousel
+                responsive={responsive}
+                swipeable
+                draggable
+                showDots={false}
+                infinite
+                autoPlay
+                autoPlaySpeed={3000}
+                keyBoardControl
+                transitionDuration={500}
+                containerClass="carousel-container"
+                removeArrowOnDeviceType={["tablet", "mobile"]}
+                itemClass="flex gap-5 justify-center pb-2 px-2 mt-8 md:mt-10 rounded-2xl"
+              >
+                {apiData?.map((post, index) => {
+                  const imageUrl =
+                    post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ??
+                    defaultimg;
 
-        return (
-          <div
-            key={index}
-            className="flex flex-col bg-white group overflow-hidden transition-all duration-300 w-full rounded-2xl shadow-md"
-          >
-            <a
-              href={post?.link ?? "#"}
-              rel="noopener noreferrer"
-              className="flex-shrink-0 overflow-hidden"
-            >
-              <div className="h-48 overflow-hidden">
-                <img
-                  src={imageUrl}
-                  alt={post?.title?.rendered ?? "Blog Image"}
-                  className="w-full h-48 object-cover overflow-hidden transition-transform duration-500 ease-in-out transform group-hover:scale-105 rounded-t-2xl"
-                />
-              </div>
+                  return (
+                    <div
+                      key={index}
+                      className="flex flex-col bg-white group overflow-hidden transition-all duration-300 w-full rounded-2xl shadow-md"
+                    >
+                      <a
+                        href={post?.link ?? "#"}
+                        rel="noopener noreferrer"
+                        className="flex-shrink-0 overflow-hidden"
+                      >
+                        <div className="h-48 overflow-hidden">
+                          <img
+                            src={imageUrl}
+                            alt={post?.title?.rendered ?? "Blog Image"}
+                            className="w-full h-48 object-cover overflow-hidden transition-transform duration-500 ease-in-out transform group-hover:scale-105 rounded-t-2xl"
+                          />
+                        </div>
 
-              <div className="flex flex-col justify-between h-full p-4">
-                <h3
-                  className="text-[#000000] text-sm md:text-lg font-jost"
-                  dangerouslySetInnerHTML={{
-                    __html: post?.title?.rendered ?? "",
-                  }}
-                />
-              </div>
-            </a>
-          </div>
-        );
-      })}
-    </Carousel>
-  </div>
-)}
-
+                        <div className="flex flex-col justify-between h-full p-4">
+                          <h3
+                            className="text-[#000000] text-sm md:text-lg font-jost"
+                            dangerouslySetInnerHTML={{
+                              __html: post?.title?.rendered ?? "",
+                            }}
+                          />
+                        </div>
+                      </a>
+                    </div>
+                  );
+                })}
+              </Carousel>
+            </div>
+          )}
         </>
       )}
     </>

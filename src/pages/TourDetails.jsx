@@ -140,6 +140,8 @@ function TourDetails() {
     setUserId(localStorage.getItem("loginid"));
   }, [loginCliked]);
 
+  const slicedUserId = window.location.href.split("#")[1];
+
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
@@ -149,15 +151,34 @@ function TourDetails() {
           ? JSON.parse(storedUserDetails)
           : null;
 
-        const payload = {
+        const payload1 = {
           program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
 
-        const response = await axios.post(
-          "https://backoffice.innerpece.com/api/v1/get-program-details",
-          payload
-        );
+        const payload2 = {
+          program_id: slicedUserId,
+        };
+
+        const response = slicedUserId
+          ? await axios.post(
+              "https://backoffice.innerpece.com/api/v1/specific-program-details",
+              payload2
+            )
+          : await axios.post(
+              "https://backoffice.innerpece.com/api/v1/get-program-details",
+              payload1
+            );
+
+        // const payload = {
+        //   program_id: id ? id : slicedPathName,
+        //   user_id: userDetails?.id || null,
+        // };
+
+        // const response = await axios.post(
+        //   "https://backoffice.innerpece.com/api/v1/get-program-details",
+        //   payload
+        // );
         setApiData(response.data.data);
         setHomeImage(response.data.data.gallery_img);
 
@@ -392,29 +413,6 @@ function TourDetails() {
   }, [bookNowClicked, loginCliked]);
   return (
     <div className="bg-[#FEFEFE]">
-      {/* <div
-        onClick={() => window.open("https://wa.me/6384131642")}
-        className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
-      >
-        <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
-          <p>Whatsapp Enquiry</p>
-        </div>
-        <img
-          src={whatsapp}
-          className="h-10 w-10  transition-all duration-500"
-        />
-      </div> */}
-
-      {/* <div className="fixed md:hidden flex items-center justify-between px-5 py-1 bottom-0 w-full  bg-[#0E598F] z-10 ">
-        <div className="flex flex-col">
-          <p className="text-white text-sm">Starting from</p>
-          <p className="font-bold text-xl text-white">₹10000 <span className="text-xs font-normal">Per Person</span></p>
-        </div>
-
-        <button className="bg-white font-medium px-5  rounded-lg text-sm h-fit py-2 text-[#0E598F]">Book Now</button>
-
-      </div> */}
-
       <Suspense
         fallback={
           <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
@@ -1349,13 +1347,18 @@ function TourDetails() {
                           <span className="p-2">
                             <FaPeopleLine />
                           </span>
-                          <input
+                          {/* <input
                             type="text"
                             className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
                             id="Total Count"
                             name="Total Count"
                             value={`${selectedPackage} : ${priceSelected}`}
-                          />
+                          /> */}
+
+                           <div className="flex gap-2 p-2 border-l">
+                          <p>{selectedPackage} :</p>
+                          <p>₹ {Number(priceSelected).toLocaleString("en-IN")}</p>
+                        </div>
                         </div>
                       </div>
 
@@ -1531,7 +1534,7 @@ function TourDetails() {
           reviewRef={reviewRef}
           dummyRef={dummyRef}
         />
-        <Footer />
+        <Footer className="pb-20" />
       </Suspense>
     </div>
   );

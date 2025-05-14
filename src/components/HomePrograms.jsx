@@ -73,12 +73,12 @@ function Programs() {
     });
   };
 
-  const SkeletonCard = () => (
-    <div className=" max-md:hidden mx-3 h-[362px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
+  const SkeletonCard = ({index}) => (
+    <div key={index} className=" max-md:hidden mx-3 h-[362px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
   );
 
-  const SkeletonCarouselCard = () => (
-    <div className="w-[90vw] sm:w-[70vw] mx-auto h-60 md:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
+  const SkeletonCarouselCard = ({index}) => (
+    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-60 md:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
   );
 
   const responsive = {
@@ -147,7 +147,7 @@ function Programs() {
             {Array(skeltonArrayLength)
               .fill(0)
               .map((_, index) => (
-                <SkeletonCard />
+                <SkeletonCard key={index}/>
               ))}
           </div>
           {/* <div className="flex items-center flex-1 w-full  mt-5  flex-grow flex-wrap justify-center "> */}
@@ -156,7 +156,7 @@ function Programs() {
             {Array(1)
               .fill(0)
               .map((_, index) => (
-                  <SkeletonCarouselCard />
+                  <SkeletonCarouselCard key={index} />
               ))}
           </div>
         </div>

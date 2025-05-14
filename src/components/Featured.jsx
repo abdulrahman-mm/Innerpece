@@ -1,7 +1,5 @@
-import React from "react";
 import guests from "../assets/guests.png";
 import locationimg from "../assets/location.png";
-import share from "../assets/share.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -15,9 +13,7 @@ import {
   LinkedinIcon,
   WhatsappIcon,
 } from "react-share";
-import { MdDateRange } from "react-icons/md";
-import icons8InstagramLogo from "../assets/icons8-instagram-logo.svg";
-import { PiListHeartFill } from "react-icons/pi";
+
 
 function Featured() {
   const location = useLocation();
@@ -27,6 +23,7 @@ function Featured() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const currentUrl = window.location.href;
   const metaDescription = apiData?.program_desc || "";
+  const [userName, setUserName] = useState("");
 
   const handleWishlistClick = async () => {
     const loginDetails = JSON.parse(localStorage.getItem("loginDetails"));
@@ -73,8 +70,8 @@ function Featured() {
     }
   };
 
-  const pathName = window.location.pathname;
   const slicedPathName = window.location.pathname.split("/")[1];
+  const slicedUserId = window.location.href.split("#")[1];
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -85,56 +82,44 @@ function Featured() {
           ? JSON.parse(storedUserDetails)
           : null;
 
-        const payload = {
+        const payload1 = {
           program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
 
-        const response = await axios.post(
-          "https://backoffice.innerpece.com/api/v1/get-program-details",
-          payload
-        );
+        const payload2 = {
+          program_id: slicedUserId,
+        };
+
+        const response = slicedUserId
+          ? await axios.post(
+              "https://backoffice.innerpece.com/api/v1/specific-program-details",
+              payload2
+            )
+          : await axios.post(
+              "https://backoffice.innerpece.com/api/v1/get-program-details",
+              payload1
+            );
+
+        setApiData(response.data.data);
+        setUserName(response.data.data.name);
 
         setApiData(response.data.data);
         setIsWishlisted(response.data.data.wishlists);
-
-        // document.title = apiData.title || "Default Title";
-
-        // const metaOgTitle = document.querySelector("meta[property='og:title']");
-        // if (metaOgTitle) {
-        //   metaOgTitle.setAttribute("content", apiData.title || "Default Title");
-        // }
-
-        // const metaOgDescription = document.querySelector(
-        //   "meta[property='og:description']"
-        // );
-        // if (metaOgDescription) {
-        //   metaOgDescription.setAttribute(
-        //     "content",
-        //     apiData.program_desc || "Default description"
-        //   );
-        // }
-
-        // const metaOgImage = document.querySelector("meta[property='og:image']");
-        // if (metaOgImage) {
-        //   metaOgImage.setAttribute(
-        //     "content",
-        //     `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
-        //   );
-        // }
       } catch (err) {
         console.log(err);
       }
     };
     fetchProgramData();
   }, []);
-  
-  
 
   return (
     <div className="mt-20 md:mt-28  mx-3 md:mx-10   xl:mx-20 ">
-      <div className="flex flex-wrap flex-col items-start justify-between gap-4">
-        {/* <span className="bg-red-500  text-white px-2">Featured</span> */}
+      <div className="flex flex-wrap flex-col items-start justify-between gap-2">
+        {userName && (
+          <p className="font-medium text-lg font-jakarta bg-gradient-to-r from-[#0E598F] to-[#041A29] text-transparent bg-clip-text ">{`Welcome, ${userName}`}</p>
+        )}
+
         <p className="font-semibold text-2xl md:text-4xl">{apiData.title}</p>
 
         <div className="flex flex-wrap gap-5">
@@ -209,7 +194,11 @@ function Featured() {
                 className="flex items-center cursor-pointer border-2 hover:bg-red-500  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200  rounded-full p-2 gap-2 px-3"
                 onClick={() => handleWishlistClick(id)}
               >
-                {isWishlisted ? <IoHeartSharp className="text-red-300"/> : <IoHeartOutline />}
+                {isWishlisted ? (
+                  <IoHeartSharp className="text-red-300" />
+                ) : (
+                  <IoHeartOutline />
+                )}
                 <p>WishList</p>
               </div>
             </div>

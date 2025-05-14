@@ -14,7 +14,12 @@ import default_user_image2 from "../assets/default_user_image_2.jpg";
 import { GoDotFill } from "react-icons/go";
 import { LuDot } from "react-icons/lu";
 
-function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
+function Mainbar({
+  highlightsRef,
+  informationRef,
+  TourPlanningRef,
+  reviewRef,
+}) {
   const location = useLocation();
   let navigate = useNavigate();
   const { id } = location.state || {};
@@ -34,8 +39,8 @@ function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
   const [userId, setUserId] = useState();
   const [loginCliked, setLoginClicked] = useState(false);
 
-  const pathName = window.location.pathname;
   const slicedPathName = window.location.pathname.split("/")[1];
+  const slicedUserId = window.location.href.split("#")[1];
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -46,19 +51,32 @@ function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
           ? JSON.parse(storedUserDetails)
           : null;
 
-        const payload = {
+        const payload1 = {
           program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
 
-        const response = await axios.post(
-          "https://backoffice.innerpece.com/api/v1/get-program-details",
-          // "https://backoffice.innerpece.com/api/v1/get-program",
-          payload
-        );
+        const payload2 = {
+          program_id: slicedUserId,
+        };
 
+        // const response = await axios.post(
+        //   "https://backoffice.innerpece.com/api/v1/get-program-details",
+        //   payload
+        // );
+
+        const response = slicedUserId
+          ? await axios.post(
+              "https://backoffice.innerpece.com/api/v1/specific-program-details",
+              payload2
+            )
+          : await axios.post(
+              "https://backoffice.innerpece.com/api/v1/get-program-details",
+              payload1
+            );
+            
         setApiData(response.data.data);
-
+        
         const cleanedText = response.data.data.important_info
           .split("·") // Split by bullet point
           .map((line) => line.replace(/\s+/g, " ").trim()) // Remove extra spaces and trim
@@ -126,10 +144,12 @@ function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
   }, []);
 
   const onClickPostReview = async () => {
+    console.log("aaa");
+    
     try {
       const payload = {
         user_id: userDetails?.id,
-        package_id: id,
+        package_id: id ? id : slicedPathName,
         comment: userReview,
         rating: rating,
         created_at: date,
@@ -328,53 +348,6 @@ function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
     indexOfLastReview
   );
 
-  const formatPlanDescription = (htmlString) => {
-    const sanitizedHTML = DOMPurify.sanitize(htmlString);
-
-    return sanitizedHTML.replace(
-      /<p>Day (\d+)([^<]*)<\/p>/g,
-      "<p><strong>Day $1</strong><br><br$2</p>"
-    );
-  };
-
-  function cleanBulletText(rawText) {
-    return rawText
-      .split("·")
-      .map((line) => line.replace(/\s+/g, " ").trim())
-      .filter(Boolean)
-      .map((line, index) => (
-        <div key={index} className="flex items-start gap-4  ">
-          <div>
-            <GoDotFill size={12} className=" text-black inline " />
-            <span className="md:leading-7 ms-3   text-[#4B4B4B] ">{line}</span>
-          </div>
-        </div>
-      ));
-  }
-
-  // const cleanHTML = (dirty) => {
-  //   const sanitized = DOMPurify.sanitize(dirty, {
-  //     FORBID_TAGS: ["style"],
-  //     FORBID_ATTR: ["style"],
-  //   });
-  //   return sanitized.replace(/&nbsp;/g, " ");
-  // };
-
-  // const cleanHTML = (htmlString) => {
-  //   const sanitizedHTML = DOMPurify.sanitize(htmlString);
-
-  //   return sanitizedHTML // ensures it's always a string
-  //   .replace(/<span[^>]*>|<\/span>/gi, "")                // Remove span tags
-  //   .replace(/<o:p>|<\/o:p>/gi, "")                       // Remove Word-specific tags
-  //   .replace(/style="[^"]*"/gi, "")                       // Remove inline styles
-  //   .replace(/&nbsp;/gi, " ")                             // Replace non-breaking spaces
-  //   .replace(/·\s*/g, "</li><li>")                        // Convert bullets to <li>
-  //   .replace(/<p[^>]*>/gi, "")                            // Remove <p> tags
-  //   .replace(/<\/p>/gi, "")                               // Remove </p> tags
-  //   .replace(/<\/li><li>/, "<ul><li>")                    // Start the <ul>
-  //   .concat("</li></ul>");                         // Remove multiple spaces
-  // };
-
   const cleanHTML = (htmlString) => {
     const sanitizedHTML = DOMPurify.sanitize(htmlString);
 
@@ -390,6 +363,7 @@ function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
 
     return cleaned;
   };
+  
 
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
@@ -443,7 +417,10 @@ function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
 
       {apiData.program_desc && (
         <>
-          <div ref={highlightsRef} className="flex gap-2 mt-8 md:mt-10 items-center">
+          <div
+            ref={highlightsRef}
+            className="flex gap-2 mt-8 md:mt-10 items-center"
+          >
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
             <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
               Highlights
@@ -766,7 +743,7 @@ function Mainbar({highlightsRef, informationRef, TourPlanningRef, reviewRef }) {
                 onClick={handleLoginClick}
                 className="cursor-pointer underline"
               >
-                login{" "}
+                Login{" "}
               </button>
               {"  "} to add review
             </p>

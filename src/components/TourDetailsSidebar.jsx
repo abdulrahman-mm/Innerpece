@@ -95,8 +95,8 @@ function Sidebar({ LocationShareRef, reviewRef }) {
     setLoginClickedForAddReview(true);
   };
 
-  const pathName = window.location.pathname;
   const slicedPathName = window.location.pathname.split("/")[1];
+  const slicedUserId = window.location.href.split("#")[1];
 
   useEffect(() => {
     const reference_id = window.location.search.split("=")[1]
@@ -120,15 +120,32 @@ function Sidebar({ LocationShareRef, reviewRef }) {
           ? JSON.parse(storedUserDetails)
           : null;
 
-        const payload = {
+        // const response = await axios.post(
+        //   "https://backoffice.innerpece.com/api/v1/get-program-details",
+        //   payload
+        // );
+
+        const payload1 = {
           program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
 
-        const response = await axios.post(
-          "https://backoffice.innerpece.com/api/v1/get-program-details",
-          payload
-        );
+        const payload2 = {
+          program_id: slicedUserId,
+        };
+
+        const response = slicedUserId
+          ? await axios.post(
+              "https://backoffice.innerpece.com/api/v1/specific-program-details",
+              payload2
+            )
+          : await axios.post(
+              "https://backoffice.innerpece.com/api/v1/get-program-details",
+              payload1
+            );
+
+        setApiData(response.data.data);
+
         setApiData(response.data.data);
         setHomeImage(response.data.data.gallery_img);
         // apiData.gallery_img
@@ -424,12 +441,12 @@ function Sidebar({ LocationShareRef, reviewRef }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
-        prevIndex === homeImage.length - 1 ? 0 : prevIndex + 1
+        prevIndex === homeImage?.length - 1 ? 0 : prevIndex + 1
       );
     }, 2500); // Change image every 4 seconds
 
     return () => clearInterval(interval);
-  }, [homeImage.length]);
+  }, [homeImage?.length]);
 
   const onChangePrice = (item, index) => {
     setSelectedPackage(item);
@@ -578,21 +595,6 @@ function Sidebar({ LocationShareRef, reviewRef }) {
     indexOfFirstReview,
     indexOfLastReview
   );
-  // const [reviewScrollRef, setReviewScrollRef] = useState("");
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     window.innerWidth <= 1024 ? setReviewScrollRef(reviewRef) : "";
-  //   };
-
-  //   handleResize();
-
-  //   // Event listener
-  //   window.addEventListener("resize", handleResize);
-
-  //   // Cleanup
-  //   return () => window.removeEventListener("resize", handleResize);
-  // }, []);
 
   return (
     <div
@@ -629,18 +631,20 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                   {apiData.price_title.map(
                     (item, index) =>
                       item && (
-                        <div className="flex gap-2 items-center h-fit text-start  ">
+                        <div key={index} className="flex gap-2 items-center h-fit text-start  ">
                           <input
                             type="radio"
-                            name=""
-                            id={item}
+                            name={item}
+                            id={item.replace(/[^a-zA-Z0-9_-]/g, "-")}
                             value={item}
                             checked={selectedPackage === item}
                             onChange={() => onChangePrice(item, index)}
-                            // onChange={() => setPriceSelected(item)}
                             className="h-fit"
                           />
-                          <label htmlFor={item} className="h-fit">
+                          <label
+                            htmlFor={item.replace(/[^a-zA-Z0-9_-]/g, "-")}
+                            className="h-fit"
+                          >
                             <span> {item} : </span>
                             <span className="font-semibold sm:font-bold text-green-800 text-base sm:text-lg">
                               ₹
@@ -675,7 +679,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                   className="underline cursor-pointer"
                   onClick={handleLoginClick}
                 >
-                  login
+                  Login
                 </span>{" "}
                 to book now
               </p>
@@ -1059,7 +1063,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                 /> */}
 
                 <div className="relative w-full h-52 md:w-1/2 overflow-hidden">
-                  {homeImage.map((image, index) => (
+                  {homeImage?.map((image, index) => (
                     <div
                       key={image.id}
                       className={`absolute inset-0 transition-opacity duration-1000 ${
@@ -1530,10 +1534,10 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                         {/*Cab Need*/}
                         <div className="flex flex-col sm:w-1/2">
                           <div className="flex items-center border rounded-md">
-                            <span className="p-2 border-r">
+                            <span className="p-2 ">
                               <FaCar />
                             </span>
-                            <label className="ms-2 text-black">
+                            <label className="border-l text-black p-2">
                               Cab Needed
                             </label>
 
@@ -1591,92 +1595,21 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                         </div>
                       </div>
 
-                      {/* {apiData.price_amount.length > 0 && (
-                        <div className="flex flex-col w-full">
-                          <div className="flex items-center border rounded-md">
-                            <span className="p-2 border-r">
-                              <PiMoneyWavyFill />
-                            </span>
-                            <p className="ms-2 me-3">Price amount </p>
-                            {/* <div className="flex gap-2 flex-wrap">
-                              {apiData.price_amount.map(
-                                (item, index) =>
-                                  item && (
-                                    <div className="flex gap-2 p-2">
-                                      <input
-                                        type="radio"
-                                        name=""
-                                        id={item}
-                                        value={item}
-                                        checked={priceSelected === item}
-                                        onChange={() => setPriceSelected(item)}
-                                      />
-                                      <label htmlFor={item}>
-                                        {apiData.price_title[index]} : ₹{item}
-                                      </label>
-                                    </div>
-                                  )
-                              )}
-                            </div> */}
-
-                      {/* <select
-                              name="price"
-                              id="price"
-                              className="w-fit border-none p-2.5 outline-none"
-                              onChange={() => setPriceSelected(item)}
-                            >
-                              <option value="" disabled selected>
-                                Select a price
-                              </option>
-                              {apiData.price_amount.map(
-                                (item, index) =>
-                                  item && (
-                                    <option key={index} value={item}>
-                                      {apiData.price_title[index]} : ₹{item}
-                                    </option>
-                                  )
-                              )}
-                            </select> */}
-
-                      {/* <select
-                              name="price"
-                              id="price"
-                              className="w-fit border-none p-2.5 outline-none"
-                              defaultValue=""
-                              onChange={(e) => setPriceSelected(e.target.value)}
-                            >
-                              <option value="" disabled selected>
-                                Select a price
-                              </option>
-                              {apiData.price_amount.map(
-                                (item, index) =>
-                                  item && (
-                                    <option key={index} value={item}>
-                                      {apiData.price_title[index]} : ₹{item}
-                                    </option>
-                                  )
-                              )}
-                            </select>
-                          </div>
-                          {errors.pricing && (
-                            <p className="text-red-500 text-xs ">
-                              {errors.pricing[0]}
-                            </p>
-                          )}
-                        </div> */}
-                      {/* )} */}
-
                       <div className="flex items-center border rounded-md">
                         <span className="p-2">
                           <FaPeopleLine />
                         </span>
-                        <input
+                        {/* <input
                           type="text"
                           className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
                           id="Total Count"
                           name="Total Count"
                           value={`${selectedPackage} : ${priceSelected}`}
-                        />
+                        /> */}
+                        <div className="flex p-2 gap-2 border-l">
+                          <p>{selectedPackage} :</p>
+                          <p>₹ {Number(priceSelected).toLocaleString("en-IN")}</p>
+                        </div>
                       </div>
                     </div>
 

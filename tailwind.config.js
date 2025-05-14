@@ -12,6 +12,8 @@ export default {
         jost: ["Jost", "sans-serif"],
         rancho: ['Rancho', 'cursive'],
         nunito: ['"Nunito Sans"', 'sans-serif'],
+        jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+
       },
       extend: {
         animation: {
