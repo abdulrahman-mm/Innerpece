@@ -12,11 +12,35 @@ import customerservice from "../assets/customerservice.svg";
 import approve from "../assets/approve.svg";
 import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+import { FaStar } from "react-icons/fa6";
 
-function DestinationsDetails() {
+const StaysList = () => {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1, // Show one image at a time inside the card
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 640 },
+      items: 1,
+    },
+    mobile: {
+      breakpoint: { max: 640, min: 0 },
+      items: 1,
+    },
+  };
 
+  const imageUrls = [
+    "https://picsum.photos/seed/story1/300/300",
+    "https://picsum.photos/seed/story2/300/300",
+    "https://picsum.photos/seed/story3/300/300",
+    "https://picsum.photos/seed/story4/300/300",
+    "https://picsum.photos/seed/story5/300/300",
+  ];
   useEffect(() => {
-    document.title = "Destination Details - Innerpece";
+    document.title = "Stays List - Innerpece";
   }, []); // Empty dependency array ensures it runs once on mount
   const location = useLocation();
   const { id, city_name } = location.state || {};
@@ -330,7 +354,7 @@ function DestinationsDetails() {
         <div
           id="hero"
           className="h-64 md:h-80 lg:h-[420px]  
- relative bg-[url('././assets/dummy5.jpeg')] bg-cover bg-center bg-no-repeat bg-fixed"
+     relative bg-[url('././assets/dummy5.jpeg')] bg-cover bg-center bg-no-repeat bg-fixed"
         >
           <div className="absolute flex w-full h-full items-center justify-center">
             <div
@@ -353,310 +377,98 @@ function DestinationsDetails() {
 
         {/* main section */}
 
-        <div className="relative">
-          <div className="bg-image-behind"></div>
+        <div className="ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 mt-5 ">
+          <div>
+            <p className="font-PlusJakartaSansMedium font-medium text-lg">
+              Explore more stays
+            </p>
 
-          <div className="absolute w-full h-full bg-gradient-to-b from-white  via-transparent to-white -z-10"></div>
-          <div className="flex flex-col xl:flex-row gap-2 md:gap-5 lg:gap-7 xl:gap-10  ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 ">
-            {/* main section > mainBar */}
-            <div className="  w-full md:mt-10">
-              {/* this will show only in smaller screens */}
-              {/* {currentItems.length > 0 && (
-                <p
-                  onClick={() => setFilterButtonClicked(!filterButtonClicked)}
-                  className={`mt-10 w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${
-                    filterButtonClicked
-                      ? "bg-red-600 text-white"
-                      : "bg-gray-300"
-                  } }`}
-                >
-                  {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
-                </p>
-              )} */}
-
-              {/* <div
-                className={`fixed bottom-0 z-10 left-0 right-0 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
-                  filterButtonClicked
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-full opacity-0"
-                }`}
-              >
-                <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
-                  <div className="flex justify-between items-center">
-                    <p className="text-lg">Search By Filter</p>
-                    <button
-                      onClick={() => setFilterButtonClicked(false)}
-                      className="text-gray-600 text-xl font-bold transition-transform duration-300 transform hover:scale-110"
-                    >
-                      &times;
-                    </button>
-                  </div>
-
-                  <div className="flex flex-wrap gap-5">
-                    <div className="flex gap-2 items-center">
-                      <label htmlFor="frmDate" className="w-20">
-                        From Date
-                      </label>
-                      <input
-                        id="frmDate"
-                        type="date"
-                        value={startDate}
-                        onChange={handleDateChange}
-                        className="border-2 p-2 rounded"
-                      />
-                    </div>
-
-                    <div className="flex gap-2 items-center">
-                      <label htmlFor="tDate" className="w-20">
-                        To Date
-                      </label>
-                      <input
-                        type="date"
-                        id="tDate"
-                        value={toDate}
-                        onChange={handleToChange}
-                        className="border-2 p-2 rounded"
-                      />
-                    </div>
-
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <button
-                        className="bg-sky-600 hover:bg-sky-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                        value="FILTER"
-                        onClick={handleFilterClick}
-                      >
-                        Filter
-                      </button>
-
-                      <button
-                        className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                        value="FILTER"
-                        onClick={handleClearFilterClicked}
-                      >
-                        Clear Filter
-                      </button>
-                    </div>
-                  </div>
-
-                  <p className="text-lg">Sort By</p>
-
-                  <select
-                    name="selectsmaller"
-                    id="selectsmaller"
-                    className="border-2 p-2 outline-none"
-                    onChange={handleSortChange}
-                    value={sortBy}
+            <div className="flex overflow-x-auto gap-2 md:gap-8 mt-3  scrollbar-hide">
+              {Array(25)
+                .fill(null)
+                .map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex cursor-pointer flex-col items-center justify-center w-20 flex-shrink-0"
                   >
-                    <option value="" disabled>
-                      Select Sort Option
-                    </option>
-                    <option value="low">Low Price</option>
-                    <option value="high">High Price</option>
-                  </select>
-                </div>
-              </div> */}
+                    <img
+                      src={`https://picsum.photos/seed/story${index}/80/80`}
+                      alt="story"
+                      className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 p-0.5 border-[#0F5B92] object-cover"
+                    />
+                    <p className="text-xs font-PlusJakartaSansMedium font-medium mt-1 text-center">
+                      User {index + 1}
+                    </p>
+                  </div>
+                ))}
+            </div>
+          </div>
 
+          <div className="flex flex-col mt-5 md:mt-10 xl:flex-row gap-2 md:gap-5 lg:gap-7 xl:gap-10  ">
+            {/* main section > mainBar */}
+            <div className="  w-full ">
               {loading ? (
                 <SkeletonLoader />
-              ) : currentItems.length > 0 ? (
-                currentItems.map((item, index) => (
-                  <div
-                    id="destinations"
-                    key={index}
-                    className="flex flex-col  mt-10 overflow-hidden"
-                  >
-                    <div
-                      key={index}
-                      className="group flex flex-col lg:flex-row overflow-hidden"
-                    >
-                      <div
-                        onClick={() => handleCardClick(item.id, item.title)}
-                        className="relative overflow-hidden w-full lg:w-1/3 rounded-t-xl lg:rounded-s-xl lg:rounded-r-none"
-                      >
-                        <img
-                          src={
-                            item.cover_img
-                              ? `https://backoffice.innerpece.com/${item.cover_img}`
-                              : defaultimage
-                          }
-                          alt={item.title}
-                          className="w-full h-44 lg:h-72 xl:h-64 object-cover object-center transform transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+              ) : (
+                <>
+                  <div className="">
+                    {/* Horizontal Scroll Section */}
+                    {/* <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-10  py-4"> */}
+                    <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4">
 
-                          // className="w-full h-44 sm:h-52 md:h-60 object-cover object-center transition duration-500 transform hover:scale-105 hover:-skew-y-1 cursor-pointer"
-                        />
-                      </div>
+                      {Array(20)
+                        .fill(null)
+                        .map((_, outerIndex) => (
+                          <div
+                            key={outerIndex}
+                            className="flex-shrink-0 flex-1 cursor-pointer flex flex-col gap-1 font-jakarta border rounded-2xl border-gray-300"
+                          >
+                            <Carousel
+                              responsive={responsive}
+                              infinite
+                              swipeable
+                              draggable
+                              showDots
+                              arrows={false}
+                              className="rounded-2xl overflow-hidden"
+                            >
+                              {Array.from({ length: 5 }).map((_, index) => {
+                                const randomUrl = `https://picsum.photos/seed/${Math.random()
+                                  .toString(36)
+                                  .substring(7)}/300/300`;
+                                return (
+                                  <img
+                                    key={index}
+                                    src={randomUrl}
+                                    alt={`Random Room ${index}`}
+                                    className="h-64 md:h-72 object-cover w-full"
+                                  />
+                                );
+                              })}
+                            </Carousel>
 
-                      <div
-                        onClick={() => handleCardClick(item.id, item.title)}
-                        className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white border-[#BABABA] py-2 px-2 md:px-3 cursor-pointer"
-                      >
-                        <p className="font-semibold text-[#2D2D2D] flex-wrap text-xl md:text-3xl font-jost">
-                          {/* {item.title.includes("-")
-                            ? item.title.split("-")[0]
-                            : item.title} */}
-                          {item.title}
-                        </p>
+                            <div className="flex px-3 justify-between  font-PlusJakartaSansMedium font-medium">
+                              <p>Room in Bison Valley</p>
 
-                        {item.current_location &&
-                            item.current_location !== "<p><br></p>" && (
-                              <div className="flex items-center gap-2">
-                                <FaLocationDot className="text-sky-800" />
-                            
-
-                                <p
-                                  className="text-sm sm:text-base"
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.current_location,
-                                  }}
-                                />
+                              <div className="flex  items-center">
+                                <FaStar className="text-yellow-500" />
+                                <p> 5.0 (2)</p>
                               </div>
-                            )}
-
-                        {/* <p className="flex-wrap text-[#11142D] font-mulish md:text-lg">
-                          {item.title.includes("-")
-                            ? item.title.split("-")[1]
-                            : ""}
-                        </p> */}
-
-                        {/* <div className="flex  items-center justify-between gap-2 flex-wrap">
-                          {item.current_location &&
-                            item.current_location !== "<p><br></p>" && (
-                              <div className="flex items-center gap-2">
-                                <FaLocationDot className="text-sky-800" />
-                            
-
-                                <p
-                                  className="text-sm sm:text-base"
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.current_location,
-                                  }}
-                                />
-                              </div>
-                            )}
-
-                          <div className="flex items-center gap-1">
-                            <FaStar className="text-yellow-500" />
-                            <p>
-                              <b className="me-1">{item.average_rating}</b>of 5
+                            </div>
+                            <p className="text-[#797979] px-3 text-sm">
+                              Stay with Shiraz The Grove
+                            </p>
+                            <p className="text-xl font-PlusJakartaSansMedium px-3 pb-3 font-medium">
+                              ₹ {Number(15444).toLocaleString()}{" "}
+                              <span className="text-[#797979] text-sm">
+                                for 4 nights
+                              </span>
                             </p>
                           </div>
-                        </div> */}
-
-                        {/* <div className="flex items-center flex-wrap gap-2">
-                          {item.member_capacity && (
-                            <p>Upto {item.member_capacity} guests</p>
-                          )}
-                          {item.bed_room && (
-                            <div className="flex items-center gap-3">
-                              <PiStarFourFill className="text-gray-400" />
-                              <p>{item.bed_room}</p>
-                              {item.bed_room > "1" ? "bed rooms" : "bed room"}
-                            </div>
-                          )}
-
-                          {item.bath_room && (
-                            <div className="flex items-center gap-3">
-                              <PiStarFourFill className="text-gray-400" />
-                              <p>{item.bath_room}</p>
-                              {item.bath_room > "1"
-                                ? "bath rooms"
-                                : "bath room"}
-                            </div>
-                          )}
-                        </div> */}
-
-                        {item.amenities && item.amenities.length > 0 && (
-                          <div>
-                            {/* <div className="border-b border-[#BABABA]"></div> */}
-
-                            <div className="flex  mt-3 gap-2 flex-wrap items-start">
-                              {/* {item.amenities
-                                .slice(0, 2)
-                                .map((amenity, index) => ( */}
-                              {item.amenities
-                                .slice(0, sliceCount)
-                                .map((amenity, index) => (
-                                  <div
-                                    key={index}
-                                    className="flex flex-col gap-1 justify-center items-center w-20 flex-wrap"
-                                  >
-                                    <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
-                                      <img
-                                        src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
-                                        alt=""
-                                      />
-                                    </span>
-                                    <p className="text-gray-500 text-center flex-wrap text-xs ">
-                                      {amenity.amenity_name}
-                                    </p>
-                                  </div>
-                                ))}
-
-                              {item.amenities.length > 3 && (
-                                //  <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
-
-                                // <p className="text-gray-500 text-xs mx-auto">
-                                //   +{item.amenities.length - 3}
-                                // </p>
-                                // </span>
-                                <div
-                                  key={index}
-                                  className="flex flex-col gap-1 justify-center w-20 items-center flex-wrap"
-                                >
-                                  <span className=" bg-sky-700 p-2 w-9 h-9  rounded-full">
-                                    <p className="text-white text-xs mx-auto">
-                                      +{item.amenities.length - 3}
-                                    </p>
-                                  </span>
-                                  <p className="text-sky-700 flex-wrap text-xs w-fit">
-                                    More
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-wrap bg-white flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]  px-2 md:px-3 py-2 ">
-                        <div className="flex flex-row lg:flex-col gap-1 sm:gap-3 items-center justify-center">
-                          <p className="text-[#001031] text-sm md:text-base text-center mx-auto ">
-                            Starting From{" "}
-                          </p>
-                          <p className="font-bold text-green-700 text-lg sm:text-xl mx-auto">
-                            {/* ₹{item.pricing[0]} */}₹
-                            {Number(item.pricing[0]).toLocaleString("en-IN")}
-                          </p>
-                        </div>
-
-                        {/* <div
-                          onClick={() => handleCardClick(item.id, item.title)}
-                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1  lg:py-2 rounded-lg "
-                        >
-                          <p className="text-white cursor-pointer  font-medium md:text-xl text-center ">
-                            View Detail
-                          </p>
-                        </div> */}
-
-                        <div
-                          onClick={() => handleCardClick(item.id, item.title)}
-                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-2 sm:px-4 lg:px-4.5 py-1 lg:py-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md hover:brightness-110"
-                        >
-                          <p className="text-white md:font-medium md:text-xl text-center">
-                            View Detail
-                          </p>
-                          {/* <FaArrowRight className="text-white h-full" /> */}
-                        </div>
-                      </div>
+                        ))}
                     </div>
                   </div>
-                ))
-              ) : (
-                <div className="flex my-20  justify-center w-full h-full">
-                  <p className="text-xl md:text-3xl font-jost">
-                    No programs available.
-                  </p>
-                </div>
+                </>
               )}
 
               <nav>
@@ -686,7 +498,6 @@ function DestinationsDetails() {
 
             {/* Main Section > Sidebar */}
             <div className="mt-10 lg:mt-20  sticky top-5 h-fit flex-grow flex flex-col md:flex-row xl:flex-col gap-4   xl:basis-[24%] ">
-          
               <div className="flex w-full md:w-1/2 xl:w-auto flex-col gap-3 items-center flex-grow  py-5 px-5 shadow-md shadow-black/10 rounded-xl">
                 <p className="font-bold md:font-bold text-xl font-mulish">
                   Any Questions ?
@@ -728,10 +539,10 @@ function DestinationsDetails() {
               </div>
 
               <div className="shadow-md w-full md:w-1/2 xl:w-auto mt-5  bg-white py-4 flex-grow flex flex-col items-center  shadow-black/10 rounded-xl">
-              <div className="flex gap-4  w-full lg:justify-center ms-3 text-lg">
-                <p className="text-sky-800">|</p>
-                <p className="font-semibold">Book With Confidence</p>
-              </div>
+                <div className="flex gap-4  w-full lg:justify-center ms-3 text-lg">
+                  <p className="text-sky-800">|</p>
+                  <p className="font-semibold">Book With Confidence</p>
+                </div>
 
                 <div className="flex flex-wrap  items-start  justify-between lg:flex-col  px-5 pt-5   gap-y-4 gap-2">
                   <div className="flex gap-4 items-center">
@@ -771,6 +582,6 @@ function DestinationsDetails() {
       </Suspense>
     </div>
   );
-}
+};
 
-export default DestinationsDetails;
+export default StaysList;

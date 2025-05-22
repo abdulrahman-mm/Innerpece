@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import { fontFamily } from 'tailwindcss/defaultTheme';
+
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -13,6 +15,8 @@ export default {
         rancho: ['Rancho', 'cursive'],
         nunito: ['"Nunito Sans"', 'sans-serif'],
         jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+        PlusJakartaSansMedium: ['PlusJakartaSansMedium', 'sans-serif'],
+
 
       },
       extend: {

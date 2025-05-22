@@ -128,7 +128,7 @@ function Destinations() {
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
           <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
             <span className="font-jost font-medium">Popular </span>
-            <span className="font-jost font-bold">Destinations</span>
+            <span className="font-jost font-bold">Programs</span>
           </p>
           <div className="flex items-center flex-1 mt-8 md:mt-10   flex-grow flex-wrap justify-start ">
             {Array(skeltonArrayLength)
@@ -152,7 +152,7 @@ function Destinations() {
             <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
               <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
                 <span className="font-jost font-medium">Popular </span>
-                <span className="font-jost font-bold">Destinations</span>
+                <span className="font-jost font-bold">Programs</span>
               </p>
               <div className="mt-8 md:mt-10">
                 <Carousel

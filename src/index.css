@@ -49,18 +49,15 @@ html{
 } 
 
 
-
-/* @font-face {
-    font-family: "jost";
-    src: url("./font/Jost-SemiBold-BF63dc52d0c0560.ttf") format("woff2"),
-         url("./font/Jost-Black-BF63dc52ccbba90.ttf") format("woff");
-    font-weight: normal;
-    font-style: normal;
-  } */
-
   @font-face {
     font-family: "rancho";
     src: url("./font/Rancho-Regular.ttf") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+    @font-face {
+    font-family: "PlusJakartaSansMedium";
+    src: url("./font/PlusJakartaSans-Medium.ttf") format("woff2");
     font-weight: normal;
     font-style: normal;
   }
@@ -79,4 +76,7 @@ html{
   
   
 
-  
+.scrollbar-hide::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
