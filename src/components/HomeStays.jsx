@@ -6,35 +6,40 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-const HomeStays = () => {
 
-       let navigate = useNavigate();
-  const [destinationData, setDestinationsData] = useState([]);
-  const [loading, setLoading] = useState(true); // Add a loading state
+const HomeStays = () => {
+  let navigate = useNavigate();
+  const [apiData, setApiData] = useState([]);
+  const [loading, setLoading] = useState(false); // Add a loading state
 
   useEffect(() => {
-    axios
-      .get(`https://backoffice.innerpece.com/api/v1/destination`)
-      // .get(`https://backoffice.innerpece.com/api/get-combined-data`)
-      .then((response) => {
-        setDestinationsData(response.data.destination_list);
-        setLoading(false); // Set loading to false even if there’s an error
-      })
-      .catch((err) => {
-        console.log(err);
+    const fetchProgramData = async () => {
+      try {
+        const response = await axios.get(
+          "https://backoffice.innerpece.com/api/v1/get-stay-destination"
+        );
+        setApiData(response.data.data);
         setLoading(false);
-      });
+      } catch (err) {
+        setLoading(false);
+      }
+    };
+    fetchProgramData();
   }, []);
 
-  const handleCardClick = (id, city_name) => {
-    const formattedCityName = city_name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-") // Remove all special characters and replace with hyphen
-      .replace(/-+/g, "-") // Replace multiple hyphens with a single hyphen
-      .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
+  const handleCardClick = (id, stay_title) => {
+    // navigate(`/staysdetails/${id}`, {
+    //   state: { id },
+    // });
 
-    navigate(`/stayslist`, {
-      state: { id, city_name },
+    const formattedThemeName = stay_title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    navigate(`/stayslist/${id}/${formattedThemeName}`, {
+      state: { stay_title },
     });
 
     window.scrollTo({
@@ -43,12 +48,18 @@ const HomeStays = () => {
     });
   };
 
-  const SkeletonCard = ({index}) => (
-    <div key={index} className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
+  const SkeletonCard = ({ index }) => (
+    <div
+      key={index}
+      className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-600 flex-grow rounded-2xl animate-pulse"
+    ></div>
   );
 
-  const SkeletonCarouselCard = ({index}) => (
-    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
+  const SkeletonCarouselCard = ({ index }) => (
+    <div
+      key={index}
+      className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-600   rounded-2xl animate-pulse"
+    ></div>
   );
 
   const responsive = {
@@ -105,8 +116,7 @@ const HomeStays = () => {
         setSkeletonArraylength(4); // super large desktop
       } else if (window.innerWidth >= 1281 && window.innerWidth < 3000) {
         setSkeletonArraylength(4); // large desktop
-      }
-      else if (window.innerWidth >= 1025 && window.innerWidth < 1200) {
+      } else if (window.innerWidth >= 1025 && window.innerWidth < 1200) {
         setSkeletonArraylength(3); // small desktop
       } else if (window.innerWidth >= 641 && window.innerWidth <= 1024) {
         setSkeletonArraylength(2); // tablet
@@ -119,85 +129,141 @@ const HomeStays = () => {
     // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  return (
-     <>
-         {loading ? (
-           <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-             <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
-               <span className="font-jost font-medium">Popular </span>
-               <span className="font-jost font-bold">Stays</span>
-             </p>
-             <div className="flex items-center flex-1 mt-8 md:mt-10   flex-grow flex-wrap justify-start ">
-               {Array(skeltonArrayLength)
-                 .fill(0)
-                 .map((_, index) => (
-                   <SkeletonCard  key={index}/>
-                 ))}
-             </div>
-             {/* <div className="flex items-center flex-1 w-full  mt-5  flex-grow flex-wrap justify-center "> */}
-             <div className="flex items-center flex-1   flex-grow flex-wrap justify-center  w-full">
-               {Array(1)
-                 .fill(0)
-                 .map((_, index) => (
-                   <SkeletonCarouselCard key={index}/>
-                 ))}
-             </div>
-           </div>
-         ) : (
-           <>
-             {destinationData && destinationData.length > 0 && (
-               <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-                 <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
-                   <span className="font-jost font-medium">Popular </span>
-                   <span className="font-jost font-bold">Stays</span>
-                 </p>
-                 <div className="mt-8 md:mt-10">
-                   <Carousel
-                     responsive={responsive}
-                     infinite={true}
-                     autoPlay={false}
-                     swipeable={true}
-                     draggable={true}
-                     showDots={false}
-                     keyBoardControl={true}
-                     containerClass="carousel-container"
-                     itemClass="px-2"
-                     customLeftArrow={<CustomLeftArrow />}
-                     customRightArrow={<CustomRightArrow />}
-                   >
-                     {destinationData.map((item, index) => (
-                       <div
-                         key={index}
-                         onClick={() => handleCardClick(item.id, item.city_name)}
-                         className="relative overflow-hidden rounded-2xl"
-                       >
-                         <div className="relative h-80 md:h-96  shrink-0 rounded-2xl overflow-hidden  group  cursor-pointer">
-                           <img
-                             src={
-                               item.cities_pic
-                                 ? `https://backoffice.innerpece.com/${item.cities_pic}`
-                                 : defaultimg
-                             }
-                             alt={`trip-${index}`}
-                             className="h-full w-full -z-30 absolute object-cover transform transition-transform duration-500 group-hover:scale-125"
-                           />
-                           <div className="absolute -z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                           <div className="absolute bottom-5 z-20 left-0 w-full text-white text-center py-2 px-3">
-                             <p className="font-rancho text-2xl md:text-3xl xl:text-4xl">
-                               {item.city_name}
-                             </p>
-                           </div>
-                         </div>
-                       </div>
-                     ))}
-                   </Carousel>
-                 </div>
-               </div>
-             )}
-           </>
-         )}
-       </>
-  )
-}
 
-export default HomeStays
+  const onClickViewAll = () => {
+    navigate("/stayslist", {
+      state: {
+        city_name: "tamil nadu",
+      },
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  };
+
+  return (
+    <>
+      {loading ? (
+        <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+          <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
+            <span className="font-jost font-medium">Popular </span>
+            <span className="font-jost font-bold">Stays</span>
+          </p>
+
+          <div className="flex items-center flex-1 mt-8 md:mt-10   flex-grow flex-wrap justify-start ">
+            {Array(skeltonArrayLength)
+              .fill(0)
+              .map((_, index) => (
+                <SkeletonCard key={index} />
+              ))}
+          </div>
+          {/* <div className="flex items-center flex-1 w-full  mt-5  flex-grow flex-wrap justify-center "> */}
+          <div className="flex items-center flex-1   flex-grow flex-wrap justify-center  w-full">
+            {Array(1)
+              .fill(0)
+              .map((_, index) => (
+                <SkeletonCarouselCard key={index} />
+              ))}
+          </div>
+        </div>
+      ) : (
+        <>
+          {apiData && apiData.length > 0 && (
+            <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
+              <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
+                <span className="font-jost font-medium">Popular </span>
+                <span className="font-jost font-bold">Stays</span>
+              </p>
+
+              <div className="mt-8 md:mt-10">
+                {/* <Carousel
+                  responsive={responsive}
+                  infinite={true}
+                  autoPlay={false}
+                  swipeable={true}
+                  draggable={true}
+                  showDots={false}
+                  keyBoardControl={true}
+                  containerClass="carousel-container"
+                  itemClass="px-2"
+                  customLeftArrow={<CustomLeftArrow />}
+                  customRightArrow={<CustomRightArrow />}
+                >
+                  {apiData.map((item, index) => (
+                    <div className="flex flex-col flex-grow flex-1 gap-3 h-[320px] w-[320px]  ">
+                      <div
+                        key={index}
+                        onClick={() => handleCardClick(item.id, item.city_name)}
+                        // className="relative  flex-grow  cursor-pointer group  rounded-tl-[20%] rounded-tr-md rounded-bl-md rounded-br-[20%]  overflow-hidden "
+                          className="relative  flex-grow  cursor-pointer group  h-[320px] w-[320px] rounded-[150%] overflow-hidden "
+                      >
+                        <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                        <img
+                          src={
+                            item.city_image
+                              ? `https://backoffice.innerpece.com/${item.city_image}`
+                              : defaultimg
+                          }
+                          alt={item.city_name}
+                          className="h-[320px] w-[320px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
+                        />
+                       
+                      </div>
+                      <p className=" font-jost font-medium text-wrap  w-full text-center text-xl  text-black  bottom-5">
+                          {item.city_name}
+                        </p>
+                    </div>
+                  ))}
+                </Carousel> */}
+
+                <Carousel
+                  responsive={responsive}
+                  infinite={true}
+                  autoPlay={true}
+                  swipeable={true}
+                  draggable={true}
+                  showDots={false}
+                  keyBoardControl={true}
+                  containerClass="carousel-container"
+                  itemClass=""
+                  customLeftArrow={<CustomLeftArrow />}
+                  customRightArrow={<CustomRightArrow />}
+                >
+                  {apiData.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col  items-center gap-3 "
+                    >
+                      <div
+                        onClick={() => handleCardClick(item.id, item.city_name)}
+                        className="relative cursor-pointer group h-[260px] shadow-xl shadow-black/20 w-[260px] rounded-full overflow-hidden  "
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-black z-10"></div>
+                        <img
+                          src={
+                            item.city_image
+                              ? `https://backoffice.innerpece.com/${item.city_image}`
+                              : defaultimg
+                          }
+                          alt={item.city_name}
+                          className="h-full w-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                        />
+                      </div>
+                      <p className="font-jost font-medium text-center text-xl text-black">
+                        {item.city_name}
+                      </p>
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
+            </div>
+          )}
+        </>
+      )}
+    </>
+  );
+};
+
+export default HomeStays;

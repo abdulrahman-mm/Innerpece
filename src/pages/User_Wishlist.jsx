@@ -80,16 +80,22 @@ const User_Wishlist = () => {
     });
   };
 
-  const onClickView = (id, title) => {
-    const formattedTitleName = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-+|-+$/g, "");
+  const onClickView = (id, title, type) => {
+    if (type === "stay") {
+      navigate(`/staysdetails/${id}`, {
+        state: { id, title },
+      });
+    } else if (type === "program") {
+      const formattedTitleName = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-+|-+$/g, "");
 
-    navigate(`/${id}/${formattedTitleName}`, {
-      state: { id, title },
-    });
+      navigate(`/${id}/${formattedTitleName}`, {
+        state: { id, title },
+      });
+    }
 
     window.scrollTo({
       top: 0,
@@ -104,6 +110,7 @@ const User_Wishlist = () => {
   //     </div>
   //   );
   // }
+
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
       <div
@@ -113,7 +120,10 @@ const User_Wishlist = () => {
         <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
           <p>Whatsapp Enquiry</p>
         </div>
-        <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
+        <img
+          src={whatsapp}
+          className="h-10 w-10  transition-all duration-500"
+        />
       </div>
 
       <Suspense
@@ -153,7 +163,7 @@ const User_Wishlist = () => {
                   <tbody>
                     {apiData
                       .slice()
-                      .reverse()
+                      // .reverse()
                       .map((item, index) => (
                         <tr key={index} className="hover:bg-gray-100">
                           <td className="border border-gray-300 px-4 py-2 text-sm">
@@ -163,15 +173,27 @@ const User_Wishlist = () => {
                             {item.created_at.split("T")[0]}
                           </td>
                           <td className="border border-gray-300 px-4 py-2 text-sm">
-                            {item.program_dts.title}
+                            {/* {item.program_dts.title} */}
+                            {/* {item?.stay_dts?.stay_title} */}
+                            {item?.stay_dts?.stay_title}
+                            {item?.program_dts?.title}
                           </td>
                           <td className="border border-gray-300 px-4 py-2 text-center">
                             <button
                               onClick={() =>
-                                onClickView(
-                                  item.program_dts.id,
-                                  item.program_dts.title
-                                )
+                                item?.program_dts
+                                  ? onClickView(
+                                      item.program_dts?.id,
+                                      item.program_dts?.title,
+                                      "program"
+                                    )
+                                  : item?.stay_dts
+                                  ? onClickView(
+                                      item.stay_dts?.id,
+                                      item.stay_dts?.stay_title,
+                                      "stay"
+                                    )
+                                  : null
                               }
                               className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
                             >

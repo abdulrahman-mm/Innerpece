@@ -74,9 +74,9 @@ function Mainbar({
               "https://backoffice.innerpece.com/api/v1/get-program-details",
               payload1
             );
-            
+
         setApiData(response.data.data);
-        
+
         const cleanedText = response.data.data.important_info
           .split("·") // Split by bullet point
           .map((line) => line.replace(/\s+/g, " ").trim()) // Remove extra spaces and trim
@@ -144,8 +144,6 @@ function Mainbar({
   }, []);
 
   const onClickPostReview = async () => {
-    console.log("aaa");
-    
     try {
       const payload = {
         user_id: userDetails?.id,
@@ -363,10 +361,10 @@ function Mainbar({
 
     return cleaned;
   };
-  
 
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
+     
       {apiData && apiData.gallery_img && (
         <Carousel
           swipeable={true}

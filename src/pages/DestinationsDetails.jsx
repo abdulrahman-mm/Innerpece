@@ -311,7 +311,7 @@ function DestinationsDetails() {
           </div>
           <img
             src={whatsapp}
-            className="h-10 w-10  transition-all duration-500"
+            className="h-12 w-12  transition-all duration-500"
           />
         </div>
       )}

@@ -14,7 +14,8 @@ import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { FaStar } from "react-icons/fa6";
+import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import defaultimg from "../assets/defaultimg.png";
 
 const StaysList = () => {
   const responsive = {
@@ -32,19 +33,31 @@ const StaysList = () => {
     },
   };
 
-  const imageUrls = [
-    "https://picsum.photos/seed/story1/300/300",
-    "https://picsum.photos/seed/story2/300/300",
-    "https://picsum.photos/seed/story3/300/300",
-    "https://picsum.photos/seed/story4/300/300",
-    "https://picsum.photos/seed/story5/300/300",
-  ];
   useEffect(() => {
     document.title = "Stays List - Innerpece";
   }, []); // Empty dependency array ensures it runs once on mount
+
   const location = useLocation();
-  const { id, city_name } = location.state || {};
+
+  useEffect(() => {
+    const fetchProgramData = async () => {
+      try {
+        const response = await axios.get(
+          "https://backoffice.innerpece.com/api/v1/get-stay-destination"
+        );
+
+        setExploreMoreStaysData(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchProgramData();
+  }, []);
+
+  const { id, stay_title } = location.state || {};
+
   const [apiData, setApiData] = useState([]);
+  const [exploreMoreStaysData, setExploreMoreStaysData] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [startDate, setStartDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -70,22 +83,25 @@ const StaysList = () => {
   };
 
   const pathName = window.location.pathname;
-  const slicedPathName = pathName.split("/")[2];
   const slicedLocationName = pathName.split("/")[3];
+  const slicedLocationid = pathName.split("/")[2];
+
 
   useEffect(() => {
     const fetchProgramData = async () => {
+      // https://backoffice.innerpece.com/api/v1/get-stays?destination=Ladakh
       try {
-        const response = await axios.post(
-          "https://backoffice.innerpece.com/api/v1/get-program",
+        const response = await axios.get(
+          "https://backoffice.innerpece.com/api/v1/get-stays",
           {
-            destination: id ? id : slicedPathName,
+            params: {
+              destination: stay_title ? stay_title : slicedLocationName,
+            },
           }
         );
 
         setApiData(response.data.data);
-        setLoading(false);
-
+        setLoading(false);        
         const firstProgram = response.data.data[0];
         const metaOgTitle = document.querySelector("meta[property='og:title']");
         if (metaOgTitle) {
@@ -117,44 +133,11 @@ const StaysList = () => {
       }
     };
     fetchProgramData();
-  }, [id]);
+  }, [slicedLocationName]);
 
-  const handleSearchClick = async () => {
-    try {
-      // Post request to search-program API
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/search-program",
-        {
-          destination: city_name,
-          title: searchTitle,
-        }
-      );
-
-      if (response.data.status === "success") {
-        if (response.data.data.length === 0) {
-          setApiData([]); // No data found, set empty array
-        } else {
-          setApiData(response.data.data); // Set the retrieved data
-        }
-      } else {
-        console.error("Error fetching programs:", response.data.message);
-        setApiData([]); // Error occurred, set empty array
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setApiData([]); // Set empty array on exception
-    }
-  };
-
-  const handleCardClick = (id, title) => {
-    const formattedTitleName = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-") // Remove all special characters and replace with hyphen
-      .replace(/-+/g, "-") // Replace multiple hyphens with a single hyphen
-      .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
-
-    navigate(`/${id}/${formattedTitleName}`, {
-      state: { id, title },
+  const handleCardClick = (id, stay_title) => {
+    navigate(`/staysdetails/${id}`, {
+      state: { id },
     });
 
     window.scrollTo({
@@ -162,95 +145,6 @@ const StaysList = () => {
       behavior: "instant",
     });
   };
-
-  const handleSortChange = async (event) => {
-    setFilterButtonClicked(false);
-
-    const selectedSort = event.target.value;
-    setSortBy(selectedSort);
-
-    try {
-      const response = await axios.post(
-        // "https://backoffice.innerpece.com/api/sort-destination ",
-        // "https://backoffice.innerpece.com/api/v1/filter-program-by-price_sort",
-        "https://backoffice.innerpece.com/api/v1/destination-program-by-price_sort",
-        {
-          sort_order: selectedSort,
-          city: city_name,
-        }
-      );
-
-      if (response.data.status === "success") {
-        const dataObject = response.data.data;
-        // Convert the data object to an array
-        const dataArray = Object.values(dataObject);
-        setApiData(dataArray);
-      } else {
-        console.error("Error sorting programs:", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const handleFilterClick = async () => {
-    setFilterButtonClicked(false);
-
-    try {
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/v1/filter-destination",
-        {
-          start_date: startDate,
-          to_date: toDate,
-          destination: city_name,
-        }
-      );
-
-      if (response.data.status === "success") {
-        const data = Object.values(response.data.data); // Convert data to an array
-
-        if (data.length === 0) {
-          setApiData([]); // No data found, set empty array
-        } else {
-          setApiData(data); // Set the retrieved data as an array
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setApiData([]);
-    }
-  };
-
-  const handleDateChange = (e) => {
-    setStartDate(e.target.value);
-  };
-
-  const handleToChange = (e) => {
-    setToDate(e.target.value);
-  };
-
-  const handleClearFilterClicked = async () => {
-    setFilterButtonClicked(false);
-
-    const fetchProgramData = async () => {
-      try {
-        const response = await axios.post(
-          // "https://backoffice.innerpece.com/api/v1/destination",
-          "https://backoffice.innerpece.com/api/v1/get-program",
-          {
-            destination: id,
-          }
-        );
-        setStartDate("");
-        setToDate("");
-        setApiData(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProgramData();
-  };
-
   useEffect(() => {
     if (filterButtonClicked) {
       document.body.classList.add("overflow-hidden");
@@ -323,6 +217,92 @@ const StaysList = () => {
     );
   };
 
+  const CustomLeftArrow = ({ onClick }) => {
+    return (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick(); // move carousel
+        }}
+        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow z-10"
+      >
+        <FaChevronLeft />
+      </button>
+    );
+  };
+
+  const CustomRightArrow = ({ onClick }) => {
+    return (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick(); // move carousel
+        }}
+        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow z-10"
+      >
+        <FaChevronRight />
+      </button>
+    );
+  };
+
+  const handleStaysClick = (id, stay_title) => {
+    
+    const formattedThemeName = stay_title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    navigate(`/stayslist/${id}/${formattedThemeName}`, {
+      state: { stay_title },
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  };
+
+  const CustomDot = ({ onClick, ...rest }) => {
+    const { active } = rest;
+    return (
+      <li
+        onClick={(e) => {
+          e.stopPropagation(); // Stop bubbling to card
+          onClick?.(); // Trigger dot click
+        }}
+        className="inline-block mx-1"
+      >
+        <button
+          className={`transition-all duration-500 h-2 rounded-full ${
+            active ? "bg-white w-10" : "bg-white/50 w-3"
+          }`}
+        />
+      </li>
+    );
+  };
+  
+  // const fetchProgramData = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       "https://backoffice.innerpece.com/api/v1/get-stays",
+  //       {
+  //         params: {
+  //           destination: stay_title,
+  //         },
+  //       }
+  //     );
+
+  //     console.log(response.data.data);
+
+  //     setApiData(response.data.data);
+  //     setLoading(false);
+  //   } catch (err) {
+  //     setLoading(false);
+  //   }
+  // };
+  // fetchProgramData();
+
   return (
     <div>
       {!filterButtonClicked && (
@@ -335,7 +315,7 @@ const StaysList = () => {
           </div>
           <img
             src={whatsapp}
-            className="h-10 w-10  transition-all duration-500"
+            className="h-12 w-12  transition-all duration-500"
           />
         </div>
       )}
@@ -361,12 +341,12 @@ const StaysList = () => {
               id="blur"
               className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
             >
-              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl  font-rancho tracking-widest text-center  font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{`Explore ${
+              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl  font-rancho tracking-widest text-center  font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{` ${
                 apiData?.length > 0
                   ? // ? apiData[0]?.destination[0]?.city_name
                     apiData[0]?.destination
                   : slicedLocationName
-              }`}</h1>
+              } Stays `}</h1>
               <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
                 Find your perfect trip with personalized themes and destinations
                 to match your preferences
@@ -383,24 +363,30 @@ const StaysList = () => {
               Explore more stays
             </p>
 
-            <div className="flex overflow-x-auto gap-2 md:gap-8 mt-3  scrollbar-hide">
-              {Array(25)
-                .fill(null)
-                .map((_, index) => (
-                  <div
-                    key={index}
-                    className="flex cursor-pointer flex-col items-center justify-center w-20 flex-shrink-0"
-                  >
+            <div className="flex overflow-x-auto gap-2 md:gap-8 xl:gap-16 mt-3  scrollbar-hide">
+              {exploreMoreStaysData.map((item, index) => (
+                <div
+                  onClick={() => handleStaysClick(item.id, item.city_name)}
+                  key={index}
+                  className="flex cursor-pointer flex-col items-center justify-start w-20 flex-shrink-0"
+                >
+                  <div className="w-16 h-16 md:w-20 overflow-hidden md:h-20  border-2  border-[#0F5B92] rounded-full p-0.5">
                     <img
-                      src={`https://picsum.photos/seed/story${index}/80/80`}
+                      src={
+                        item.city_image
+                          ? `https://backoffice.innerpece.com/${item.city_image}`
+                          : defaultimg
+                      }
                       alt="story"
-                      className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 p-0.5 border-[#0F5B92] object-cover"
+                      className=" rounded-full  hover:scale-125 transition-all duration-300 w-full h-full   object-cover"
                     />
-                    <p className="text-xs font-PlusJakartaSansMedium font-medium mt-1 text-center">
-                      User {index + 1}
-                    </p>
                   </div>
-                ))}
+
+                  <p className="text-xs font-PlusJakartaSansMedium font-medium mt-1 text-center">
+                    {item.city_name}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -414,59 +400,81 @@ const StaysList = () => {
                   <div className="">
                     {/* Horizontal Scroll Section */}
                     {/* <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-10  py-4"> */}
-                    <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4">
-
-                      {Array(20)
-                        .fill(null)
-                        .map((_, outerIndex) => (
+                    {apiData.length > 0 ? (
+                      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4">
+                        {apiData.map((item, outerIndex) => (
                           <div
                             key={outerIndex}
+                            onClick={() => handleCardClick(item.id)}
                             className="flex-shrink-0 flex-1 cursor-pointer flex flex-col gap-1 font-jakarta border rounded-2xl border-gray-300"
                           >
-                            <Carousel
-                              responsive={responsive}
-                              infinite
-                              swipeable
-                              draggable
-                              showDots
-                              arrows={false}
-                              className="rounded-2xl overflow-hidden"
-                            >
-                              {Array.from({ length: 5 }).map((_, index) => {
-                                const randomUrl = `https://picsum.photos/seed/${Math.random()
-                                  .toString(36)
-                                  .substring(7)}/300/300`;
-                                return (
-                                  <img
-                                    key={index}
-                                    src={randomUrl}
-                                    alt={`Random Room ${index}`}
-                                    className="h-64 md:h-72 object-cover w-full"
-                                  />
-                                );
-                              })}
-                            </Carousel>
+                            <div>
+                              <Carousel
+                                responsive={responsive}
+                                infinite
+                                swipeable
+                                draggable
+                                showDots
+                                arrows={false}
+                                className="rounded-2xl overflow-hidden"
+                                customDot={<CustomDot />} // 👈 Use custom dot that stops propagation
+                              >
+                                {item?.images.length > 0 ? (
+                                  item?.images.map((item1, index) => (
+                                    <div key={index} className="w-full h-full">
+                                      <img
+                                        src={
+                                          item1
+                                            ? `https://backoffice.innerpece.com/${item1}`
+                                            : defaultimage
+                                        }
+                                        alt=""
+                                        className="h-64 md:h-72 object-cover w-full"
+                                      />
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div>
+                                    <img
+                                      src={defaultimage}
+                                      alt=""
+                                      className="h-64 md:h-72 object-cover w-full"
+                                    />
+                                  </div>
+                                )}
+                              </Carousel>
+                            </div>
 
-                            <div className="flex px-3 justify-between  font-PlusJakartaSansMedium font-medium">
-                              <p>Room in Bison Valley</p>
+                            <div className="flex px-3 gap-x-5 justify-between flex-wrap font-PlusJakartaSansMedium font-semibold">
+                              <p>{item.stay_title}</p>
 
-                              <div className="flex  items-center">
+                              <div className="flex items-center">
                                 <FaStar className="text-yellow-500" />
                                 <p> 5.0 (2)</p>
                               </div>
                             </div>
-                            <p className="text-[#797979] px-3 text-sm">
-                              Stay with Shiraz The Grove
+
+                            <p className="text-gray-600 px-3">
+                              {item.tag_line}
                             </p>
-                            <p className="text-xl font-PlusJakartaSansMedium px-3 pb-3 font-medium">
-                              ₹ {Number(15444).toLocaleString()}{" "}
-                              <span className="text-[#797979] text-sm">
-                                for 4 nights
-                              </span>
-                            </p>
+
+                            <div className="flex items-center gap-2 pb-2">
+                              <del className="font-PlusJakartaSansMedium text-[#7C7C7C] px-3 font-medium">
+                                ₹ {Number(item.actual_price).toLocaleString()}
+                              </del>
+
+                              <p className="lg:text-xl font-PlusJakartaSansMedium px-3 font-semibold">
+                                ₹ {Number(item.discount_price).toLocaleString()}
+                              </p>
+                            </div>
                           </div>
                         ))}
-                    </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center items-center h-96">
+                        <p className="text-2xl">No stays available</p>
+                      </div>
+                    )}
                   </div>
                 </>
               )}

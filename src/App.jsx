@@ -21,6 +21,7 @@ const User_Enquiries = lazy(() => import("./pages/User_Enquiries"));
 const Faq = lazy(() => import("./pages/Faq"));
 import { HelmetProvider } from "react-helmet-async";
 import Destinations from "./pages/Destinations";
+import StaysDetails from "./pages/StaysDetails";
 
 
 
@@ -53,7 +54,7 @@ function App() {
             element={<DestinationsDetails />}
           />
             <Route
-            path="/stayslist"
+            path="/stayslist/:id/:cityname"
             element={<StaysList />}
           />
           <Route path="/destinations" element={<Destinations/>} />
@@ -65,6 +66,7 @@ function App() {
           <Route path="/wishlist" element={<User_Wishlist />} />
           <Route path="/enquiries" element={<User_Enquiries />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/staysdetails/:id" element={<StaysDetails />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

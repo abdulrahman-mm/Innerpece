@@ -14,7 +14,6 @@ import {
   WhatsappIcon,
 } from "react-share";
 
-
 function Featured() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -45,6 +44,11 @@ function Featured() {
       Authorization: `Bearer ${token}`,
     };
 
+    console.log(user_id);
+    console.log(id);
+    console.log(isWishlisted);
+    
+
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("program_id", id);
@@ -56,15 +60,50 @@ function Featured() {
         formData,
         { headers }
       );
+      console.log(response);
 
-      if (response.status === 201 || response.status === 200) {
-        // console.log(
-        //   `${isWishlisted ? "Removed from" : "Added to"} wishlist successfully.`
-        // );
-        setIsWishlisted(!isWishlisted);
-      } else {
-        console.error("Failed to update wishlist.", response);
-      }
+      setIsWishlisted(!isWishlisted);
+
+      const fetchProgramData = async () => {
+        try {
+          const storedUserDetails = localStorage.getItem("loginDetails");
+
+          const userDetails = storedUserDetails
+            ? JSON.parse(storedUserDetails)
+            : null;
+
+          const payload1 = {
+            program_id: id ? id : slicedPathName,
+            user_id: userDetails?.id || null,
+          };
+
+          const payload2 = {
+            program_id: slicedUserId,
+          };
+
+          const response = slicedUserId
+            ? await axios.post(
+                "https://backoffice.innerpece.com/api/v1/specific-program-details",
+                payload2
+              )
+            : await axios.post(
+                "https://backoffice.innerpece.com/api/v1/get-program-details",
+                payload1
+              );
+
+          console.log(response);
+
+          setApiData(response.data.data);
+          setUserName(response.data.data.name);
+
+          setApiData(response.data.data);
+          setIsWishlisted(response.data.data.wishlists);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      fetchProgramData();
     } catch (error) {
       console.error("An error occurred while updating wishlist:", error);
     }

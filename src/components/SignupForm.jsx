@@ -54,7 +54,10 @@ function Signup() {
   }
 
   function navigateToTermsOfService() {
-    navigate("/termsofservice");
+    // navigate("/termsofservice");
+      window.open("/termsofservice", "_blank");
+    
+    
 
     window.scrollTo({
       top: 0,
@@ -640,7 +643,7 @@ function Signup() {
               </div> */}
 
               <div className="flex flex-col gap-1">
-                {/* <div className="flex items-center justify-start gap-2">
+                <div className="flex items-center justify-start gap-2">
                   <input
                     type="checkbox"
                     name="terms_condition"
@@ -663,7 +666,7 @@ function Signup() {
                   >
                     Terms Of Service
                   </span>
-                </div> */}
+                </div>
 
                 {/* <div>
                   {userDetailsError.terms_condition && (

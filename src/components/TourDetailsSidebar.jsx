@@ -595,7 +595,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
     indexOfFirstReview,
     indexOfLastReview
   );
-
+  
   return (
     <div
       className={` w-full overflow-y-auto lg:h-screen  pb-10 lg:sticky top-5  sidebar bg-[#FEFEFE]  md:basis-[32%] xl:basis-[25%] flex-grow  md:mt-10   ${

@@ -278,6 +278,8 @@ function Programs() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  
+
   return (
     <div>
       {!filterButtonClicked && (
@@ -290,7 +292,7 @@ function Programs() {
           </div>
           <img
             src={whatsapp}
-            className="h-10 w-10  transition-all duration-500"
+            className="h-12 w-12  transition-all duration-500"
           />
         </div>
       )}

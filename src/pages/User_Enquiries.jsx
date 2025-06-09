@@ -6,7 +6,6 @@ import axios from "axios";
 import Footer from "../components/Footer";
 import whatsapp from "../assets/whatsapp.svg";
 
-
 const User_Enquiries = () => {
   const [userLogedIn, setUserLogedIn] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -17,7 +16,6 @@ const User_Enquiries = () => {
   const [isLoading, setIsLoading] = useState(true); // Loading state
 
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     document.title = "Enquiries - Innerpece";
@@ -45,9 +43,8 @@ const User_Enquiries = () => {
       setUserLogedIn(true);
       const { email } = loggedUserDetails;
       setUserEmail(email);
-    }
-    else{
-      setUserLogedIn(false)
+    } else {
+      setUserLogedIn(false);
     }
   }, []);
 
@@ -73,7 +70,14 @@ const User_Enquiries = () => {
           { headers }
         );
 
+        console.log(response.data.data);
+        
+
         setApiData(response.data.data);
+        // setApiData([
+        //   ...response.data.data.stay_enquiry,
+        //   ...response.data.data.program_enquiry,
+        // ]);
       } catch (err) {
         console.log(err);
       } finally {
@@ -102,19 +106,23 @@ const User_Enquiries = () => {
     );
   }
 
-  
+
+  console.log(apiData);
+
 
   return (
     <div className="bg-gray-50 min-h-screen">
-
-<div
+      <div
         onClick={() => window.open("https://wa.me/6384131642")}
         className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
       >
         <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
           <p>Whatsapp Enquiry</p>
         </div>
-        <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
+        <img
+          src={whatsapp}
+          className="h-10 w-10  transition-all duration-500"
+        />
       </div>
 
       <Header />
@@ -143,30 +151,28 @@ const User_Enquiries = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {apiData
-                    .slice()
-                    .reverse()
-                    .map((item, index) => (
-                      <tr key={index} className="hover:bg-gray-100">
-                        <td className="border border-gray-300 px-4 py-2 text-sm">
-                          {index + 1}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-sm">
-                          {item.created_at.split("T")[0]}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-sm">
-                          {item.program_title}
-                        </td>
-                        <td className="border border-gray-300 px-4 py-2 text-center">
-                          <button
-                            onClick={() => onClickView(index)}
-                            className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-                          >
-                            View
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                  {apiData.slice().map((item, index) => (
+                    <tr key={index} className="hover:bg-gray-100">
+                      <td className="border border-gray-300 px-4 py-2 text-sm">
+                        {index + 1}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-sm">
+                        {item.created_at.split("T")[0]}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-sm">
+                        {item.program_title}
+                        {item.stay_title}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        <button
+                          onClick={() => onClickView(index)}
+                          className="rounded bg-blue-500 px-3 py-1 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+                        >
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             ) : (
@@ -201,6 +207,7 @@ const User_Enquiries = () => {
           <div className="bg-white rounded-xl p-6 w-11/12 max-w-lg shadow-lg">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
               {selectedDetails.program_title}
+              {selectedDetails.stay_title}
             </h2>
             <div>
               <p className="text-gray-700">
@@ -221,16 +228,22 @@ const User_Enquiries = () => {
               </p>
               <p className="text-gray-700">
                 <span className="font-semibold">Days to Travel:</span>{" "}
-                {selectedDetails.days}
+                {selectedDetails.days
+                  ? selectedDetails.days
+                  : selectedDetails.no_of_days}
               </p>
               <p className="text-gray-700">
                 <span className="font-semibold">Destination:</span>{" "}
-                {selectedDetails.travel_destination}
+                {selectedDetails.travel_destination
+                  ? selectedDetails.travel_destination
+                  : selectedDetails.location}
               </p>
-              <p className="text-gray-700">
-                <span className="font-semibold">Budget per Head:</span>{" "}
-                {selectedDetails.budget_per_head}
-              </p>
+              {selectedDetails.budget_per_head && (
+                <p className="text-gray-700">
+                  <span className="font-semibold">Budget per Head:</span>{" "}
+                  {selectedDetails.budget_per_head}
+                </p>
+              )}
               <p className="text-gray-700">
                 <span className="font-semibold">Total Count:</span>{" "}
                 {selectedDetails.total_count}
@@ -247,17 +260,37 @@ const User_Enquiries = () => {
                 <span className="font-semibold">Child Count:</span>{" "}
                 {selectedDetails.child_count}
               </p>
-              <p className="text-gray-700">
-                <span className="font-semibold">Travel Date:</span>{" "}
-                {selectedDetails.travel_date}
-              </p>
-              <p className="text-gray-700">
-                <span className="font-semibold">Rooms Required:</span>{" "}
-                {selectedDetails.rooms_count}
-              </p>
+
+              {selectedDetails.travel_date && (
+                <p className="text-gray-700">
+                  <span className="font-semibold">Travel Date:</span>{" "}
+                  {selectedDetails.travel_date}
+                </p>
+              )}
+
+              {selectedDetails.rooms_count && (
+                <p className="text-gray-700">
+                  <span className="font-semibold">Rooms Required:</span>{" "}
+                  {selectedDetails.rooms_count}
+                </p>
+              )}
+              {selectedDetails.checkin_date && (
+                <p className="text-gray-700">
+                  <span className="font-semibold">Checkin Date:</span>{" "}
+                  {selectedDetails.checkin_date}
+                </p>
+              )}
+              {selectedDetails.checkout_date && (
+                <p className="text-gray-700">
+                  <span className="font-semibold">Checkout Date:</span>{" "}
+                  {selectedDetails.checkout_date}
+                </p>
+              )}
               <p className="text-gray-700">
                 <span className="font-semibold">Cab Needed:</span>{" "}
-                {selectedDetails.cab_need}
+                {selectedDetails.cab_need
+                  ? selectedDetails.cab_need
+                  : selectedDetails.cab}
               </p>
               <p className="text-gray-700">
                 <span className="font-semibold">Comments:</span>{" "}

@@ -191,12 +191,13 @@ function TourDetails() {
     fetchProgramData();
   }, []);
 
+  const [bookNowClicked, setBookNowClicked] = useState(false);
+
   const handleLoginClick = () => {
     setLoginClicked(true);
     setBookNowClicked(false);
   };
 
-  const [bookNowClicked, setBookNowClicked] = useState(false);
 
   const onChangePrice = (item, index) => {
     setSelectedPackage(item);
@@ -1355,10 +1356,12 @@ function TourDetails() {
                             value={`${selectedPackage} : ${priceSelected}`}
                           /> */}
 
-                           <div className="flex gap-2 p-2 border-l">
-                          <p>{selectedPackage} :</p>
-                          <p>₹ {Number(priceSelected).toLocaleString("en-IN")}</p>
-                        </div>
+                          <div className="flex gap-2 p-2 border-l">
+                            <p>{selectedPackage} :</p>
+                            <p>
+                              ₹ {Number(priceSelected).toLocaleString("en-IN")}
+                            </p>
+                          </div>
                         </div>
                       </div>
 
@@ -1534,7 +1537,7 @@ function TourDetails() {
           reviewRef={reviewRef}
           dummyRef={dummyRef}
         />
-        <Footer className="pb-20" />
+        <Footer className="pb-20 md:pb-0" />
       </Suspense>
     </div>
   );
