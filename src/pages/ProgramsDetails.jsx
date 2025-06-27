@@ -19,7 +19,6 @@ import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
 
 function Programs() {
-
   useEffect(() => {
     document.title = "Program Details - Innerpece";
   }, []); // Empty dependency array ensures it runs once on mount
@@ -50,7 +49,12 @@ function Programs() {
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.split("/")[2];
-  const slicedLocationName = pathName.split("/")[3];
+  const slicedLocationName = pathName.split("/")[3]?.split("-");
+  const mappedSlicedLocationName = slicedLocationName.map(
+    (item) => item[0].toUpperCase() + item.slice(1)
+  );
+  const upperCasedLocationName = mappedSlicedLocationName.join(" ");
+
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -61,6 +65,7 @@ function Programs() {
             theme: id ? id : slicedPathName,
           }
         );
+
         setLoading(false);
         setApiData(response.data.data);
       } catch (err) {
@@ -278,8 +283,6 @@ function Programs() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
-
   return (
     <div>
       {!filterButtonClicked && (
@@ -318,7 +321,7 @@ function Programs() {
                 className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
               >
                 <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-rancho tracking-widest text-center lg:text-5xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{`Explore ${
-                  apiData.length > 0 ? apiData[0].theme : slicedLocationName
+                  apiData.length > 0 ? apiData[0].theme :upperCasedLocationName
                 }`}</h1>
                 <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
                   Find your perfect trip with personalized themes and

@@ -108,7 +108,7 @@ function Footer({className}) {
 
             <div className="text-white basis-30 flex gap-2 flex-col  md:gap-4">
               <p className="font-semibold text-xl  pb-3 md:pb-5 ">
-                Services Request
+                Services Request 
               </p>
 
               <p

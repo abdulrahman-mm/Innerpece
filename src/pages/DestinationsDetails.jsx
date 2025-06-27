@@ -47,7 +47,12 @@ function DestinationsDetails() {
 
   const pathName = window.location.pathname;
   const slicedPathName = pathName.split("/")[2];
-  const slicedLocationName = pathName.split("/")[3];
+  const slicedLocationName = pathName.split("/")[3]?.split("-");
+  const mappedSlicedLocationName = slicedLocationName.map(
+    (item) => item[0].toUpperCase() + item.slice(1)
+  );
+  const upperCasedLocationName = mappedSlicedLocationName.join(" ");
+
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -341,7 +346,7 @@ function DestinationsDetails() {
                 apiData?.length > 0
                   ? // ? apiData[0]?.destination[0]?.city_name
                     apiData[0]?.destination
-                  : slicedLocationName
+                  : upperCasedLocationName
               }`}</h1>
               <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
                 Find your perfect trip with personalized themes and destinations

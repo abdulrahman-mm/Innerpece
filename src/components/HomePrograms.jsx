@@ -48,6 +48,9 @@ function Programs() {
       .then((response) => {
         setProgramsData(response.data.themes);
         setLoading(false); // Set loading to false after data is fetched
+
+  
+        
       })
       .catch((error) => {
         console.log(error);
@@ -57,6 +60,8 @@ function Programs() {
 
   // navigate to program details page
   const handleThemeClick = (id, themes_name) => {
+ 
+    
     const formattedThemeName = themes_name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
@@ -134,6 +139,8 @@ function Programs() {
       </button>
     );
   };
+
+  
 
   return (
     <>

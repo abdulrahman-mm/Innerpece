@@ -18,10 +18,11 @@ const StaysTamilnadu = () => {
           "https://backoffice.innerpece.com/api/v1/get-stays",
           {
             params: {
-              destination: "kerala",
+              destination: "Himachal Pradesh",
             },
           }
         );
+
         setApiData(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -138,7 +139,7 @@ const StaysTamilnadu = () => {
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
           <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
             <span className="font-jost font-medium">Popular Stays in </span>
-            <span className="font-jost font-bold">Kerala</span>
+            <span className="font-jost font-bold">Himachal Pradesh</span>
           </p>
 
           <div className="flex items-center flex-1 mt-8 md:mt-10   flex-grow flex-wrap justify-start ">
@@ -161,9 +162,9 @@ const StaysTamilnadu = () => {
         <>
           {apiData && apiData.length > 0 && (
             <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-              <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
+              <p className="text-2xl md:text-3xl leading-tight  lg:text-4xl  leading-loose text-[#141414]">
                 <span className="font-jost font-medium">Popular Stays in </span>
-                <span className="font-jost font-bold">Kerala</span>
+                <span className="font-jost font-bold">Himachal Pradesh</span>
               </p>
 
               <div className="mt-8 md:mt-10">
@@ -191,7 +192,7 @@ const StaysTamilnadu = () => {
                         }
                         className="relative  flex-grow  cursor-pointer group  rounded-t-2xl  overflow-hidden "
                       >
-                        <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                        <div className="absolute  -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
                         <img
                           src={
                             item.images[0]
@@ -206,10 +207,15 @@ const StaysTamilnadu = () => {
                           {item.stay_title}
                         </p> */}
 
-                        <div className="absolute font-jost font-medium  w-full  ps-5 text-2xl md:text-3xl  text-white  bottom-5">
-                          <p>
+                        <div className="absolute font-mulish font-medium  w-full  ps-5 text-2xl  text-white  bottom-2">
+                          <p className="font-semibold">
                             {" "}
-                            {item?.stay_title.split(" ").slice(0, -1).join(" ").slice(0,15)}....
+                            {item?.stay_title
+                              .split(" ")
+                              .slice(0, -1)
+                              .join(" ")
+                              .slice(0, 16)}
+                            ....
                           </p>
                           <p className="font-jost text-[18px] font-medium">
                             {" "}

@@ -48,7 +48,6 @@ import { FaImage } from "react-icons/fa6";
 import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
 import defaultimage from "../assets/defaultimg.png";
 import default_user_image2 from "../assets/default_user_image_2.jpg";
-
 import star from "../assets/star.png";
 
 const StaysDetails = () => {
@@ -104,6 +103,10 @@ const StaysDetails = () => {
   const checkOutDateInputRef = useRef(null);
 
   useEffect(() => {
+    document.title = "Stays Details - Innerpece";
+  }, []); // Empty dependency array ensures it runs once on mount
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
         prevIndex === apiData?.data?.[0]?.images.length - 1 ? 0 : prevIndex + 1
@@ -136,6 +139,9 @@ const StaysDetails = () => {
     };
   }, []);
 
+  const pathName = window.location.pathname;
+  const slicedLocationName = pathName.split("/")[2];
+
   useEffect(() => {
     const storedUserDetails = localStorage.getItem("loginDetails");
     const userDetails = storedUserDetails
@@ -149,7 +155,7 @@ const StaysDetails = () => {
           "https://backoffice.innerpece.com/api/v1/get-stay-details",
           {
             params: {
-              program_id: id,
+              program_id: id ? id : slicedLocationName,
               user_id: userDetails?.id,
             },
           }
@@ -171,6 +177,8 @@ const StaysDetails = () => {
           );
 
         setMap(modifiedMapHtml);
+
+        console.log(response.data);
       } catch (err) {
         console.log(err);
       }
@@ -617,8 +625,6 @@ const StaysDetails = () => {
     indexOfFirstReview,
     indexOfLastReview
   );
-  
-
   return (
     <div>
       <Header />
@@ -759,7 +765,7 @@ const StaysDetails = () => {
                 <div className="w-[40%] grid grid-cols-2 grid-rows-2 gap-5">
                   {item.images.slice(1, 5).map((img, index) => (
                     <div
-                    onClick={() => openModal(index+1)}
+                      onClick={() => openModal(index + 1)}
                       key={index}
                       className="w-full h-full relative cursor-pointer "
                     >
@@ -771,7 +777,7 @@ const StaysDetails = () => {
                       />
                       {index === 3 && (
                         <div
-                          onClick={() => openModal(index+1)}
+                          onClick={() => openModal(index + 1)}
                           className="flex items-center gap-3 absolute bottom-2 right-2 z-10 bg-white rounded-full px-4 py-1"
                         >
                           <FaImage />
@@ -998,13 +1004,13 @@ const StaysDetails = () => {
               </button>
 
               {!userDetails && (
-                <p className="text-sm text-center text-red-500 mt-2">
+                <p className="text-sm text-center  text-blue-900 mt-2">
                   Please{" "}
                   <span
                     onClick={handleLoginClick}
-                    className="underline cursor-pointer"
+                    className="underline text-red-500 text-lg font-semibold cursor-pointer"
                   >
-                    login
+                    Login
                   </span>{" "}
                   to reserve
                 </p>
@@ -1113,11 +1119,11 @@ const StaysDetails = () => {
               </div>
 
               {!userDetails && (
-                <p className="text-red-500 mt-1 max-lg:hidden">
+                <p className="text-blue-900 text-sm mt-1 max-lg:hidden">
                   Please{" "}
                   <button
                     onClick={handleLoginClick}
-                    className="cursor-pointer underline"
+                    className="cursor-pointer text-red-500 text-lg font-semibold underline"
                   >
                     Login{" "}
                   </button>
@@ -1821,11 +1827,15 @@ const StaysDetails = () => {
           <div className="flex items-center justify-center  bg-white">
             <div className="w-screen   md:w-[70vw] py-3  lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
               <button
-                onClick={() => setLoginClicked(false)}
-                className="text-gray-500 w-full pe-5  font-extrabold text-xl hover:text-gray-700 focus:outline-none placeholder:text-gray-600 placeholder:text-sm flex justify-end"
+                onClick={() => {
+                  setLoginClicked(false);
+                  setBookNowClicked(false);
+                }}
+                className="text-gray-500 w-full pe-5 font-extrabold text-xl hover:text-gray-700 focus:outline-none placeholder:text-gray-600 placeholder:text-sm flex justify-end"
               >
                 ✕
               </button>
+
               <div className="flex justify-start gap-2 md:gap-5 lg:gap-8 h-full w-full px-2 md:px-4 py-4">
                 <div className=' bg-[url("././assets/login_image.png")] max-sm:hidden  w-1/5  md:w-1/3 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
 
@@ -1917,7 +1927,7 @@ const StaysDetails = () => {
                           <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                         </div>
                       ) : (
-                        "Sign In"
+                        "Log In"
                       )}
                     </button>
 

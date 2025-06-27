@@ -13,6 +13,7 @@ import default_user_image from "../assets/default_user_image.png";
 import default_user_image2 from "../assets/default_user_image_2.jpg";
 import { GoDotFill } from "react-icons/go";
 import { LuDot } from "react-icons/lu";
+import { FaChevronDown } from "react-icons/fa";
 
 function Mainbar({
   highlightsRef,
@@ -362,9 +363,15 @@ function Mainbar({
     return cleaned;
   };
 
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleIndex = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+  
+  
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
-     
       {apiData && apiData.gallery_img && (
         <Carousel
           swipeable={true}
@@ -432,40 +439,89 @@ function Mainbar({
         </>
       )}
 
-      {apiData.tour_planning?.plan_description &&
-        !apiData.tour_planning?.plan_description.includes("<p><br></p>") && (
-          <div ref={TourPlanningRef} className="mt-8 md:mt-10">
-            <div className="flex gap-2 mt-8 items-center">
-              <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-              <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
-                Tour Planning
-              </p>
-            </div>
+      {apiData.tour_planning && (
+        <div ref={TourPlanningRef} className="mt-8 md:mt-10">
+          <div className="flex gap-2 mt-8 items-center">
+            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+              Tour Planning
+            </p>
+          </div>
 
-            {apiData.tour_planning.plan_description &&
-              apiData.tour_planning.plan_description.length > 0 && ( // Check for presence and length
-                <div>
-                  <div className="mt-3 md:mt-5">
-                    {/* <p
-                      dangerouslySetInnerHTML={{
-                        __html: apiData?.tour_planning?.plan_description || "",
-                      }}
-                      className="md:leading-7"
-                    /> */}
+          <div className="mt-3 md:mt-5 flex flex-col gap-2">
+            {apiData.tour_planning.map((item, index) => {
+              const isOpen = openIndex === index;
 
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: cleanHTML(
-                          apiData?.tour_planning?.plan_description
-                        ),
-                      }}
-                      className="md:leading-7"
+              return (
+                <div key={index} className=" pb-2">
+                  <button
+                    onClick={() => toggleIndex(index)}
+                    className="w-full flex justify-between items-center text-left font-mulish text-[#0E598F] font-semibold focus:outline-none"
+                  >
+                    <div className="flex gap-2 items-center">
+                      <span>{item.title}</span>
+                      {/* <p className="border-black font-semibold border-2 h-4"></p> */}
+                      <p className="text-black font-medium">{item.subtitle}</p>
+                    </div>
+                    <FaChevronDown
+                      className={`transition-transform text-black duration-300 ${
+                        isOpen ? "rotate-180" : "rotate-0"
+                      }`}
                     />
+                  </button>
+
+                  <div
+                    className={`overflow-hidden mt-2 transition-all duration-700 ease-out ${
+                      isOpen ? " opacity-100 min-h-20" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    {/* <p className="text-[#0D3756] font-normal">{item.description}</p> */}
+                    <p  dangerouslySetInnerHTML={{
+                              __html: item.description ?? "",
+                            }}/>
                   </div>
                 </div>
-              )}
+              );
+            })}
+
+           
+            {/* {Object.keys(apiData.tour_planning).map((key, index) => {
+              const item = apiData.tour_planning[key];
+              const isOpen = openIndex === index;
+
+              return (
+                <div key={key} className="pb-2">
+                  <button
+                    onClick={() => toggleIndex(index)}
+                    className="w-full flex justify-between items-center text-left font-mulish text-[#0E598F] font-semibold focus:outline-none"
+                  >
+                    <div className="flex gap-2 items-center flex-wrap">
+                      <span>{item.title}</span>
+                      <p className="border-black font-semibold border-2 h-4"></p>
+                      <p className="text-black font-medium">{item.subtitle}</p>
+                    </div>
+                    <FaChevronDown
+                      className={`transition-transform text-black duration-300 ${
+                        isOpen ? "rotate-180" : "rotate-0"
+                      }`}
+                    />
+                  </button>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ease-out ${
+                      isOpen ? " opacity-100 mt-2" : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <p className="text-[#0D3756] font-normal">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })} */}
           </div>
-        )}
+        </div>
+      )}
 
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
@@ -481,7 +537,6 @@ function Mainbar({
               <div className="flex  flex-wrap gap-3 md:gap-5">
                 {Object.keys(apiData.amenity_details).map((key, index) => {
                   const amenity = apiData.amenity_details[key];
-
                   return (
                     <div className="flex gap-2 " key={index}>
                       <img
@@ -622,7 +677,7 @@ function Mainbar({
         </div>
       )}
 
-      {apiData.important_info && apiData.important_info !== "<br>" && (
+      {apiData.important_info && apiData.important_info !== "<p><br></p>" && (
         <div ref={informationRef} className="mt-8 md:mt-10   ">
           <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
@@ -646,7 +701,7 @@ function Mainbar({
         </div>
       )}
 
-      {apiData.program_inclusion && (
+      {apiData.program_inclusion && apiData.program_inclusion !== "<p><br></p>" &&(
         <div className="mt-8 md:mt-10   ">
           <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
@@ -667,7 +722,7 @@ function Mainbar({
         </div>
       )}
 
-      {apiData.program_exclusion && (
+      {apiData.program_exclusion && apiData.program_exclusion !== "<p><br></p>" &&(
         <div className="mt-8 md:mt-10   ">
           <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
@@ -996,7 +1051,7 @@ function Mainbar({
                         !captchaValue ? "bg-gray-400" : "bg-sky-800"
                       } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
                     >
-                      Sign In
+                      Log In
                     </button>
 
                     <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">

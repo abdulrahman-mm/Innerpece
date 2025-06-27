@@ -44,9 +44,6 @@ function Featured() {
       Authorization: `Bearer ${token}`,
     };
 
-    console.log(user_id);
-    console.log(id);
-    console.log(isWishlisted);
     
 
     const formData = new FormData();
@@ -60,7 +57,6 @@ function Featured() {
         formData,
         { headers }
       );
-      console.log(response);
 
       setIsWishlisted(!isWishlisted);
 
@@ -91,7 +87,6 @@ function Featured() {
                 payload1
               );
 
-          console.log(response);
 
           setApiData(response.data.data);
           setUserName(response.data.data.name);

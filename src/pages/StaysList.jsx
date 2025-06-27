@@ -39,25 +39,10 @@ const StaysList = () => {
 
   const location = useLocation();
 
-  useEffect(() => {
-    const fetchProgramData = async () => {
-      try {
-        const response = await axios.get(
-          "https://backoffice.innerpece.com/api/v1/get-stay-destination"
-        );
-
-        setExploreMoreStaysData(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProgramData();
-  }, []);
-
   const { id, stay_title } = location.state || {};
 
   const [apiData, setApiData] = useState([]);
-  const [exploreMoreStaysData, setExploreMoreStaysData] = useState([]);
+  const [filteredApiData, setFilteredApiData] = useState([]);
   const [sortBy, setSortBy] = useState("");
   const [startDate, setStartDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -83,9 +68,14 @@ const StaysList = () => {
   };
 
   const pathName = window.location.pathname;
-  const slicedLocationName = pathName.split("/")[3];
-  const slicedLocationid = pathName.split("/")[2];
+  const slicedLocationName = pathName.split("/")[3]?.split("-");
 
+  const mappedSlicedLocationName = slicedLocationName.map(
+    (item) => item[0].toUpperCase() + item.slice(1)
+  );
+  const upperCasedLocationName = mappedSlicedLocationName.join(" ");
+
+  const slicedLocationid = pathName.split("/")[2];
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -100,8 +90,9 @@ const StaysList = () => {
           }
         );
 
-        setApiData(response.data.data);
-        setLoading(false);        
+        setApiData(response.data);
+        setFilteredApiData(response.data);
+        setLoading(false);
         const firstProgram = response.data.data[0];
         const metaOgTitle = document.querySelector("meta[property='og:title']");
         if (metaOgTitle) {
@@ -129,11 +120,13 @@ const StaysList = () => {
           );
         }
       } catch (err) {
+        console.log(err);
+
         setLoading(false);
       }
     };
     fetchProgramData();
-  }, [slicedLocationName]);
+  }, [pathName]);
 
   const handleCardClick = (id, stay_title) => {
     navigate(`/staysdetails/${id}`, {
@@ -245,22 +238,21 @@ const StaysList = () => {
     );
   };
 
-  const handleStaysClick = (id, stay_title) => {
-    
-    const formattedThemeName = stay_title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/-+/g, "-")
-      .replace(/^-+|-+$/g, "");
+  const handleStaysClick = (districtName) => {
+    // const formattedThemeName = districtName
+    //   .toLowerCase()
+    //   .replace(/[^a-z0-9]+/g, "-")
+    //   .replace(/-+/g, "-")
+    //   .replace(/^-+|-+$/g, "");
 
-    navigate(`/stayslist/${id}/${formattedThemeName}`, {
-      state: { stay_title },
-    });
+    let a = apiData.data.filter(
+      (item, index) => item.district === districtName
+    );
 
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
+    setFilteredApiData((prev) => ({
+      ...prev,
+      data: a,
+    }));
   };
 
   const CustomDot = ({ onClick, ...rest }) => {
@@ -281,7 +273,7 @@ const StaysList = () => {
       </li>
     );
   };
-  
+
   // const fetchProgramData = async () => {
   //   try {
   //     const response = await axios.get(
@@ -322,8 +314,8 @@ const StaysList = () => {
 
       <Suspense
         fallback={
-          <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
-            <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+          <div class="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
+            <div className="  w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
           </div>
         }
       >
@@ -344,8 +336,8 @@ const StaysList = () => {
               <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl  font-rancho tracking-widest text-center  font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{` ${
                 apiData?.length > 0
                   ? // ? apiData[0]?.destination[0]?.city_name
-                    apiData[0]?.destination
-                  : slicedLocationName
+                    apiData?.data?.[0]?.destination
+                  : upperCasedLocationName
               } Stays `}</h1>
               <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
                 Find your perfect trip with personalized themes and destinations
@@ -359,22 +351,24 @@ const StaysList = () => {
 
         <div className="ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 mt-5 ">
           <div>
+            {/* {filteredApiData && ( */}
             <p className="font-PlusJakartaSansMedium font-medium text-lg">
-              Explore more stays
+              Explore more places
             </p>
+            {/* )} */}
 
             <div className="flex overflow-x-auto gap-2 md:gap-8 xl:gap-16 mt-3  scrollbar-hide">
-              {exploreMoreStaysData.map((item, index) => (
+              {apiData?.districts?.map((item, index) => (
                 <div
-                  onClick={() => handleStaysClick(item.id, item.city_name)}
+                  onClick={() => handleStaysClick(item.name)}
                   key={index}
                   className="flex cursor-pointer flex-col items-center justify-start w-20 flex-shrink-0"
                 >
                   <div className="w-16 h-16 md:w-20 overflow-hidden md:h-20  border-2  border-[#0F5B92] rounded-full p-0.5">
                     <img
                       src={
-                        item.city_image
-                          ? `https://backoffice.innerpece.com/${item.city_image}`
+                        item.image
+                          ? `https://backoffice.innerpece.com${item.image}`
                           : defaultimg
                       }
                       alt="story"
@@ -383,7 +377,7 @@ const StaysList = () => {
                   </div>
 
                   <p className="text-xs font-PlusJakartaSansMedium font-medium mt-1 text-center">
-                    {item.city_name}
+                    {item.name}
                   </p>
                 </div>
               ))}
@@ -400,9 +394,9 @@ const StaysList = () => {
                   <div className="">
                     {/* Horizontal Scroll Section */}
                     {/* <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-10  py-4"> */}
-                    {apiData.length > 0 ? (
+                    {filteredApiData?.data?.length > 0 ? (
                       <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4">
-                        {apiData.map((item, outerIndex) => (
+                        {filteredApiData?.data.map((item, outerIndex) => (
                           <div
                             key={outerIndex}
                             onClick={() => handleCardClick(item.id)}
@@ -417,7 +411,7 @@ const StaysList = () => {
                                 showDots
                                 arrows={false}
                                 className="rounded-2xl overflow-hidden"
-                                customDot={<CustomDot />} // 👈 Use custom dot that stops propagation
+                                customDot={<CustomDot />}
                               >
                                 {item?.images.length > 0 ? (
                                   item?.images.map((item1, index) => (

@@ -1018,7 +1018,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                           <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                         </div>
                       ) : (
-                        "Sign In"
+                        "Log In"
                       )}
                     </button>
 
@@ -1742,7 +1742,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
                         !captchaValue ? "bg-gray-400" : "bg-sky-800"
                       } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
                     >
-                      Sign In
+                      Log In
                     </button>
 
                     <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">

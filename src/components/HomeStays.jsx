@@ -6,7 +6,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-
 const HomeStays = () => {
   let navigate = useNavigate();
   const [apiData, setApiData] = useState([]);

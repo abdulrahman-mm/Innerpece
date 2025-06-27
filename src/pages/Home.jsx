@@ -27,7 +27,7 @@ function Home() {
   const [loginError, setLoginError] = useState({});
 
   useEffect(() => {
-    document.title = "Innerpece";
+    document.title = "Home - Innerpece";
   }, []);
 
   useEffect(() => {

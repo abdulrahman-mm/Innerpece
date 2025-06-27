@@ -198,7 +198,6 @@ function TourDetails() {
     setBookNowClicked(false);
   };
 
-
   const onChangePrice = (item, index) => {
     setSelectedPackage(item);
     setPriceSelected(apiData.price_amount[index]);
@@ -400,6 +399,7 @@ function TourDetails() {
 
   // this will stop scroll when modal is open
   useEffect(() => {
+
     // Add or remove the 'overflow-hidden' class on the <body> based on modal state
     if (bookNowClicked || loginCliked) {
       document.body.classList.add("overflow-hidden");
@@ -412,6 +412,8 @@ function TourDetails() {
       document.body.classList.remove("overflow-hidden");
     };
   }, [bookNowClicked, loginCliked]);
+
+
   return (
     <div className="bg-[#FEFEFE]">
       <Suspense
@@ -483,19 +485,6 @@ function TourDetails() {
 
             {/* Book Button */}
             <div className="text-center">
-              {/* <button
-                onClick={handleShow}
-                disabled={!userDetails}
-                className={`w-full flex items-center justify-center gap-2 px-4 py-3 text-white font-semibold rounded-lg transition-transform duration-300 ease-in-out ${
-                  userDetails
-                    ? "bg-red-500 hover:scale-105"
-                    : "bg-red-300 cursor-not-allowed"
-                }`}
-              >
-                <img src={telegram} alt="" className="w-5 h-5" />
-                Book Now
-              </button> */}
-
               <button
                 onClick={handleShow}
                 disabled={!userDetails}
@@ -519,199 +508,6 @@ function TourDetails() {
             </div>
           </div>
         </div>
-
-        {/* <div
-          onClick={() => setBookNowClicked(!bookNowClicked)}
-          className="fixed md:hidden flex items-center justify-between px-5 py-2 [box-shadow:0_10px_25px_rgba(0,0,0,0.55)] bottom-0 w-full bg-white z-10"
-        >
-          <button className="w-full font-medium px-5 text-white rounded-lg text-sm h-fit py-2 bg-gradient-to-r from-sky-600 to-sky-800">
-            Book Now
-          </button>
-        </div>
-
-        {bookNowClicked && (
-          <div
-            className={`fixed bottom-0 left-0 right-0 z-10 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
-              bookNowClicked
-                ? "translate-y-0 opacity-100"
-                : "translate-y-full opacity-0"
-            }`}
-          >
-            <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
-              <div className="relative flex flex-col p-3   shadow-md  bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
-                <IoClose
-                  onClick={() => setBookNowClicked(false)}
-                  className="absolute  top-3 right-2 cursor-pointer text-xl"
-                />
-
-                <span className="text-gray-600 pb-2 mt-5 ">
-                  Starting From{" "}
-                  <span className="text-green-800 font-semibold text-xl lg:text-2xl ms-1">
-                    ₹
-                    {`${
-                      apiData.price_amount &&
-                      Number(apiData.price_amount[0]).toLocaleString("en-IN")
-                    }`}
-                  </span>
-                </span>
-
-                <div className="border-t-2 border-dotted w-full border-sky-800"></div>
-
-                <span className="bg-sky-800 -mt-8 px-16 py-1  text-sm rounded-full text-white font-semibold">
-                  Per Person
-                </span>
-
-                {apiData?.price_amount?.length > 0 && (
-                  <div className="flex flex-col w-full">
-                    <div className="flex items-center text-center justify-center">
-                      <div className="flex gap-2 flex-wrap">
-                        {apiData.price_title.map(
-                          (item, index) =>
-                            item && (
-                              <div className="flex gap-2 items-center h-fit text-start  ">
-                                <input
-                                  type="radio"
-                                  name=""
-                                  id={item}
-                                  value={item}
-                                  checked={selectedPackage === item}
-                                  onChange={() => onChangePrice(item, index)}
-                                  // onChange={() => setPriceSelected(item)}
-                                  className="h-fit"
-                                />
-                                <label htmlFor={item} className="h-fit">
-                                  <span> {item} : </span>
-                                  <span className="font-semibold sm:font-bold text-green-800 text-base sm:text-lg">
-                                    ₹
-                                    {Number(
-                                      apiData.price_amount[index]
-                                    ).toLocaleString("en-IN")}
-                                  </span>
-                                </label>
-                              </div>
-                            )
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex flex-col items-center flex-wrap justify-center ">
-                  <button
-                    onClick={handleShow}
-                    disabled={userDetails ? false : true}
-                    className="flex hover:scale-105 transition-all duration-300 ease-in-out flex-wrap bg-red-500 text-white font-semibold flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
-                  >
-                    <img src={telegram} alt="" />
-                    Book Now
-                  </button>
-
-                  {!userDetails && (
-                    <p className="text-red-500 ">
-                      Please{" "}
-                      <span
-                        className="underline cursor-pointer"
-                        onClick={handleLoginClick}
-                      >
-                        login
-                      </span>{" "}
-                      to book now
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )} */}
-
-        {/* {bookNowClicked && (
-          <div className=" backdrop-blur-md fixed z-10 flex items-center justify-center w-full h-full">
-            <div className="relative flex flex-col p-3 w-[95%]  shadow-md  bg-white shadow-black/10 rounded-lg items-center gap-y-4 gap-2">
-              <IoClose
-                onClick={() => setBookNowClicked(false)}
-                className="absolute  top-3 right-2 cursor-pointer text-xl"
-              />
-
-              <span className="text-gray-600 pb-2 mt-5 ">
-                Starting From{" "}
-                <span className="text-green-800 font-semibold text-xl lg:text-2xl ms-1">
-                  ₹
-                  {`${
-                    apiData.price_amount &&
-                    Number(apiData.price_amount[0]).toLocaleString("en-IN")
-                  }`}
-                </span>
-              </span>
-
-              <div className="border-t-2 border-dotted w-full border-sky-800"></div>
-
-              <span className="bg-sky-800 -mt-8 px-16 py-1  text-sm rounded-full text-white font-semibold">
-                Per Person
-              </span>
-
-              {apiData?.price_amount?.length > 0 && (
-                <div className="flex flex-col w-full">
-                  <div className="flex items-center text-center justify-center">
-                    <div className="flex gap-2 flex-wrap">
-                      {apiData.price_title.map(
-                        (item, index) =>
-                          item && (
-                            <div className="flex gap-2 items-center h-fit text-start  ">
-                              <input
-                                type="radio"
-                                name=""
-                                id={item}
-                                value={item}
-                                checked={selectedPackage === item}
-                                onChange={() => onChangePrice(item, index)}
-                                // onChange={() => setPriceSelected(item)}
-                                className="h-fit"
-                              />
-                              <label htmlFor={item} className="h-fit">
-                                <span> {item} : </span>
-                                <span className="font-semibold sm:font-bold text-green-800 text-base sm:text-lg">
-                                  ₹
-                                  {Number(
-                                    apiData.price_amount[index]
-                                  ).toLocaleString("en-IN")}
-                                </span>
-                              </label>
-                            </div>
-                          )
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex flex-col items-center flex-wrap justify-center ">
-                <button
-                  onClick={handleShow}
-                  disabled={userDetails ? false : true}
-                  className="flex hover:scale-105 transition-all duration-300 ease-in-out flex-wrap bg-red-500 text-white font-semibold flex-grow md:flex-grow-0 px-4 py-2 items-center rounded-lg gap-2"
-                >
-                  <img src={telegram} alt="" />
-                  Book Now
-                </button>
-
-                {!userDetails && (
-                  <p className="text-red-500 ">
-                    Please{" "}
-                    <span
-                      className="underline cursor-pointer"
-                      onClick={handleLoginClick}
-                    >
-                      login
-                    </span>{" "}
-                    to book now
-                  </p>
-                )}
-
-               
-              </div>
-            </div>
-          </div>
-        )} */}
 
         {show && (
           <div className="fixed inset-0 z-50 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto">
@@ -1499,7 +1295,7 @@ function TourDetails() {
                             <span className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                           </div>
                         ) : (
-                          "Sign In"
+                          "Log In"
                         )}
                       </button>
 
