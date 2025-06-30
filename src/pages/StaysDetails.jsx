@@ -178,7 +178,6 @@ const StaysDetails = () => {
 
         setMap(modifiedMapHtml);
 
-        console.log(response.data);
       } catch (err) {
         console.log(err);
       }
@@ -292,7 +291,6 @@ const StaysDetails = () => {
           );
           setApiData(response.data);
 
-          console.log(response.data);
 
           let modifiedMapHtml = response?.data?.data?.[0].stay_location;
 
@@ -419,7 +417,6 @@ const StaysDetails = () => {
         }
       );
 
-      console.log(response);
 
       // Successful submission
       setLoadingform("");

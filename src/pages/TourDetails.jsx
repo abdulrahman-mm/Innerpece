@@ -252,7 +252,6 @@ function TourDetails() {
       setLoadingform("");
       setFailure("");
       setSuccess(response.data.message);
-      console.log("api data", response.data);
 
       // Clear form values
       // setName("");

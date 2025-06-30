@@ -88,37 +88,12 @@ const StaysList = () => {
               destination: stay_title ? stay_title : slicedLocationName,
             },
           }
-        );
+        );        
 
         setApiData(response.data);
         setFilteredApiData(response.data);
         setLoading(false);
-        const firstProgram = response.data.data[0];
-        const metaOgTitle = document.querySelector("meta[property='og:title']");
-        if (metaOgTitle) {
-          metaOgTitle.setAttribute(
-            "content",
-            firstProgram.title || "Default Title"
-          );
-        }
-
-        const metaOgDescription = document.querySelector(
-          "meta[property='og:description']"
-        );
-        if (metaOgDescription) {
-          metaOgDescription.setAttribute(
-            "content",
-            firstProgram.category || "Default description"
-          );
-        }
-
-        const metaOgImage = document.querySelector("meta[property='og:image']");
-        if (metaOgImage) {
-          metaOgImage.setAttribute(
-            "content",
-            `https://backoffice.innerpece.com/${firstProgram.cover_img}` || ""
-          );
-        }
+  
       } catch (err) {
         console.log(err);
 
@@ -138,6 +113,7 @@ const StaysList = () => {
       behavior: "instant",
     });
   };
+  
   useEffect(() => {
     if (filterButtonClicked) {
       document.body.classList.add("overflow-hidden");
@@ -351,11 +327,11 @@ const StaysList = () => {
 
         <div className="ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 mt-5 ">
           <div>
-            {/* {filteredApiData && ( */}
+            {apiData?.districts?.length>0 && (
             <p className="font-PlusJakartaSansMedium font-medium text-lg">
               Explore more places
             </p>
-            {/* )} */}
+             )} 
 
             <div className="flex overflow-x-auto gap-2 md:gap-8 xl:gap-16 mt-3  scrollbar-hide">
               {apiData?.districts?.map((item, index) => (

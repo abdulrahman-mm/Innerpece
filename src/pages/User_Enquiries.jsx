@@ -70,7 +70,6 @@ const User_Enquiries = () => {
           { headers }
         );
 
-        console.log(response.data.data);
         
 
         setApiData(response.data.data);
@@ -107,7 +106,6 @@ const User_Enquiries = () => {
   }
 
 
-  console.log(apiData);
 
 
   return (
