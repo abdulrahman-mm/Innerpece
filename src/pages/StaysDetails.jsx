@@ -177,7 +177,6 @@ const StaysDetails = () => {
           );
 
         setMap(modifiedMapHtml);
-
       } catch (err) {
         console.log(err);
       }
@@ -291,7 +290,6 @@ const StaysDetails = () => {
           );
           setApiData(response.data);
 
-
           let modifiedMapHtml = response?.data?.data?.[0].stay_location;
 
           modifiedMapHtml = modifiedMapHtml
@@ -327,7 +325,6 @@ const StaysDetails = () => {
         },
       });
     } catch (err) {
-      console.log("aaa");
 
       console.log(err);
       Swal.fire({
@@ -416,7 +413,6 @@ const StaysDetails = () => {
           },
         }
       );
-
 
       // Successful submission
       setLoadingform("");
@@ -622,6 +618,7 @@ const StaysDetails = () => {
     indexOfFirstReview,
     indexOfLastReview
   );
+
   return (
     <div>
       <Header />
@@ -635,12 +632,12 @@ const StaysDetails = () => {
         <div className="flex items-center justify-between">
           <div className="flex gap-5">
             {apiData?.data?.[0]?.actual_price && (
-              <del className=" text-xl text-[#7C7C7C]">
+              <del className=" text-md text-[#7C7C7C]">
                 ₹ {Number(apiData?.data?.[0]?.actual_price).toLocaleString()}
               </del>
             )}
             {apiData?.data?.[0]?.discount_price && (
-              <p className="font-bold text-xl">
+              <p className="font-bold text-lg">
                 ₹ {Number(apiData?.data?.[0]?.discount_price).toLocaleString()}
               </p>
             )}
@@ -840,7 +837,7 @@ const StaysDetails = () => {
               </p>
             )}
 
-            <hr className="border-gray-200 mt-8 md:mt-10" />
+            <hr className="border-gray-200 mt-5 md:mt-10" />
 
             {apiData?.data?.[0]?.stay_description != "<p><br></p>" && (
               <div className="mt-8 md:mt-10">
@@ -863,7 +860,7 @@ const StaysDetails = () => {
                   )
                   // ))
                 }
-                <hr className="border-gray-200 mt-8 md:mt-10" />
+                <hr className="border-gray-200 mt-5 md:mt-10" />
               </div>
             )}
 
@@ -891,7 +888,7 @@ const StaysDetails = () => {
                     })}
                   </div>
                 </div>
-                <hr className="border-gray-200 mt-8 md:mt-10" />
+                <hr className="border-gray-200 mt-5 md:mt-10" />
               </div>
             )}
 
@@ -919,6 +916,45 @@ const StaysDetails = () => {
                     })}
                   </div>
                 </div>
+                <hr className="border-gray-200 mt-5 md:mt-10" />
+              </div>
+            )}
+
+            {apiData?.data?.[0]?.stay_exclusive && (
+              <div className="mt-8 md:mt-10">
+                <div className="flex gap-2 mt-8 items-center">
+                  <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+                  <p className="font-semibold font-mulish text-xl md:text-2xl  text-[#11142D]">
+                    Stay Exclusion
+                  </p>
+                </div>
+
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: apiData.data[0].stay_exclusive,
+                  }}
+                  className="text-[#4B4B4B] font-mulish leading-7 mt-3 md:mt-5"
+                />
+                <hr className="border-gray-200 mt-5 md:mt-10" />
+              </div>
+            )}
+
+            {apiData?.data?.[0]?.stay_inclusive && (
+              <div className="mt-8 md:mt-10">
+                <div className="flex gap-2 mt-8 items-center">
+                  <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+                  <p className="font-semibold font-mulish text-xl md:text-2xl  text-[#11142D]">
+                    Stay Inclusion
+                  </p>
+                </div>
+
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: apiData.data[0].stay_inclusive,
+                  }}
+                  className="text-[#4B4B4B] font-mulish leading-7 mt-3 md:mt-5"
+                />
+                <hr className="border-gray-200 mt-5 hidden sm:block md:mt-10" />
               </div>
             )}
           </div>
@@ -1050,7 +1086,7 @@ const StaysDetails = () => {
             <div className="mt-8 md:mt-10">
               {/* <hr className="border-gray-400 mt-8 md:mt-10" /> */}
 
-              <div className="flex gap-2 mt-8 md:mt-16 items-start">
+              <div className="flex gap-2 items-start">
                 <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
                 <div className="flex flex-col ">
                   <p className="font-jost font-medium text-xl   text-[#2D2D2D]">

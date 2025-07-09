@@ -9,6 +9,7 @@ import defaultimg from "../assets/defaultimg.png";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Marquee from "react-fast-marquee";
 
 function Programs() {
   const [programsData, setProgramsData] = useState([]);
@@ -48,9 +49,6 @@ function Programs() {
       .then((response) => {
         setProgramsData(response.data.themes);
         setLoading(false); // Set loading to false after data is fetched
-
-  
-        
       })
       .catch((error) => {
         console.log(error);
@@ -60,8 +58,6 @@ function Programs() {
 
   // navigate to program details page
   const handleThemeClick = (id, themes_name) => {
- 
-    
     const formattedThemeName = themes_name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
@@ -78,12 +74,18 @@ function Programs() {
     });
   };
 
-  const SkeletonCard = ({index}) => (
-    <div key={index} className=" max-md:hidden mx-3 h-[362px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
+  const SkeletonCard = ({ index }) => (
+    <div
+      key={index}
+      className=" max-md:hidden mx-3 h-[362px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"
+    ></div>
   );
 
-  const SkeletonCarouselCard = ({index}) => (
-    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-60 md:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
+  const SkeletonCarouselCard = ({ index }) => (
+    <div
+      key={index}
+      className="w-[90vw] sm:w-[70vw] mx-auto h-60 md:hidden  bg-gray-600   rounded-2xl animate-pulse"
+    ></div>
   );
 
   const responsive = {
@@ -140,7 +142,7 @@ function Programs() {
     );
   };
 
-  
+  /*******************/
 
   return (
     <>
@@ -154,16 +156,15 @@ function Programs() {
             {Array(skeltonArrayLength)
               .fill(0)
               .map((_, index) => (
-                <SkeletonCard key={index}/>
+                <SkeletonCard key={index} />
               ))}
           </div>
           {/* <div className="flex items-center flex-1 w-full  mt-5  flex-grow flex-wrap justify-center "> */}
           <div className="flex items-center flex-1  mt-5 flex-grow flex-wrap justify-center  w-full">
-
             {Array(1)
               .fill(0)
               .map((_, index) => (
-                  <SkeletonCarouselCard key={index} />
+                <SkeletonCarouselCard key={index} />
               ))}
           </div>
         </div>
@@ -177,14 +178,14 @@ function Programs() {
               </p>
 
               <div className="">
-                <div className="relative w-full mt-10 max-md:hidden">
+                {/* <div className="relative w-full mt-10 max-md:hidden">
                   <Carousel
                     responsive={responsive}
                     swipeable={true}
                     draggable={true}
                     showDots={false}
                     arrows={true}
-                    autoPlay={false}
+                    autoPlay={true}
                     infinite={true}
                     customLeftArrow={<CustomLeftArrow />}
                     customRightArrow={<CustomRightArrow />}
@@ -215,7 +216,32 @@ function Programs() {
                       </div>
                     ))}
                   </Carousel>
-                </div>
+                </div> */}
+
+                {/* <div className="overflow-hidden group mt-10 max-md:hidden">
+                  <div className="animate-marquee inline-flex gap-6 group-hover:[animation-play-state:paused]">
+                    {[...programsData, ...programsData].map((item, index) => (
+                      <div
+                        key={index}
+                        className="relative h-[362px] w-[300px] cursor-pointer group/item flex-shrink-0 rounded-2xl overflow-hidden flex items-center justify-center"
+                      >
+                        <img
+                          src={
+                            item.theme_pic
+                              ? `https://backoffice.innerpece.com/${item.theme_pic}`
+                              : defaultimg
+                          }
+                          alt={item.themes_name}
+                          className="w-full h-full transform transition-transform duration-500 group-hover/item:scale-125 object-cover absolute inset-0 z-0"
+                        />
+                        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full pointer-events-none"></div>
+                        <p className="absolute font-rancho text-3xl lg:text-4xl text-white bottom-5 text-center w-full z-20">
+                          {item.themes_name}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div> */}
 
                 <div className="md:hidden h-60 overflow-hidden  relative w-full flex mt-5">
                   <Swiper
@@ -250,6 +276,36 @@ function Programs() {
                       </SwiperSlide>
                     ))}
                   </Swiper>
+                </div>
+
+                <div className="mt-10 max-md:hidden">
+                  <Marquee
+                    gradient={false}
+                    speed={50}
+                    pauseOnHover={true}
+                    autoFill={true}
+                  >
+                    {[...programsData, ...programsData].map((item, index) => (
+                      <div
+                        key={index}
+                        className="relative h-[362px] w-[300px] mx-3 cursor-pointer group/item flex-shrink-0 rounded-2xl overflow-hidden flex items-center justify-center"
+                      >
+                        <img
+                          src={
+                            item.theme_pic
+                              ? `https://backoffice.innerpece.com/${item.theme_pic}`
+                              : defaultimg
+                          }
+                          alt={item.themes_name}
+                          className="w-full h-full transform transition-transform duration-500 group-hover/item:scale-125 object-cover absolute inset-0 z-0"
+                        />
+                        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full pointer-events-none"></div>
+                        <p className="absolute font-rancho text-3xl lg:text-4xl text-white bottom-5 text-center w-full z-20">
+                          {item.themes_name}
+                        </p>
+                      </div>
+                    ))}
+                  </Marquee>
                 </div>
               </div>
             </div>

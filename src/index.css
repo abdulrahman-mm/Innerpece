@@ -78,8 +78,6 @@ html {
   background: white;
 }
 
-
-
 /* From Uiverse.io by alexroumi */
 .special_button {
   padding: 15px 25px;
@@ -114,24 +112,17 @@ html {
   /* color: #004679; */
   /* border-width: 1px; */
   z-index: -1;
-
 }
 
 .special_button:hover {
-  color:white;
+  color: white;
   border-color: #004679;
- border-width: 5px;
+  border-width: 5px;
 }
 
 .special_button:hover::before {
   width: 100%;
 }
-
-
-
-
-
-
 
 /* From Uiverse.io by fanishah */
 .loader {
@@ -140,14 +131,14 @@ html {
 }
 
 .loader__eye1,
-  .loader__eye2,
-  .loader__mouth1,
-  .loader__mouth2 {
+.loader__eye2,
+.loader__mouth1,
+.loader__mouth2 {
   animation: eye1 3s ease-in-out infinite;
 }
 
 .loader__eye1,
-  .loader__eye2 {
+.loader__eye2 {
   transform-origin: 64px 64px;
 }
 
@@ -177,7 +168,7 @@ html {
   }
 
   50%,
-    60% {
+  60% {
     animation-timing-function: cubic-bezier(0.17, 0, 0.58, 1);
     transform: rotate(-40deg) translate(0, -56px) scale(1);
   }
@@ -201,7 +192,7 @@ html {
   }
 
   55%,
-    70% {
+  70% {
     animation-timing-function: cubic-bezier(0, 0, 0.28, 1);
     transform: rotate(40deg) translate(0, -56px) rotate(-40deg) scale(1);
   }
@@ -213,9 +204,9 @@ html {
 
 @keyframes eyeBlink {
   from,
-    25%,
-    75%,
-    to {
+  25%,
+  75%,
+  to {
     transform: scaleY(1);
   }
 
@@ -245,7 +236,7 @@ html {
   }
 
   75%,
-    to {
+  to {
     visibility: hidden;
   }
 }

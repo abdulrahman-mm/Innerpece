@@ -29,13 +29,6 @@ function Programs() {
 
   const [apiData, setApiData] = useState([]);
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
-
-  const [sortBy, setSortBy] = useState("");
-  const [searchTitle, setSearchTitle] = useState("");
-
-  const [startDate, setStartDate] = useState("");
-  const [toDate, setToDate] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
 
@@ -54,7 +47,6 @@ function Programs() {
     (item) => item[0].toUpperCase() + item.slice(1)
   );
   const upperCasedLocationName = mappedSlicedLocationName.join(" ");
-
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -75,117 +67,6 @@ function Programs() {
     };
     fetchProgramData();
   }, [id]);
-
-  const handleDateChange = (e) => {
-    setStartDate(e.target.value);
-  };
-
-  const handleToChange = (e) => {
-    setToDate(e.target.value);
-  };
-
-  const handleClearFilterClicked = async () => {
-    const fetchProgramData = async () => {
-      try {
-        const response = await axios.post(
-          "https://backoffice.innerpece.com/api/v1/get-program",
-          {
-            theme: id,
-          }
-        );
-        setStartDate("");
-        setToDate("");
-        setApiData(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProgramData();
-  };
-
-  const handleSortChange = async (event) => {
-    setFilterButtonClicked(false);
-
-    const selectedSort = event.target.value;
-    setSortBy(selectedSort);
-
-    try {
-      const response = await axios.post(
-        // "https://backoffice.innerpece.com/api/sort-program",
-        "https://backoffice.innerpece.com/api/v1/filter-program-by-price_sort",
-        {
-          sort_order: selectedSort,
-          theme: themes_name,
-        }
-      );
-
-      if (response.data.status === "success") {
-        const dataObject = response.data.data;
-        // Convert the data object to an array
-        const dataArray = Object.values(dataObject);
-
-        setApiData(dataArray);
-      } else {
-        console.error("Error sorting programs:", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const handleSearchClick = async () => {
-    try {
-      // Post request to search-program API
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/search-program",
-        {
-          title: searchTitle,
-          theme: themes_name,
-        }
-      );
-
-      if (response.data.status === "success") {
-        if (response.data.data.length === 0) {
-          setApiData([]); // No data found, set empty array
-        } else {
-          setApiData(response.data.data); // Set the retrieved data
-        }
-      } else {
-        console.error("Error fetching programs:", response.data.message);
-        setApiData([]); // Error occurred, set empty array
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setApiData([]); // Set empty array on exception
-    }
-  };
-
-  const handleFilterClick = async () => {
-    setFilterButtonClicked(false);
-    try {
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/filter-program-by-date",
-        {
-          start_date: startDate,
-          to_date: toDate,
-          theme: themes_name,
-        }
-      );
-
-      if (response.data.status === "success") {
-        const data = Object.values(response.data.data); // Convert data to an array
-
-        if (data.length === 0) {
-          setApiData([]); // No data found, set empty array
-        } else {
-          setApiData(data); // Set the retrieved data as an array
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setApiData([]);
-    }
-  };
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -283,6 +164,8 @@ function Programs() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  
+
   return (
     <div>
       {!filterButtonClicked && (
@@ -321,7 +204,7 @@ function Programs() {
                 className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
               >
                 <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-rancho tracking-widest text-center lg:text-5xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{`Explore ${
-                  apiData.length > 0 ? apiData[0].theme :upperCasedLocationName
+                  apiData.length > 0 ? apiData[0].theme : upperCasedLocationName
                 }`}</h1>
                 <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
                   Find your perfect trip with personalized themes and

@@ -368,58 +368,9 @@ function Mainbar({
   const toggleIndex = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-  
-  
+
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
-      {apiData && apiData.gallery_img && (
-        <Carousel
-          swipeable={true}
-          draggable={true}
-          pauseOnHover={false}
-          responsive={{
-            superLargeDesktop: {
-              breakpoint: { max: 4000, min: 1441 },
-              items: 1,
-            },
-            desktop: {
-              breakpoint: { max: 1440, min: 1024 },
-              items: 1,
-            },
-            tablet: {
-              breakpoint: { max: 1024, min: 640 },
-              items: 1,
-            },
-            mobile: {
-              breakpoint: { max: 640, min: 0 },
-              items: 1,
-            },
-          }}
-          infinite={true}
-          autoPlay={true}
-          autoPlaySpeed={5000}
-          arrows={true}
-          keyBoardControl={true}
-          transitionDuration={1000}
-          containerClass="carousel-container mx-auto z-0 w-full object-cover rounded-xl mt-5"
-          itemClass="carousel-item-padding-40-px block shadow-lg   object-cover shadow-black/10 "
-        >
-          {apiData.gallery_img.map((item, index) => (
-            <div key={item.id || index} className="overflow-hidden">
-              <img
-                src={
-                  item
-                    ? `https://backoffice.innerpece.com/${item}`
-                    : defaultimage
-                }
-                alt={`Gallery Image ${index + 1}`}
-                className="h-[30vh]  lg:h-[440px] w-full object-cover "
-              />
-            </div>
-          ))}
-        </Carousel>
-      )}
-
       {apiData.program_desc && (
         <>
           <div
@@ -476,15 +427,16 @@ function Mainbar({
                     }`}
                   >
                     {/* <p className="text-[#0D3756] font-normal">{item.description}</p> */}
-                    <p  dangerouslySetInnerHTML={{
-                              __html: item.description ?? "",
-                            }}/>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: item.description ?? "",
+                      }}
+                    />
                   </div>
                 </div>
               );
             })}
 
-           
             {/* {Object.keys(apiData.tour_planning).map((key, index) => {
               const item = apiData.tour_planning[key];
               const isOpen = openIndex === index;
@@ -701,47 +653,50 @@ function Mainbar({
         </div>
       )}
 
-      {apiData.program_inclusion && apiData.program_inclusion !== "<p><br></p>" &&(
-        <div className="mt-8 md:mt-10   ">
-          <div className="flex gap-2 mt-8 items-center">
-            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
-              Package Inclusion
-            </p>
-          </div>
+      {apiData.program_inclusion &&
+        apiData.program_inclusion !== "<p><br></p>" && (
+          <div className="mt-8 md:mt-10   ">
+            <div className="flex gap-2 mt-8 items-center">
+              <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+              <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+                Package Inclusion
+              </p>
+            </div>
 
-          <div className="mt-3 md:mt-5 md:leading-7  ">
-            {/* <p>{cleanBulletText(apiData.program_inclusion)}</p> */}
-            <p
-              className=""
-              dangerouslySetInnerHTML={{
-                __html: cleanHTML(apiData.program_inclusion),
-              }}
-            />
+            <div className="mt-3 md:mt-5 md:leading-7  ">
+              {/* <p>{cleanBulletText(apiData.program_inclusion)}</p> */}
+              <p
+                className=""
+                dangerouslySetInnerHTML={{
+                  __html: cleanHTML(apiData.program_inclusion),
+                }}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      {apiData.program_exclusion &&
+        apiData.program_exclusion !== "<p><br></p>" && (
+          <div className="mt-8 md:mt-10   ">
+            <div className="flex gap-2 mt-8 items-center">
+              <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+              <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+                Package Exclusion
+              </p>
+            </div>
 
-      {apiData.program_exclusion && apiData.program_exclusion !== "<p><br></p>" &&(
-        <div className="mt-8 md:mt-10   ">
-          <div className="flex gap-2 mt-8 items-center">
-            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
-            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
-              Package Exclusion
-            </p>
+            <div className="mt-3 md:mt-5 md:leading-7  ">
+              {/* <p>{cleanBulletText(apiData.program_exclusion)}</p> */}
+              <p
+                className=""
+                dangerouslySetInnerHTML={{
+                  __html: cleanHTML(apiData.program_exclusion),
+                }}
+              />
+            </div>
           </div>
+        )}
 
-          <div className="mt-3 md:mt-5 md:leading-7  ">
-            {/* <p>{cleanBulletText(apiData.program_exclusion)}</p> */}
-            <p
-              className=""
-              dangerouslySetInnerHTML={{
-                __html: cleanHTML(apiData.program_exclusion),
-              }}
-            />
-          </div>
-        </div>
-      )}
+   
 
       <div ref={reviewRef} className="mt-8 md:mt-10 max-lg:hidden">
         <div className="flex flex-wrap flex-col justify-start ">

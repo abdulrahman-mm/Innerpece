@@ -103,6 +103,8 @@ const StaysList = () => {
     fetchProgramData();
   }, [pathName]);
 
+  
+
   const handleCardClick = (id, stay_title) => {
     navigate(`/staysdetails/${id}`, {
       state: { id },
@@ -215,12 +217,7 @@ const StaysList = () => {
   };
 
   const handleStaysClick = (districtName) => {
-    // const formattedThemeName = districtName
-    //   .toLowerCase()
-    //   .replace(/[^a-z0-9]+/g, "-")
-    //   .replace(/-+/g, "-")
-    //   .replace(/^-+|-+$/g, "");
-
+  
     let a = apiData.data.filter(
       (item, index) => item.district === districtName
     );
@@ -250,26 +247,7 @@ const StaysList = () => {
     );
   };
 
-  // const fetchProgramData = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "https://backoffice.innerpece.com/api/v1/get-stays",
-  //       {
-  //         params: {
-  //           destination: stay_title,
-  //         },
-  //       }
-  //     );
-
-  //     console.log(response.data.data);
-
-  //     setApiData(response.data.data);
-  //     setLoading(false);
-  //   } catch (err) {
-  //     setLoading(false);
-  //   }
-  // };
-  // fetchProgramData();
+ 
 
   return (
     <div>

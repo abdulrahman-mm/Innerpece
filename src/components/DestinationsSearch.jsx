@@ -29,7 +29,7 @@ function Search() {
       .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
 
     // navigate(`/destinationsdetails/${formattedCityName}`, {
-      navigate(`/populardestinations/${id}/${formattedCityName}`, {
+    navigate(`/populardestinations/${id}/${formattedCityName}`, {
       state: { id, city_name },
     });
 
@@ -79,18 +79,6 @@ function Search() {
   return (
     <div className="overflow-hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 ms-3 me-3 md:ms-6 md:me-6 lg:ms-12 lg:me-12 xl:ms-20 xl:me-20 gap-4 auto-rows-[150px] mt-8 md:mt-20">
       {destinationData.map((item, index, array) => {
-      {/* {[
-        dummy1,
-        dummy1,
-        dummy1,
-        dummy1,
-        dummy1,
-        dummy1,
-        dummy1,
-        dummy1,
-        dummy1,
-        dummy1,
-      ].map((item, index, array) => { */}
         const colSpanClass = getSpanClass(index, array);
 
         return (
