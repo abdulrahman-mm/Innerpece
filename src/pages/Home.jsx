@@ -6,7 +6,6 @@ let Hero = lazy(() => import("../components/HomeHero"));
 let HomePrograms = lazy(() => import("../components/HomePrograms"));
 let HomeDestinations = lazy(() => import("../components/HomeDestinations"));
 let HomeStays = lazy(() => import("../components/HomeStays"));
-
 let LetsGetStarted = lazy(() => import("../components/LetsGetStarted"));
 let Footer = lazy(() => import("../components/Footer"));
 import whatsapp from "../assets/whatsapp.svg";
@@ -16,6 +15,7 @@ let Perfecttraveltype = lazy(() => import("../components/Perfecttraveltype"));
 import TripCategories from "../components/TripCategories";
 import Blogs from "../components/Blogs";
 import StaysTamilnadu from "../components/StaysTamilnadu";
+
 
 function Home() {
   // const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -85,9 +85,11 @@ function Home() {
   return (
     <div>
       <div
-        onClick={() => window.open("https://wa.me/6384131642")}
+        onClick={() => window.open("https://wa.me/8807343642")}
         className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
       >
+
+        
         <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
           <p>Whatsapp Enquiry</p>
         </div>

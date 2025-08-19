@@ -58,6 +58,27 @@ function Header() {
     });
   };
 
+  const onChangeSelect = (e) => {
+    const fetchProgramData = async () => {
+      try {
+        const response = await axios.get(
+          "https://backoffice.innerpece.com/api/v1/get-pricewise-programs",
+          {
+            params: {
+              price_check: e,
+            },
+          }
+        );
+        navigate(`/filteredList/${e}`, {
+          state: { value: response.data.packages },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchProgramData();
+  };
+
   return (
     <div className="flex justify-between items-center px-2  xl:px-5 py-0   sm:py-2   bg-black text-white ">
       <div onClick={() => navigate("/")} className="cursor-pointer">
@@ -83,7 +104,7 @@ function Header() {
               onMouseLeave={() => setFilterByPriceDropdownOpen(false)}
             >
               <button className="  rounded-md transition duration-300 ease-in-out cursor-pointer ">
-                Filter by price
+                Filter by Price
               </button>
 
               <div
@@ -236,7 +257,7 @@ function Header() {
                 }}
                 className="flex justify-between items-center gap-2 text-xl cursor-pointer font-medium text-gray-800  transition duration-200"
               >
-                Filter by price{" "}
+                Filter by Price{" "}
                 {filterByPriceDropdownOpen ? (
                   <IoIosArrowUp />
                 ) : (

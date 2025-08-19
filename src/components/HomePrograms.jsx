@@ -178,12 +178,13 @@ function Programs() {
               </p>
 
               <div className="">
-                {/* <div className="relative w-full mt-10 max-md:hidden">
+                <div className="relative w-full mt-10 max-md:hidden">
                   <Carousel
                     responsive={responsive}
                     swipeable={true}
                     draggable={true}
                     showDots={false}
+                    autoPlaySpeed={2000} 
                     arrows={true}
                     autoPlay={true}
                     infinite={true}
@@ -191,6 +192,7 @@ function Programs() {
                     customRightArrow={<CustomRightArrow />}
                     containerClass="carousel-container"
                     itemClass="px-3"
+                    
                   >
                     {programsData.map((item, index) => (
                       <div
@@ -216,32 +218,7 @@ function Programs() {
                       </div>
                     ))}
                   </Carousel>
-                </div> */}
-
-                {/* <div className="overflow-hidden group mt-10 max-md:hidden">
-                  <div className="animate-marquee inline-flex gap-6 group-hover:[animation-play-state:paused]">
-                    {[...programsData, ...programsData].map((item, index) => (
-                      <div
-                        key={index}
-                        className="relative h-[362px] w-[300px] cursor-pointer group/item flex-shrink-0 rounded-2xl overflow-hidden flex items-center justify-center"
-                      >
-                        <img
-                          src={
-                            item.theme_pic
-                              ? `https://backoffice.innerpece.com/${item.theme_pic}`
-                              : defaultimg
-                          }
-                          alt={item.themes_name}
-                          className="w-full h-full transform transition-transform duration-500 group-hover/item:scale-125 object-cover absolute inset-0 z-0"
-                        />
-                        <div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full pointer-events-none"></div>
-                        <p className="absolute font-rancho text-3xl lg:text-4xl text-white bottom-5 text-center w-full z-20">
-                          {item.themes_name}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div> */}
+                </div>
 
                 <div className="md:hidden h-60 overflow-hidden  relative w-full flex mt-5">
                   <Swiper
@@ -278,7 +255,7 @@ function Programs() {
                   </Swiper>
                 </div>
 
-                <div className="mt-10 max-md:hidden">
+                {/* <div className="mt-10 max-md:hidden">
                   <Marquee
                     gradient={false}
                     speed={50}
@@ -306,7 +283,7 @@ function Programs() {
                       </div>
                     ))}
                   </Marquee>
-                </div>
+                </div> */}
               </div>
             </div>
           )}

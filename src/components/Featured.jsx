@@ -91,6 +91,8 @@ function Featured() {
                 payload1
               );
 
+          console.log(response);
+
           setApiData(response.data.data);
           setUserName(response.data.data.name);
 
@@ -142,8 +144,8 @@ function Featured() {
         setApiData(response.data.data);
         setIsWishlisted(response.data.data.wishlists);
         setCombinedGalleryImagesAndStayImages([
-          ...response.data.data.gallery_img,
-          ...response.data.data.stay_images,
+          ...(response.data.data.gallery_img || []),
+          ...(response.data.data.stay_images || []),
         ]);
       } catch (err) {
         console.log(err);

@@ -104,7 +104,7 @@ function Header() {
               onMouseLeave={() => setFilterByPriceDropdownOpen(false)}
             >
               <button className=" bg-white text-gray-700  rounded-md transition duration-300 ease-in-out cursor-pointer ">
-                Filter by price
+                Filter by Price
               </button>
 
               <div
@@ -248,7 +248,7 @@ function Header() {
                 }}
                 className="flex justify-between items-center gap-2 text-xl cursor-pointer font-medium text-gray-800  transition duration-200"
               >
-                Filter by price{" "}
+                Filter by Price{" "}
                 {filterByPriceDropdownOpen ? (
                   <IoIosArrowUp />
                 ) : (

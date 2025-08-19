@@ -247,8 +247,6 @@ const StaysList = () => {
     );
   };
 
- 
-
   return (
     <div>
       {!filterButtonClicked && (

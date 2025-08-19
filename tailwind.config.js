@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
@@ -16,16 +15,19 @@ export default {
         jakarta: ['"Plus Jakarta Sans"', "sans-serif"],
         PlusJakartaSansMedium: ["PlusJakartaSansMedium", "sans-serif"],
       },
-      extend: {
-        animation: {
-          fadeIn: "fadeIn 1s ease-in-out forwards",
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
         },
-        keyframes: {
-          fadeIn: {
-            "0%": { opacity: 0 },
-            "100%": { opacity: 1 },
-          },
+        shine: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
         },
+      },
+      animation: {
+        fadeIn: "fadeIn 1s ease-in-out forwards",
+        shine: "shine 3s linear infinite",
       },
     },
   },
